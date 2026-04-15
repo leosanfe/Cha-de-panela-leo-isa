@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite de Casamento - Mar & Jaume</title>
+    <style>
+        :root {
+            --bg-color: #f8f6f2;
+            --text-color: #2c3e50;
+            --accent-green: #5d7c66;
+            --accent-light-green: #90b49c;
+            --accent-pink: #f2a6a2;
+            --white: #ffffff;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-script: 'Dancing Script', cursive;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- Envelope --- */
+        #envelope {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .wax-seal {
+            width: 120px;
+            height: 120px;
+            background-color: var(--white);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        /* CSS do Vídeo do Selo */
+        .seal-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .exclusive-text {
+            font-family: var(--font-script);
+            font-size: 24px;
+            margin: 0;
+        }
+
+        /* --- Conteúdo Principal --- */
+        #content {
+            width: 100%;
+            max-width: 550px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        section {
+            width: 100%;
+            margin-bottom: 40px;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .main-invite {
+            background-color: var(--white);
+            padding: 40px;
+        }
+        
+        .illustration {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, #d9e4dd, #f8f6f2);
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden; /* Garante que o vídeo não vaze as bordas arredondadas */
+        }
+
+        /* CSS do Vídeo de Fundo */
+        .bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nos-casamos {
+            font-size: 16px;
+            letter-spacing: 2px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .names {
+            font-family: var(--font-script);
+            font-size: 48px;
+            margin: 0 0 10px 0;
+        }
+
+        .date {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .confirm-button {
+            display: inline-block;
+            background-color: var(--accent-light-green);
+            color: var(--white);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* --- Contador --- */
+        .countdown {
+            background-color: var(--accent-green);
+            color: var(--white);
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            margin-top: 0;
+            color: #d9e4dd;
+        }
+
+        .countdown-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .countdown-box {
+            background-color: var(--white);
+            color: var(--accent-green);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .countdown-box span {
+            font-size: 32px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .countdown-box label {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        /* --- Detalhes do Dia --- */
+        .details h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .details p {
+            font-size: 16px;
+            margin-top: 0;
+            color: #7f8c8d;
+        }
+
+        /* --- Programa do Dia --- */
+        .program h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .timeline {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .event {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .event-time {
+            font-weight: bold;
+            width: 60px;
+            color: var(--accent-green);
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-name {
+            font-weight: bold;
+        }
+
+        .event-desc {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        /* --- Confirmação --- */
+        .confirmacion form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9e4dd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: var(--accent-light-green);
+            color: var(--white);
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- Rodapé --- */
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="envelope">
+        <div class="wax-seal">
+            <video autoplay loop muted playsinline class="seal-video">
+                <source src="LINK_DO_VIDEO_SELO_AQUI.mp4" type="video/mp4">
+            </video>
+        </div>
+        <p class="exclusive-text">Esta invitación es exclusiva para ti</p>
+    </div>
+
+    <div id="content">
+        <section class="main-invite">
+            <div class="illustration">
+                <video autoplay loop muted playsinline class="bg-video">
+                    <source src="LINK_DO_VIDEO_FUNDO_AQUI.mp4" type="video/mp4">
+                </video>
+            </div>
+            <p class="nos-casamos">NOS CASAMOS</p>
+            <h1 class="names">Mar & Jaume</h1>
+            <p class="date">7 de mayo de 2027</p>
+            <a href="#confirmacion" class="confirm-button">CONFIRMA TU ASISTENCIA</a>
+        </section>
+
+        <section class="countdown">
+            <h2 class="section-title">Cuenta atrás</h2>
+            <p class="section-subtitle">Para el día más especial de nuestras vidas</p>
+            <div class="countdown-container">
+                <div class="countdown-box"><span id="days">000</span><label>DÍAS</label></div>
+                <div class="countdown-box"><span id="hours">00</span><label>HORAS</label></div>
+                <div class="countdown-box"><span id="minutes">00</span><label>MINUTOS</label></div>
+                <div class="countdown-box"><span id="seconds">00</span><label>SEGUNDOS</label></div>
+            </div>
+        </section>
+
+        <section class="details">
+            <h3>Detalles del día</h3>
+            <p>Todo lo que necesitas saber</p>
+            <p><strong>Finca Binagual</strong> - De 17:00h a 01:00h</p>
+            <a href="#" class="confirm-button" style="background-color: var(--accent-green);">Abrir no Maps</a>
+        </section>
+
+        <section class="program">
+            <h3>Programa del día</h3>
+            <p>Lo que tenemos preparado para vosotros</p>
+            <div class="timeline">
+                <div class="event"><span class="event-time">17:00</span><div class="event-details"><p class="event-name">Llegada de invitados</p><p class="event-desc">Recepción y bienvenida</p></div></div>
+                <div class="event"><span class="event-time">17:30</span><div class="event-details"><p class="event-name">Welcome Drink</p></div></div>
+                <div class="event"><span class="event-time">18:00</span><div class="event-details"><p class="event-name">Ceremonia</p></div></div>
+                <div class="event"><span class="event-time">19:00</span><div class="event-details"><p class="event-name">Cóctel</p></div></div>
+                <div class="event"><span class="event-time">21:00</span><div class="event-details"><p class="event-name">Banquete</p></div></div>
+                <div class="event"><span class="event-time">00:00</span><div class="event-details"><p class="event-name">Fiesta</p></div></div>
+                <div class="event"><span class="event-time">01:00</span><div class="event-details"><p class="event-name">Fin de fiesta</p></div></div>
+            </div>
+        </section>
+
+        <section class="confirmacion" id="confirmacion">
+            <h3>Confirma tu asistencia</h3>
+            <p>Esperamos contar contigo</p>
+            <form id="rsvp-form">
+                <input type="text" placeholder="Nombre completo *" required>
+                <input type="email" placeholder="Email (opcional)">
+                <fieldset>
+                    <legend>¿Asistirás? *</legend>
+                    <div class="radio-group">
+                        <label><input type="radio" name="attendance" value="yes" required> Sí, asistiré</label>
+                        <label><input type="radio" name="attendance" value="no"> No podré asistir</label>
+                    </div>
+                </fieldset>
+                <input type="number" placeholder="Número de invitados (incluyéndote)">
+                <fieldset>
+                    <legend>Alergias e intolerancias</legend>
+                    <div class="checkbox-group" style="flex-wrap: wrap;">
+                        <label><input type="checkbox"> Sin gluten</label>
+                        <label><input type="checkbox"> Sin lactosa</label>
+                        <label><input type="checkbox"> Vegetariano</label>
+                        <label><input type="checkbox"> Vegano</label>
+                        <label><input type="checkbox"> Frutos secos</label>
+                        <label><input type="checkbox"> Mariscos</label>
+                    </div>
+                </fieldset>
+                <textarea placeholder="Mensaje para los novios (opcional)" rows="3"></textarea>
+                <button type="submit">Enviar confirmación</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>❤️ Mar & Jaume</p>
+            <p>7 de mayo de 2027</p>
+            <p>Hecho com ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Função para Abrir o Envelope ---
+        const envelope = document.getElementById('envelope');
+        const content = document.getElementById('content');
+
+        envelope.addEventListener('click', () => {
+            envelope.style.opacity = '0';
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                content.style.display = 'flex';
+            }, 500);
+        });
+
+        // --- Função para a Contagem Regressiva ---
+        const countdownDate = new Date("May 7, 2027 17:00:00").getTime();
+
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector(".countdown-container").innerText = "¡DÍA DE BODA!";
+            }
+        };
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- Lógica Simples do Formulário ---
+        const rsvpForm = document.getElementById('rsvp-form');
+        rsvpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('A confirmação foi simulada! Obrigado.');
+            rsvpForm.reset();
+        });
+
+    </script>
+</body>
+</html>
