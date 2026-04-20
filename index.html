@@ -637,17 +637,43 @@
               splashVideoH=document.getElementById('splash-video-h'), splashVideoV=document.getElementById('splash-video-v');
         let hasStarted=false;
         function getActiveSplash(){return window.matchMedia('(max-width:768px),(orientation:portrait)').matches?splashVideoV:splashVideoH}
-        splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
-        splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause()});
-        splashScreen.addEventListener('click',()=>{
-            if(hasStarted)return; hasStarted=true;
-            tapIndicator.classList.add('hidden');
-            const v=getActiveSplash();
-            v.play().catch(()=>showMain());
-            splashScreen.style.cursor='default';
-            v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
-            v.addEventListener('ended',()=>showMain());
-        });
+
+        // Reset scroll on load to prevent bugs
+        window.scrollTo(0, 0);
+
+        // Check if returning visitor
+        if (localStorage.getItem('cha-visited')) {
+            // Skip splash entirely — show main content immediately
+            splashScreen.style.display = 'none';
+            whiteFade.style.display = 'none';
+            mainContent.classList.add('visible');
+            document.body.style.backgroundColor = 'var(--bg)';
+            document.body.style.overflow = 'auto';
+            // Show hero fully revealed (no animations)
+            const hero = document.getElementById('hero');
+            hero.classList.add('hero-revealed');
+            hero.querySelectorAll('.hero-ornament, .hero-pretitle, .hero-names, .hero-date, .hero-bottom').forEach(el => {
+                el.classList.add('hero-text-visible');
+            });
+            // Show music button for returning visitors
+            setTimeout(() => {
+                document.getElementById('music-btn').classList.add('visible');
+            }, 100);
+        } else {
+            // First visit — normal splash flow
+            splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
+            splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause()});
+            splashScreen.addEventListener('click',()=>{
+                if(hasStarted)return; hasStarted=true;
+                tapIndicator.classList.add('hidden');
+                const v=getActiveSplash();
+                v.play().catch(()=>showMain());
+                splashScreen.style.cursor='default';
+                v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
+                v.addEventListener('ended',()=>showMain());
+            });
+        }
+
         function showMain(){
             whiteFade.classList.add('active');
             setTimeout(()=>{
@@ -660,6 +686,8 @@
                 setTimeout(()=>{whiteFade.classList.add('fade-out');setTimeout(()=>{whiteFade.style.display='none'},1200)},300);
                 // Staggered hero text intro
                 heroIntroSequence();
+                // Mark as visited
+                localStorage.setItem('cha-visited', 'true');
             },500);
         }
         function heroIntroSequence() {
@@ -695,8 +723,10 @@
                 setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
             }, 5600);
         }
-        document.body.style.overflow='hidden';
-        const iv=getActiveSplash();iv.currentTime=0;iv.pause();
+        if (!localStorage.getItem('cha-visited')) {
+            document.body.style.overflow='hidden';
+            const iv=getActiveSplash();iv.currentTime=0;iv.pause();
+        }
 
         // MUSIC
         const bgMusic=document.getElementById('bg-music'), musicBtn=document.getElementById('music-btn');
