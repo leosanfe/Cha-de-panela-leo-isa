@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <style>
         :root {
             --bg: #FAF8F3; --bg-warm: #F5F1EB; --bg-cream: #EDE8DF; --bg-rsvp: #E5DFD4;
@@ -47,23 +50,46 @@
         #main-content.visible { display: flex; opacity: 1; }
 
         /* HERO */
-        .hero { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
-        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.25) 40%, rgba(0,0,0,.30) 70%, rgba(0,0,0,.50)); z-index: 1; }
+        .hero { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; background: var(--white); transition: background 2.5s ease; }
+        .hero.hero-revealed { background: transparent; }
+        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0; transition: opacity 2.5s ease; }
+        .hero.hero-revealed .hero-video-bg { opacity: 1; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.25) 40%, rgba(0,0,0,.30) 70%, rgba(0,0,0,.50)); z-index: 1; opacity: 0; transition: opacity 2.5s ease; }
+        .hero.hero-revealed .hero-overlay { opacity: 1; }
         .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 60px 24px 80px; }
-        .hero-ornament { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-light), transparent); margin-bottom: 28px; opacity: 0; animation: fadeUp 1s .2s forwards; }
-        .hero-pretitle { font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 32px; opacity: 0; animation: fadeUp 1s .4s forwards; }
-        .hero-names { font-family: var(--serif); font-size: clamp(36px,10vw,72px); font-weight: 400; color: var(--white); opacity: 0; animation: fadeUp 1s .6s forwards; text-shadow: 0 2px 20px rgba(0,0,0,.3); line-height: 1.2; letter-spacing: 0.25em; text-transform: uppercase; }
-        .hero-names .amp { display: block; font-family: var(--serif); font-size: clamp(22px,5vw,34px); font-style: italic; color: rgba(255,255,255,0.8); margin: 8px 0; font-weight: 300; text-shadow: none; letter-spacing: 0.05em; text-transform: lowercase; }
-        .hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; z-index: 2; }
-        .hero-date-lines { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; opacity: 0; animation: fadeUp 1s 1s forwards; }
-        .hero-date-line { width: 40px; height: 1px; background: rgba(255,255,255,0.4); }
-        .hero-diamond { width: 8px; height: 8px; border: 1px solid rgba(255,255,255,0.5); transform: rotate(45deg); }
-        .hero-date { font-family: var(--serif); font-size: clamp(16px,4vw,22px); font-weight: 300; font-style: italic; color: rgba(255,255,255,0.9); margin-bottom: 24px; opacity: 0; animation: fadeUp 1s 1.2s forwards; text-shadow: 0 2px 10px rgba(0,0,0,.3); letter-spacing: 0.05em; }
-        .hero-rsvp { font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none; opacity: 0; animation: fadeUp 1s 1.4s forwards; transition: color .3s; }
+
+        /* --- Hero staggered text intro --- */
+        .hero-ornament { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-light), transparent); margin-bottom: 28px; opacity: 0; transform: scaleX(0); transition: opacity 1.2s ease, transform 1.2s ease; }
+        .hero-ornament.hero-text-visible { opacity: 1; transform: scaleX(1); }
+
+        .hero-pretitle { font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--text); margin-bottom: 32px; opacity: 0; transform: translateY(18px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1), color 2.5s ease; }
+        .hero-pretitle.hero-text-visible { opacity: 1; transform: translateY(0); }
+        .hero.hero-revealed .hero-pretitle { color: rgba(255,255,255,0.85); }
+
+        .hero-names { font-family: var(--serif); font-size: clamp(36px,9vw,52px); font-weight: 400; color: var(--text); text-shadow: none; line-height: 1.2; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 1.6s cubic-bezier(.23,1,.32,1), transform 1.6s cubic-bezier(.23,1,.32,1), color 2.5s ease, text-shadow 2.5s ease; }
+        .hero-names.hero-text-visible { opacity: 1; transform: translateY(0) scale(1); }
+        .hero.hero-revealed .hero-names { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,.3); }
+        .hero-names .amp { display: block; font-family: var(--serif); font-size: clamp(22px,5vw,34px); font-style: italic; color: var(--text-light); margin: 8px 0; font-weight: 300; text-shadow: none; letter-spacing: 0.05em; text-transform: lowercase; transition: color 2.5s ease; }
+        .hero.hero-revealed .hero-names .amp { color: rgba(255,255,255,0.8); }
+
+        .hero-date { font-family: var(--serif); font-size: clamp(20px,5vw,28px); font-weight: 300; font-style: italic; color: var(--text-light); margin-bottom: 24px; text-shadow: none; letter-spacing: 0.05em; opacity: 0; transform: translateY(16px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1), color 2.5s ease, text-shadow 2.5s ease; }
+        .hero-date.hero-text-visible { opacity: 1; transform: translateY(0); }
+        .hero.hero-revealed .hero-date { color: rgba(255,255,255,0.9); text-shadow: 0 2px 10px rgba(0,0,0,.3); }
+
+        .hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; z-index: 2; opacity: 0; transform: translateY(12px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1); }
+        .hero-bottom.hero-text-visible { opacity: 1; transform: translateY(0); }
+
+        .hero-date-lines { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .hero-date-line { width: 40px; height: 1px; background: var(--divider); transition: background 2.5s ease; }
+        .hero.hero-revealed .hero-date-line { background: rgba(255,255,255,0.4); }
+        .hero-diamond { width: 8px; height: 8px; border: 1px solid var(--text-muted); transform: rotate(45deg); transition: border-color 2.5s ease; }
+        .hero.hero-revealed .hero-diamond { border-color: rgba(255,255,255,0.5); }
+        .hero-rsvp { font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 2.5s ease; }
+        .hero.hero-revealed .hero-rsvp { color: rgba(255,255,255,0.7); }
         .hero-rsvp:hover { color: var(--gold-light); }
-        .hero-scroll-arrow { margin-top: 16px; opacity: 0; animation: fadeUp 1s 1.6s forwards; }
-        .hero-scroll-arrow svg { width: 20px; height: 20px; color: var(--white); opacity: .6; animation: bounce 2s ease-in-out infinite; }
+        .hero-scroll-arrow { margin-top: 16px; }
+        .hero-scroll-arrow svg { width: 20px; height: 20px; color: var(--text-muted); opacity: .6; animation: bounce 2s ease-in-out infinite; transition: color 2.5s ease; }
+        .hero.hero-revealed .hero-scroll-arrow svg { color: var(--white); }
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
@@ -165,22 +191,39 @@
         .gift-modal-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.5); backdrop-filter: blur(4px); justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
         .gift-modal-overlay.open { display: flex; }
         .gift-modal { background: var(--bg); border-radius: 20px; max-width: 460px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); margin: auto; }
-        .gift-modal-header { padding: 28px 24px 16px; text-align: center; border-bottom: 1px solid var(--divider); position: sticky; top: 0; background: var(--bg); z-index: 5; border-radius: 20px 20px 0 0; }
-        .gift-modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(0,0,0,.06); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-light); transition: all .3s; }
+        .gift-modal-header { padding: 16px 24px 14px; text-align: center; border-bottom: 1px solid var(--divider); position: sticky; top: 0; background: var(--bg); z-index: 5; border-radius: 20px 20px 0 0; }
+        .gift-modal-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(0,0,0,.06); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-light); transition: all .3s; z-index: 10; }
         .gift-modal-close:hover { background: rgba(0,0,0,.12); }
-        .gift-modal-title { font-family: var(--script); font-size: 28px; color: var(--olive-text); margin-bottom: 6px; }
-        .gift-modal-desc { font-family: var(--serif); font-size: 14px; font-style: italic; color: var(--text-light); line-height: 1.6; }
-        .gift-modal-tip { font-family: var(--sans); font-size: 11px; color: var(--text-muted); margin-top: 8px; background: rgba(113,146,182,.08); padding: 6px 12px; border-radius: 6px; display: inline-block; }
+        .gift-modal-title { font-family: var(--script); font-size: 26px; color: var(--olive-text); margin-bottom: 4px; }
+        .gift-modal-desc { font-family: var(--serif); font-size: 13px; font-style: italic; color: var(--text-light); line-height: 1.5; }
+        .gift-modal-tip { font-family: var(--sans); font-size: 10px; color: var(--text-muted); margin-top: 6px; background: rgba(113,146,182,.08); padding: 5px 10px; border-radius: 6px; display: inline-block; }
+
+        /* INSPIRATION CAROUSEL */
+        .inspo-carousel { position: relative; width: 100%; height: 120px; border-radius: 12px; overflow: hidden; margin-top: 12px; }
+        .inspo-carousel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease; }
+        .inspo-carousel img.inspo-active { opacity: 1; }
+        .inspo-carousel-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,0,0,.45)); z-index: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px 14px; }
+        .inspo-carousel-label { font-family: var(--sans); font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.7); }
+        .inspo-carousel-subtitle { font-family: var(--serif); font-size: 14px; font-style: italic; color: var(--white); }
+        .inspo-dots { display: flex; gap: 5px; position: absolute; bottom: 8px; right: 12px; z-index: 2; }
+        .inspo-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.4); transition: background .3s; }
+        .inspo-dots span.active { background: var(--white); }
+        .inspo-palette { display: flex; align-items: center; gap: 8px; margin-top: 10px; justify-content: center; }
+        .inspo-palette-label { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+        .inspo-palette-colors { display: flex; gap: 4px; }
+        .inspo-swatch { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--divider); }
+
         .gift-grid { padding: 12px 8px; }
-        .gift-card { background: var(--white); border-radius: 14px; border: 2px solid transparent; padding: 14px 10px; text-align: center; cursor: pointer; transition: all .3s; position: relative; overflow: hidden; }
+        .gift-card { background: var(--white); border-radius: 14px; border: 2px solid transparent; padding: 12px 8px 10px; text-align: center; cursor: pointer; transition: all .3s; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
         .gift-card:hover { border-color: var(--olive-light); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.06); }
         .gift-card.selected { border-color: var(--olive); background: rgba(113,146,182,.06); }
-        .gift-card.selected::after { content: '✓'; position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; background: var(--olive); color: white; border-radius: 50%; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+        .gift-card.selected::after { content: '✓'; position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; background: var(--olive); color: white; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; }
         .gift-card.taken { opacity: .45; pointer-events: none; cursor: default; }
         .gift-card.taken::after { content: 'Reservado'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-15deg); background: rgba(0,0,0,.6); color: white; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; }
-        .gift-card-img { width: 80px; height: 80px; object-fit: contain; margin: 0 auto 8px; display: block; }
-        .gift-card-name { font-family: var(--serif); font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-        .gift-card-qty { font-family: var(--sans); font-size: 10px; color: var(--text-muted); }
+        .gift-card-img { width: 72px; height: 72px; object-fit: contain; margin: 0 auto 6px; display: block; border-radius: 8px; }
+        .gift-card-name { font-family: var(--serif); font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; line-height: 1.3; }
+        .gift-card-suggestion { font-family: var(--sans); font-size: 9px; font-weight: 500; color: var(--olive-dark); background: rgba(113,146,182,.1); padding: 2px 8px; border-radius: 20px; margin-top: 4px; display: inline-block; letter-spacing: 0.3px; line-height: 1.4; }
+        .gift-card-qty { font-family: var(--sans); font-size: 10px; color: var(--text-muted); margin-top: 3px; }
         .gift-room-section { margin-bottom: 4px; }
         .gift-room-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; border-radius: 12px; transition: background .3s; user-select: none; }
         .gift-room-header:hover { background: rgba(113,146,182,.06); }
@@ -192,7 +235,7 @@
         .gift-room-section.open .gift-room-arrow { transform: rotate(180deg); }
         .gift-room-items { display: none; padding: 0 8px 12px; }
         .gift-room-section.open .gift-room-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .gift-modal-footer { padding: 16px 20px 24px; border-top: 1px solid var(--divider); text-align: center; position: sticky; bottom: 0; background: var(--bg); border-radius: 0 0 20px 20px; z-index: 5; }
+        .gift-modal-footer { padding: 14px 20px 20px; border-top: 1px solid var(--divider); text-align: center; position: sticky; bottom: 0; background: var(--bg); border-radius: 0 0 20px 20px; z-index: 5; }
         .gift-confirm-btn { padding: 14px 40px; border-radius: 50px; background: var(--olive); color: var(--white); font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: 1px; border: none; cursor: pointer; transition: all .3s; opacity: .4; pointer-events: none; }
         .gift-confirm-btn.active { opacity: 1; pointer-events: all; }
         .gift-confirm-btn.active:hover { background: var(--olive-dark); transform: translateY(-1px); }
@@ -376,7 +419,7 @@
                 <!-- 10h - Café -->
                 <div class="tl-row reveal">
                     <div class="tl-side-left">
-                        <div class="tl-img-wrap"><img src="in%C3%ADcio.png" alt="Café da manhã" class="tl-img"></div>
+                        <div class="tl-img-wrap"><img src="inicio.png" alt="Café da manhã" class="tl-img"></div>
                     </div>
                     <div class="tl-center"><div class="tl-dot"></div></div>
                     <div class="tl-side-right">
@@ -394,7 +437,7 @@
                     </div>
                     <div class="tl-center"><div class="tl-dot"></div></div>
                     <div class="tl-side-right">
-                        <div class="tl-img-wrap"><img src="almo%C3%A7o.png" alt="Almoço" class="tl-img"></div>
+                        <div class="tl-img-wrap"><img src="almoco.png" alt="Almoço" class="tl-img"></div>
                     </div>
                 </div>
                 <!-- 14h - Brincadeiras -->
@@ -420,7 +463,7 @@
                     <div class="tl-side-right">
                         <div class="tl-dual-img">
                             <img src="violao.png" alt="Violão" class="tl-img">
-                            <img src="ora%C3%A7%C3%A3o.png" alt="Oração" class="tl-img">
+                            <img src="oracao.png" alt="Oração" class="tl-img">
                         </div>
                     </div>
                 </div>
@@ -494,8 +537,28 @@
                 <div class="gift-modal-header">
                     <button class="gift-modal-close" onclick="closeGiftModal()">✕</button>
                     <h3 class="gift-modal-title">Lista de Presentes</h3>
-                    <p class="gift-modal-desc">Esta é apenas uma lista de sugestões. Selecione o que você pretende dar no dia para que outros convidados não repitam o presente.</p>
+                    <p class="gift-modal-desc">Sugestões dos noivos para padronizar a nossa casa. Selecione o que você pretende dar para que outros convidados não repitam.</p>
                     <p class="gift-modal-tip">💡 Nenhum pagamento é feito aqui — apenas a reserva do presente</p>
+                    <div class="inspo-carousel" id="inspo-carousel">
+                        <img src="inspiracao-casa-1.png" alt="Inspiração 1" class="inspo-active">
+                        <img src="inspiracao-casa-2.png" alt="Inspiração 2">
+                        <img src="inspiracao-casa-3.png" alt="Inspiração 3">
+                        <div class="inspo-carousel-overlay">
+                            <span class="inspo-carousel-label">Inspiração da casa</span>
+                            <span class="inspo-carousel-subtitle">Paleta & estilo dos noivos</span>
+                        </div>
+                        <div class="inspo-dots"><span class="active"></span><span></span><span></span></div>
+                    </div>
+                    <div class="inspo-palette">
+                        <span class="inspo-palette-label">Paleta:</span>
+                        <div class="inspo-palette-colors">
+                            <span class="inspo-swatch" style="background:#F5F0E8" title="Creme"></span>
+                            <span class="inspo-swatch" style="background:#C8B99A" title="Bege"></span>
+                            <span class="inspo-swatch" style="background:#2C2C2C" title="Preto"></span>
+                            <span class="inspo-swatch" style="background:#A8A8A8" title="Inox"></span>
+                            <span class="inspo-swatch" style="background:#E8DDD1" title="Areia"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="gift-grid" id="gift-grid"></div>
                 <div class="gift-modal-footer" id="gift-footer-main">
@@ -595,7 +658,42 @@
                 musicBtn.classList.add('visible');
                 startMusic();
                 setTimeout(()=>{whiteFade.classList.add('fade-out');setTimeout(()=>{whiteFade.style.display='none'},1200)},300);
+                // Staggered hero text intro
+                heroIntroSequence();
             },500);
+        }
+        function heroIntroSequence() {
+            const hero = document.getElementById('hero');
+            const ornament = hero.querySelector('.hero-ornament');
+            const pretitle = hero.querySelector('.hero-pretitle');
+            const names = hero.querySelector('.hero-names');
+            const date = hero.querySelector('.hero-date');
+            const bottom = hero.querySelector('.hero-bottom');
+
+            // Lock scroll during intro
+            document.body.style.overflow = 'hidden';
+
+            // Step 1: Ornament line expands
+            setTimeout(() => { ornament.classList.add('hero-text-visible'); }, 300);
+
+            // Step 2: "Chá de Panela e Roda de Violão" fades up
+            setTimeout(() => { pretitle.classList.add('hero-text-visible'); }, 600);
+
+            // Step 3: "Leonardo & Isabelle" enters with scale + slide
+            setTimeout(() => { names.classList.add('hero-text-visible'); }, 1800);
+
+            // Step 4: Date appears
+            setTimeout(() => { date.classList.add('hero-text-visible'); }, 3000);
+
+            // Step 5: "Confirme sua presença" appears
+            setTimeout(() => { bottom.classList.add('hero-text-visible'); }, 3600);
+
+            // Step 6: Video fades in 2s after "Confirme sua presença"
+            setTimeout(() => {
+                hero.classList.add('hero-revealed');
+                // Unlock scroll after video transition finishes (2.5s transition)
+                setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
+            }, 5600);
         }
         document.body.style.overflow='hidden';
         const iv=getActiveSplash();iv.currentTime=0;iv.pause();
@@ -650,45 +748,87 @@
 
         const GIFTS = [
             // Cozinha
-            { id:'geladeira', name:'Geladeira', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=200&h=200&fit=crop' },
-            { id:'fogao', name:'Fogão', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop' },
-            { id:'microondas', name:'Micro-ondas', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=200&h=200&fit=crop' },
-            { id:'liquidificador', name:'Liquidificador', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=200&h=200&fit=crop' },
-            { id:'airfryer', name:'Air Fryer', qty:1, room:'cozinha', img:'gift-airfryer.png' },
-            { id:'panelas', name:'Jogo de Panelas', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=200&h=200&fit=crop' },
-            { id:'talheres', name:'Jogo de Talheres', qty:3, room:'cozinha', img:'https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=200&h=200&fit=crop' },
-            { id:'pratos', name:'Jogo de Pratos', qty:3, room:'cozinha', img:'https://images.unsplash.com/photo-1603199506016-b9a594b593c0?w=200&h=200&fit=crop' },
-            { id:'copos', name:'Jogo de Copos', qty:3, room:'cozinha', img:'gift-copos.png' },
-            { id:'cafeteira', name:'Cafeteira', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=200&h=200&fit=crop' },
-            { id:'batedeira', name:'Batedeira', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=200&h=200&fit=crop' },
-            { id:'potes', name:'Conjunto de Potes', qty:2, room:'cozinha', img:'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&h=200&fit=crop' },
-            { id:'escorredor', name:'Escorredor de Louça', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=200&h=200&fit=crop' },
-            { id:'lixeira-coz', name:'Lixeira', qty:1, room:'cozinha', img:'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=200&h=200&fit=crop' },
+            { id:'panelas-aco', name:'Jogo de Panelas', qty:1, room:'cozinha', img:'panelas.jpeg', sug:'Aço Cirúrgico' },
+            { id:'panela-ceramica', name:'Panela 100% Cerâmica', qty:1, room:'cozinha', img:'panela-ceramica.jpeg', sug:'Fogão por indução' },
+            { id:'frigideira-ceramica', name:'Frigideira Cerâmica', qty:1, room:'cozinha', img:'frigideira-ceramica.jpeg', sug:'100% cerâmica · Indução' },
+            { id:'frigideira-aco', name:'Frigideira Aço Cirúrgico', qty:1, room:'cozinha', img:'frigideira-aco.jpeg', sug:'Fogão por indução' },
+            { id:'panela-pedra', name:'Panela de Pedra Sabão', qty:1, room:'cozinha', img:'panela-pedra.jpeg', sug:'Pedra sabão natural' },
+            { id:'leiteira-ceramica', name:'Leiteira Cerâmica', qty:1, room:'cozinha', img:'leiteira-ceramica.jpeg', sug:'100% cerâmica · Indução' },
+            { id:'airfryer', name:'Air Fryer', qty:1, room:'cozinha', img:'airfryer-inox.jpeg', sug:'Preto ou inox' },
+            { id:'geladeira', name:'Geladeira', qty:1, room:'cozinha', img:'geladeira-inox.jpeg', sug:'Cor: inox' },
+            { id:'forno', name:'Forno', qty:1, room:'cozinha', img:'forno-inox.jpeg', sug:'Preto ou inox' },
+            { id:'liquidificador', name:'Liquidificador', qty:1, room:'cozinha', img:'liquidificador.jpeg', sug:'' },
+            { id:'batedeira', name:'Batedeira', qty:1, room:'cozinha', img:'batedeira.jpeg', sug:'' },
+            { id:'chaleira', name:'Chaleira Elétrica', qty:1, room:'cozinha', img:'chaleira.jpeg', sug:'Elétrica' },
+            { id:'filtro', name:'Filtro', qty:1, room:'cozinha', img:'filtro.jpeg', sug:'' },
+            { id:'utensilios', name:'Conjunto de Utensílios', qty:1, room:'cozinha', img:'utensilios-bege.jpeg', sug:'Cor: bege' },
+            { id:'facas', name:'Jogo de Facas', qty:1, room:'cozinha', img:'facas-bege.jpeg', sug:'Cor: bege' },
+            { id:'talheres', name:'Talheres', qty:1, room:'cozinha', img:'talheres.jpeg', sug:'' },
             // Quarto
-            { id:'jogo-cama', name:'Jogo de Cama', qty:3, room:'quarto', img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&h=200&fit=crop' },
-            { id:'travesseiros', name:'Travesseiros', qty:4, room:'quarto', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop' },
-            { id:'abajur', name:'Abajur', qty:2, room:'quarto', img:'gift-abajur.png' },
-            { id:'cobertor', name:'Cobertor', qty:2, room:'quarto', img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop' },
-            { id:'ventilador', name:'Ventilador', qty:2, room:'quarto', img:'gift-ventilador.png' },
+            { id:'jogo-cama', name:'Jogo de Cama', qty:3, room:'quarto', img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&h=200&fit=crop', sug:'' },
+            { id:'travesseiros', name:'Travesseiros', qty:4, room:'quarto', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop', sug:'' },
+            { id:'abajur', name:'Abajur', qty:2, room:'quarto', img:'gift-abajur.png', sug:'' },
+            { id:'cobertor', name:'Cobertor', qty:2, room:'quarto', img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop', sug:'' },
+            { id:'ventilador', name:'Ventilador', qty:2, room:'quarto', img:'gift-ventilador.png', sug:'' },
             // Banheiro
-            { id:'toalhas-banho', name:'Toalhas de Banho', qty:4, room:'banheiro', img:'https://images.unsplash.com/photo-1616627561950-9f746e330187?w=200&h=200&fit=crop' },
-            { id:'tapete-banheiro', name:'Tapete de Banheiro', qty:2, room:'banheiro', img:'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=200&h=200&fit=crop' },
-            { id:'lixeira-ban', name:'Lixeira', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=200&h=200&fit=crop' },
-            { id:'espelho', name:'Espelho Decorativo', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1618220179428-22790b461013?w=200&h=200&fit=crop' },
+            { id:'toalhas-banho', name:'Toalhas de Banho', qty:4, room:'banheiro', img:'https://images.unsplash.com/photo-1616627561950-9f746e330187?w=200&h=200&fit=crop', sug:'' },
+            { id:'tapete-banheiro', name:'Tapete de Banheiro', qty:2, room:'banheiro', img:'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=200&h=200&fit=crop', sug:'' },
+            { id:'lixeira-ban', name:'Lixeira', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=200&h=200&fit=crop', sug:'' },
+            { id:'espelho', name:'Espelho Decorativo', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1618220179428-22790b461013?w=200&h=200&fit=crop', sug:'' },
             // Sala
-            { id:'almofadas', name:'Almofadas Decorativas', qty:4, room:'sala', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop' },
-            { id:'cortina', name:'Cortina', qty:2, room:'sala', img:'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&h=200&fit=crop' },
-            { id:'tapete-sala', name:'Tapete', qty:1, room:'sala', img:'https://images.unsplash.com/photo-1600166898405-da9535204843?w=200&h=200&fit=crop' },
+            { id:'almofadas', name:'Almofadas Decorativas', qty:4, room:'sala', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop', sug:'' },
+            { id:'cortina', name:'Cortina', qty:2, room:'sala', img:'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&h=200&fit=crop', sug:'' },
+            { id:'tapete-sala', name:'Tapete', qty:1, room:'sala', img:'https://images.unsplash.com/photo-1600166898405-da9535204843?w=200&h=200&fit=crop', sug:'' },
             // Lavanderia
-            { id:'maq-lavar', name:'Máquina de Lavar', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=200&h=200&fit=crop' },
-            { id:'ferro', name:'Ferro de Passar', qty:1, room:'lavanderia', img:'gift-ferro.png' },
-            { id:'aspirador', name:'Aspirador de Pó', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&h=200&fit=crop' },
-            { id:'tabua', name:'Tábua de Passar', qty:1, room:'lavanderia', img:'gift-tabua.png' },
+            { id:'maq-lavar', name:'Máquina de Lavar', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=200&h=200&fit=crop', sug:'' },
+            { id:'ferro', name:'Ferro de Passar', qty:1, room:'lavanderia', img:'gift-ferro.png', sug:'' },
+            { id:'aspirador', name:'Aspirador de Pó', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&h=200&fit=crop', sug:'' },
+            { id:'tabua', name:'Tábua de Passar', qty:1, room:'lavanderia', img:'gift-tabua.png', sug:'' },
         ];
 
         let selectedGifts = [];
-        function getReserved() { try { return JSON.parse(localStorage.getItem('cha-gifts-reserved')||'{}'); } catch(e) { return {}; } }
-        function saveReserved(r) { localStorage.setItem('cha-gifts-reserved', JSON.stringify(r)); }
+
+        // ===== FIREBASE CONFIG =====
+        // INSTRUÇÕES: Substitua o objeto abaixo com as credenciais do seu projeto Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDaRr5DMr6sSpkfS7vi9FGUkrgwRxtERuA",
+            authDomain: "cha-leo-isa.firebaseapp.com",
+            databaseURL: "https://cha-leo-isa-default-rtdb.firebaseio.com",
+            projectId: "cha-leo-isa",
+            storageBucket: "cha-leo-isa.firebasestorage.app",
+            messagingSenderId: "799403119928",
+            appId: "1:799403119928:web:045804127c3409d8db9dcd"
+        };
+
+        let fbDb = null;
+        let firebaseReady = false;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            fbDb = firebase.database();
+            firebaseReady = true;
+        } catch(e) {
+            console.warn('Firebase não configurado. Usando localStorage como fallback.', e);
+        }
+
+        // Cache local dos presentes reservados
+        let cachedReserved = {};
+        try { cachedReserved = JSON.parse(localStorage.getItem('cha-gifts-reserved') || '{}'); } catch(e) {}
+
+        function getReserved() { return cachedReserved; }
+        function saveReservedLocal(r) { localStorage.setItem('cha-gifts-reserved', JSON.stringify(r)); }
+
+        // Listener em tempo real do Firebase
+        if (firebaseReady) {
+            fbDb.ref('reserved').on('value', snap => {
+                cachedReserved = snap.val() || {};
+                saveReservedLocal(cachedReserved);
+                // Re-render se o modal está aberto
+                if (document.getElementById('gift-modal').classList.contains('open')) {
+                    renderGiftGrid();
+                    updateConfirmBtn();
+                }
+            });
+        }
 
         function renderGiftGrid() {
             const grid = document.getElementById('gift-grid');
@@ -696,6 +836,7 @@
             // Save which rooms are currently open
             const openRooms = new Set();
             grid.querySelectorAll('.gift-room-section.open').forEach(s => openRooms.add(s.dataset.roomId));
+            const isFirstRender = grid.children.length === 0;
             grid.innerHTML = '';
 
             ROOMS.forEach(room => {
@@ -706,8 +847,8 @@
                 const section = document.createElement('div');
                 section.className = 'gift-room-section';
                 section.dataset.roomId = room.id;
-                // Restore open state
-                if (openRooms.has(room.id)) section.classList.add('open');
+                // Default open on first render, otherwise restore state
+                if (isFirstRender || openRooms.has(room.id)) section.classList.add('open');
                 section.innerHTML = `
                     <div class="gift-room-header" onclick="this.parentElement.classList.toggle('open')">
                         <img src="${room.img}" alt="${room.name}" class="gift-room-img">
@@ -727,8 +868,10 @@
                     const isSelected = selectedGifts.includes(g.id);
                     const card = document.createElement('div');
                     card.className = 'gift-card' + (taken ? ' taken' : '') + (isSelected ? ' selected' : '');
+                    const sugHtml = g.sug ? `<span class="gift-card-suggestion">✦ ${g.sug}</span>` : '';
                     card.innerHTML = `<img src="${g.img}" alt="${g.name}" class="gift-card-img" onerror="this.style.display='none'">
                         <p class="gift-card-name">${g.name}</p>
+                        ${sugHtml}
                         <p class="gift-card-qty">${taken ? 'Esgotado' : (g.qty > 1 ? avail + ' disponível(eis)' : '1 unidade')}</p>`;
                     if (!taken) {
                         card.addEventListener('click', () => {
@@ -760,11 +903,13 @@
             renderGiftGrid();
             updateConfirmBtn();
             document.body.style.overflow = 'hidden';
+            startInspoCarousel();
         }
 
         function closeGiftModal() {
             document.getElementById('gift-modal').classList.remove('open');
             document.body.style.overflow = 'auto';
+            stopInspoCarousel();
         }
 
         function showGiftNameStep() {
@@ -778,10 +923,27 @@
         function confirmGift() {
             const name = document.getElementById('gift-name-input').value.trim();
             if (!name) { document.getElementById('gift-name-input').style.boxShadow = '0 0 0 2px #B85A4A'; return; }
-            const reserved = getReserved();
-            selectedGifts.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
-            saveReserved(reserved);
-            const giftNames = selectedGifts.map(id => GIFTS.find(g => g.id === id)?.name).join(', ');
+
+            if (firebaseReady) {
+                // Usar transações atômicas do Firebase (seguro para acessos simultâneos)
+                selectedGifts.forEach(id => {
+                    fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
+                });
+                // Salvar detalhes do convidado
+                const giftNames = selectedGifts.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
+                fbDb.ref('guests').push({
+                    name: name,
+                    gifts: giftNames,
+                    giftIds: [...selectedGifts],
+                    date: new Date().toISOString()
+                });
+            } else {
+                // Fallback localStorage
+                const reserved = getReserved();
+                selectedGifts.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
+                saveReservedLocal(reserved);
+            }
+
             document.getElementById('gift-name-step').classList.remove('show');
             document.getElementById('gift-success-step').classList.add('show');
             // Pre-fill RSVP name
@@ -794,6 +956,25 @@
             if (e.target === e.currentTarget) closeGiftModal();
         });
 
+        // INSPIRATION CAROUSEL
+        let inspoInterval = null;
+        function startInspoCarousel() {
+            const imgs = document.querySelectorAll('#inspo-carousel img');
+            const dots = document.querySelectorAll('.inspo-dots span');
+            let current = 0;
+            if (inspoInterval) clearInterval(inspoInterval);
+            inspoInterval = setInterval(() => {
+                imgs[current].classList.remove('inspo-active');
+                dots[current].classList.remove('active');
+                current = (current + 1) % imgs.length;
+                imgs[current].classList.add('inspo-active');
+                dots[current].classList.add('active');
+            }, 3500);
+        }
+        function stopInspoCarousel() {
+            if (inspoInterval) { clearInterval(inspoInterval); inspoInterval = null; }
+        }
+
         // RSVP
         document.getElementById('rsvp-form').addEventListener('submit', e => {
             e.preventDefault();
@@ -804,6 +985,17 @@
                 const n = i.querySelector('input').value;
                 if (n) comps.push({ type: i.querySelector('.comp-type').textContent, name: n });
             });
+
+            // Salvar confirmação no Firebase
+            if (firebaseReady) {
+                fbDb.ref('rsvp').push({
+                    name: d.name,
+                    phone: d.phone || '',
+                    companions: comps,
+                    date: new Date().toISOString()
+                });
+            }
+
             let m = `🎉 *Presença confirmada - Chá de Panela*\n\n*Nome:* ${d.name}\n*Telefone:* ${d.phone||'-'}`;
             if (comps.length) {
                 m += `\n\n*Acompanhantes:*`;

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel — Chá de Panela Leo & Isa</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f1117; color: #e4e4e7; min-height: 100vh; }
+        
+        .header { background: linear-gradient(135deg, #1a1b23, #252730); border-bottom: 1px solid rgba(255,255,255,.06); padding: 24px 32px; }
+        .header h1 { font-size: 22px; font-weight: 600; color: #fff; }
+        .header p { font-size: 13px; color: #71717a; margin-top: 4px; }
+        
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding: 24px 32px; }
+        .stat-card { background: linear-gradient(135deg, #1e1f2b, #252636); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 20px 24px; }
+        .stat-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: #71717a; margin-bottom: 8px; }
+        .stat-value { font-size: 36px; font-weight: 700; color: #fff; }
+        .stat-value.green { color: #4ade80; }
+        .stat-value.blue { color: #60a5fa; }
+        .stat-value.amber { color: #fbbf24; }
+        .stat-value.purple { color: #c084fc; }
+
+        .section { padding: 16px 32px 32px; }
+        .section-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .section-title span { font-size: 20px; }
+        
+        .table-wrap { background: #1a1b23; border: 1px solid rgba(255,255,255,.06); border-radius: 12px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #71717a; background: rgba(255,255,255,.02); border-bottom: 1px solid rgba(255,255,255,.06); }
+        td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,.04); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,.02); }
+        
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+        .badge-green { background: rgba(74,222,128,.1); color: #4ade80; }
+        .badge-red { background: rgba(248,113,113,.1); color: #f87171; }
+        .badge-blue { background: rgba(96,165,250,.1); color: #60a5fa; }
+        .badge-amber { background: rgba(251,191,36,.1); color: #fbbf24; }
+        
+        .empty { text-align: center; padding: 40px; color: #52525b; font-size: 14px; }
+        .timestamp { color: #52525b; font-size: 12px; }
+        .companions-list { font-size: 12px; color: #a1a1aa; }
+        
+        .refresh-note { text-align: center; padding: 16px; font-size: 11px; color: #3f3f46; }
+        .live-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+
+        .gift-bar { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; min-width: 60px; }
+        .gift-bar-fill { height: 100%; background: #4ade80; border-radius: 3px; transition: width .5s; }
+        .gift-bar-fill.full { background: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎁 Painel — Chá de Panela</h1>
+        <p><span class="live-dot"></span> Atualização em tempo real · Leonardo & Isabelle · 24 de Maio</p>
+    </div>
+
+    <div class="stats" id="stats">
+        <div class="stat-card">
+            <div class="stat-label">Presenças Confirmadas</div>
+            <div class="stat-value green" id="stat-rsvp">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total de Convidados</div>
+            <div class="stat-value blue" id="stat-total-people">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Presentes Reservados</div>
+            <div class="stat-value amber" id="stat-gifts">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Presentes Disponíveis</div>
+            <div class="stat-value purple" id="stat-avail">0</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title"><span>📋</span> Confirmações de Presença</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>#</th><th>Nome</th><th>Telefone</th><th>Acompanhantes</th><th>Data</th></tr></thead>
+                <tbody id="rsvp-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title"><span>🎁</span> Presentes Reservados</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>#</th><th>Convidado</th><th>Presentes</th><th>Data</th></tr></thead>
+                <tbody id="guests-table"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title"><span>📦</span> Status dos Presentes</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Presente</th><th>Reservado por</th><th>Status</th><th>Progresso</th></tr></thead>
+                <tbody id="gifts-status-table"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="refresh-note">Os dados atualizam automaticamente em tempo real. Não precisa recarregar a página.</p>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDaRr5DMr6sSpkfS7vi9FGUkrgwRxtERuA",
+            authDomain: "cha-leo-isa.firebaseapp.com",
+            databaseURL: "https://cha-leo-isa-default-rtdb.firebaseio.com",
+            projectId: "cha-leo-isa",
+            storageBucket: "cha-leo-isa.firebasestorage.app",
+            messagingSenderId: "799403119928",
+            appId: "1:799403119928:web:045804127c3409d8db9dcd"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const GIFT_NAMES = {
+            'panelas-aco': 'Jogo de Panelas (Aço Cirúrgico)',
+            'panela-ceramica': 'Panela 100% Cerâmica',
+            'frigideira-ceramica': 'Frigideira Cerâmica',
+            'frigideira-aco': 'Frigideira Aço Cirúrgico',
+            'panela-pedra': 'Panela de Pedra Sabão',
+            'leiteira-ceramica': 'Leiteira Cerâmica',
+            'airfryer': 'Air Fryer',
+            'geladeira': 'Geladeira',
+            'forno': 'Forno',
+            'liquidificador': 'Liquidificador',
+            'batedeira': 'Batedeira',
+            'chaleira': 'Chaleira Elétrica',
+            'filtro': 'Filtro',
+            'utensilios': 'Conjunto de Utensílios',
+            'facas': 'Jogo de Facas',
+            'talheres': 'Talheres',
+            'jogo-cama': 'Jogo de Cama',
+            'travesseiros': 'Travesseiros',
+            'abajur': 'Abajur',
+            'cobertor': 'Cobertor',
+            'ventilador': 'Ventilador',
+            'toalhas-banho': 'Toalhas de Banho',
+            'tapete-banheiro': 'Tapete de Banheiro',
+            'lixeira-ban': 'Lixeira (Banheiro)',
+            'espelho': 'Espelho Decorativo',
+            'almofadas': 'Almofadas Decorativas',
+            'cortina': 'Cortina',
+            'tapete-sala': 'Tapete (Sala)',
+            'maq-lavar': 'Máquina de Lavar',
+            'ferro': 'Ferro de Passar',
+            'aspirador': 'Aspirador de Pó',
+            'tabua': 'Tábua de Passar',
+        };
+
+        function formatDate(iso) {
+            if (!iso) return '-';
+            const d = new Date(iso);
+            return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+        }
+
+        // Real-time RSVP listener
+        let allRsvp = {};
+        db.ref('rsvp').on('value', snap => {
+            allRsvp = snap.val() || {};
+            renderRsvp();
+            updateStats();
+        });
+
+        // Real-time guests listener
+        let allGuests = {};
+        db.ref('guests').on('value', snap => {
+            allGuests = snap.val() || {};
+            renderGuests();
+            updateStats();
+        });
+
+        // Real-time reserved listener
+        let allReserved = {};
+        db.ref('reserved').on('value', snap => {
+            allReserved = snap.val() || {};
+            renderGiftsStatus();
+            updateStats();
+        });
+
+        function renderRsvp() {
+            const tbody = document.getElementById('rsvp-table');
+            const entries = Object.values(allRsvp).sort((a,b) => new Date(b.date) - new Date(a.date));
+            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty">Nenhuma confirmação ainda</td></tr>'; return; }
+            tbody.innerHTML = entries.map((r, i) => {
+                const comps = (r.companions || []).map(c => `${c.name} (${c.type})`).join(', ');
+                return `<tr>
+                    <td>${i+1}</td>
+                    <td><strong>${r.name}</strong></td>
+                    <td>${r.phone || '-'}</td>
+                    <td class="companions-list">${comps || '-'}</td>
+                    <td class="timestamp">${formatDate(r.date)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderGuests() {
+            const tbody = document.getElementById('guests-table');
+            const entries = Object.values(allGuests).sort((a,b) => new Date(b.date) - new Date(a.date));
+            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="empty">Nenhum presente reservado ainda</td></tr>'; return; }
+            tbody.innerHTML = entries.map((g, i) => {
+                const gifts = (g.gifts || g.giftIds || []).map(name => `<span class="badge badge-amber">${name}</span>`).join(' ');
+                return `<tr>
+                    <td>${i+1}</td>
+                    <td><strong>${g.name}</strong></td>
+                    <td>${gifts}</td>
+                    <td class="timestamp">${formatDate(g.date)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function renderGiftsStatus() {
+            const tbody = document.getElementById('gifts-status-table');
+            // Build who reserved what from allGuests
+            const reservedBy = {};
+            Object.values(allGuests).forEach(g => {
+                (g.giftIds || []).forEach(id => {
+                    if (!reservedBy[id]) reservedBy[id] = [];
+                    reservedBy[id].push(g.name);
+                });
+            });
+
+            const rows = Object.keys(GIFT_NAMES).map(id => {
+                const name = GIFT_NAMES[id];
+                const reserved = allReserved[id] || 0;
+                const people = (reservedBy[id] || []).join(', ');
+                const isTaken = reserved > 0;
+                const status = isTaken ? '<span class="badge badge-red">Reservado</span>' : '<span class="badge badge-green">Disponível</span>';
+                const pct = isTaken ? 100 : 0;
+                return `<tr>
+                    <td>${name}</td>
+                    <td style="font-size:13px;color:#a1a1aa">${people || '-'}</td>
+                    <td>${status}</td>
+                    <td><div class="gift-bar"><div class="gift-bar-fill ${isTaken ? 'full' : ''}" style="width:${pct}%"></div></div></td>
+                </tr>`;
+            });
+            tbody.innerHTML = rows.join('');
+        }
+
+        function updateStats() {
+            const rsvpEntries = Object.values(allRsvp);
+            document.getElementById('stat-rsvp').textContent = rsvpEntries.length;
+            
+            // Total people = rsvp + their companions
+            let totalPeople = 0;
+            rsvpEntries.forEach(r => {
+                totalPeople += 1 + (r.companions || []).length;
+            });
+            document.getElementById('stat-total-people').textContent = totalPeople;
+
+            const reservedCount = Object.values(allReserved).filter(v => v > 0).length;
+            document.getElementById('stat-gifts').textContent = reservedCount;
+            document.getElementById('stat-avail').textContent = Object.keys(GIFT_NAMES).length - reservedCount;
+        }
+    </script>
+</body>
+</html>
