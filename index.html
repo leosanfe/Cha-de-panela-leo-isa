@@ -11,6 +11,14 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script>
+        // MUST run before first paint — detect returning visitor
+        if (sessionStorage.getItem('cha-visited')) {
+            document.documentElement.classList.add('skip-intro');
+        }
+        // Prevent browser from restoring scroll position on refresh
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
     <style>
         :root {
             --bg: #FAF8F3; --bg-warm: #F5F1EB; --bg-cream: #EDE8DF; --bg-rsvp: #E5DFD4;
@@ -93,25 +101,28 @@
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-        /* SKIP INTRO — for returning visitors */
-        #main-content.skip-intro-content { display: flex !important; opacity: 1 !important; transition: none !important; }
-        .hero.skip-intro { background: transparent !important; transition: none !important; }
-        .hero.skip-intro .hero-video-bg { opacity: 1 !important; transition: none !important; }
-        .hero.skip-intro .hero-overlay { opacity: 1 !important; transition: none !important; }
-        .hero.skip-intro .hero-ornament,
-        .hero.skip-intro .hero-pretitle,
-        .hero.skip-intro .hero-names,
-        .hero.skip-intro .hero-date,
-        .hero.skip-intro .hero-bottom { opacity: 1 !important; transform: none !important; transition: none !important; }
-        .hero.skip-intro .hero-pretitle { color: rgba(255,255,255,0.85) !important; }
-        .hero.skip-intro .hero-names { color: var(--white) !important; text-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
-        .hero.skip-intro .hero-names .amp { color: rgba(255,255,255,0.8) !important; }
-        .hero.skip-intro .hero-date { color: rgba(255,255,255,0.9) !important; text-shadow: 0 2px 10px rgba(0,0,0,.3) !important; }
-        .hero.skip-intro .hero-date-line { background: rgba(255,255,255,0.4) !important; }
-        .hero.skip-intro .hero-diamond { border-color: rgba(255,255,255,0.5) !important; }
-        .hero.skip-intro .hero-rsvp { color: rgba(255,255,255,0.7) !important; }
-        .hero.skip-intro .hero-scroll-arrow svg { color: var(--white) !important; }
-        .music-btn.skip-intro-music { opacity: 1 !important; pointer-events: all !important; }
+        /* SKIP INTRO — for returning visitors (triggered from <head> script) */
+        html.skip-intro #splash-screen,
+        html.skip-intro #white-fade { display: none !important; }
+        html.skip-intro #main-content { display: flex !important; opacity: 1 !important; transition: none !important; }
+        html.skip-intro .hero { background: transparent !important; transition: none !important; }
+        html.skip-intro .hero-video-bg { opacity: 1 !important; transition: none !important; }
+        html.skip-intro .hero-overlay { opacity: 1 !important; transition: none !important; }
+        html.skip-intro .hero-ornament,
+        html.skip-intro .hero-pretitle,
+        html.skip-intro .hero-names,
+        html.skip-intro .hero-date,
+        html.skip-intro .hero-bottom { opacity: 1 !important; transform: none !important; transition: none !important; }
+        html.skip-intro .hero-pretitle { color: rgba(255,255,255,0.85) !important; }
+        html.skip-intro .hero-names { color: var(--white) !important; text-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
+        html.skip-intro .hero-names .amp { color: rgba(255,255,255,0.8) !important; }
+        html.skip-intro .hero-date { color: rgba(255,255,255,0.9) !important; text-shadow: 0 2px 10px rgba(0,0,0,.3) !important; }
+        html.skip-intro .hero-date-line { background: rgba(255,255,255,0.4) !important; }
+        html.skip-intro .hero-diamond { border-color: rgba(255,255,255,0.5) !important; }
+        html.skip-intro .hero-rsvp { color: rgba(255,255,255,0.7) !important; }
+        html.skip-intro .hero-scroll-arrow svg { color: var(--white) !important; }
+        html.skip-intro .music-btn { opacity: 1 !important; pointer-events: all !important; }
+        html.skip-intro body { overflow: auto !important; background-color: var(--bg) !important; }
 
         /* COUNTDOWN */
         .countdown-section { width: 100%; background: var(--olive); padding: 40px 24px; text-align: center; }
@@ -661,32 +672,21 @@
         // Reset scroll on load to prevent bugs
         window.scrollTo(0, 0);
 
-        // Check if returning visitor (expires when browser closes)
-        if (sessionStorage.getItem('cha-visited')) {
-            // Skip splash entirely — show main content immediately
-            splashScreen.style.display = 'none';
-            whiteFade.style.display = 'none';
-            mainContent.classList.add('skip-intro-content');
-            document.body.style.backgroundColor = 'var(--bg)';
-            document.body.style.overflow = 'auto';
-            // Instant hero reveal via CSS class
-            document.getElementById('hero').classList.add('skip-intro', 'hero-revealed');
-            // Show music button immediately
-            document.getElementById('music-btn').classList.add('skip-intro-music');
-            // Auto-start music (will work if Safari allows, otherwise user clicks button)
-            window.addEventListener('DOMContentLoaded', () => {
-                const bgm = document.getElementById('bg-music');
-                bgm.volume = 0.4;
-                bgm.play().then(() => {
-                    document.getElementById('music-btn').classList.remove('muted');
-                }).catch(() => {
-                    // Safari blocks autoplay — start on first touch/click
-                    document.addEventListener('click', function resumeAudio() {
-                        bgm.play().then(() => { document.getElementById('music-btn').classList.remove('muted'); });
-                        document.removeEventListener('click', resumeAudio);
-                    }, { once: true });
-                });
-            }, { once: true });
+        // Check if returning visitor
+        if (document.documentElement.classList.contains('skip-intro')) {
+            // Everything is handled by CSS via html.skip-intro
+            // Just need to start music
+            const bgm = document.getElementById('bg-music');
+            bgm.volume = 0.4;
+            bgm.play().then(() => {
+                document.getElementById('music-btn').classList.remove('muted');
+            }).catch(() => {
+                // Safari blocks autoplay — enable on first user interaction
+                document.addEventListener('click', function resumeAudio() {
+                    bgm.play().then(() => { document.getElementById('music-btn').classList.remove('muted'); });
+                    document.removeEventListener('click', resumeAudio);
+                }, { once: true });
+            });
         } else {
             // First visit — normal splash flow
             splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
@@ -751,7 +751,7 @@
                 setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
             }, 5600);
         }
-        if (!sessionStorage.getItem('cha-visited')) {
+        if (!document.documentElement.classList.contains('skip-intro')) {
             document.body.style.overflow='hidden';
             const iv=getActiveSplash();iv.currentTime=0;iv.pause();
         }
