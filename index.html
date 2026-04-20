@@ -653,17 +653,24 @@
             const hero = document.getElementById('hero');
             hero.style.transition = 'none';
             hero.style.background = 'transparent';
-            hero.querySelector('.hero-video-bg').style.cssText = 'opacity:1;transition:none;';
-            hero.querySelector('.hero-overlay').style.cssText = 'opacity:1;transition:none;';
+            const heroVid = hero.querySelector('.hero-video-bg');
+            heroVid.style.cssText = 'opacity:1 !important;transition:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;';
+            heroVid.play().catch(() => {});
+            const heroOverlay = hero.querySelector('.hero-overlay');
+            heroOverlay.style.cssText = 'opacity:1 !important;transition:none;position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.25) 40%,rgba(0,0,0,.30) 70%,rgba(0,0,0,.50));';
             hero.classList.add('hero-revealed');
             hero.querySelectorAll('.hero-ornament, .hero-pretitle, .hero-names, .hero-date, .hero-bottom').forEach(el => {
                 el.style.transition = 'none';
                 el.classList.add('hero-text-visible');
             });
-            // Show music button
+            // Show music button and start music
             setTimeout(() => {
-                document.getElementById('music-btn').classList.add('visible');
-            }, 100);
+                const mb = document.getElementById('music-btn');
+                mb.classList.add('visible');
+                const bgm = document.getElementById('bg-music');
+                bgm.volume = 0.4;
+                bgm.play().then(() => { mb.classList.remove('muted'); }).catch(() => { mb.classList.add('muted'); });
+            }, 300);
         } else {
             // First visit — normal splash flow
             splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
