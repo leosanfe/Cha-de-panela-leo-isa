@@ -44,6 +44,9 @@
         .empty { text-align: center; padding: 40px; color: #52525b; font-size: 14px; }
         .timestamp { color: #52525b; font-size: 12px; }
         .companions-list { font-size: 12px; color: #a1a1aa; }
+        .phone-link { color: #4ade80; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; transition: opacity .2s; }
+        .phone-link:hover { opacity: .7; text-decoration: underline; }
+        .phone-link svg { width: 14px; height: 14px; fill: #25D366; }
         
         .refresh-note { text-align: center; padding: 16px; font-size: 11px; color: #3f3f46; }
         .live-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
@@ -52,9 +55,37 @@
         .gift-bar { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; min-width: 60px; }
         .gift-bar-fill { height: 100%; background: #4ade80; border-radius: 3px; transition: width .5s; }
         .gift-bar-fill.full { background: #f87171; }
+
+        /* LOGIN SCREEN */
+        .login-overlay { position: fixed; inset: 0; background: #0f1117; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .login-overlay.hidden { display: none; }
+        .login-box { text-align: center; max-width: 360px; width: 100%; padding: 24px; }
+        .login-box h2 { font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+        .login-box p { font-size: 13px; color: #71717a; margin-bottom: 24px; }
+        .login-input { width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,.1); background: #1a1b23; color: #fff; font-family: 'Inter', sans-serif; font-size: 16px; text-align: center; letter-spacing: 8px; outline: none; transition: border-color .3s; }
+        .login-input:focus { border-color: #60a5fa; }
+        .login-input.error { border-color: #f87171; animation: shake .4s; }
+        .login-btn { width: 100%; margin-top: 12px; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .3s; }
+        .login-btn:hover { opacity: .9; }
+        .login-error { color: #f87171; font-size: 12px; margin-top: 8px; min-height: 18px; }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        .dashboard { display: none; }
+        .dashboard.visible { display: block; }
     </style>
 </head>
 <body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-box">
+            <h2>🔒 Painel Admin</h2>
+            <p>Digite a senha para acessar</p>
+            <input type="password" class="login-input" id="login-input" placeholder="••••••" maxlength="10" autofocus>
+            <button class="login-btn" id="login-btn" onclick="checkPassword()">Entrar</button>
+            <p class="login-error" id="login-error"></p>
+        </div>
+    </div>
+
+    <div class="dashboard" id="dashboard">
     <div class="header">
         <h1>🎁 Painel — Chá de Panela</h1>
         <p><span class="live-dot"></span> Atualização em tempo real · Leonardo & Isabelle · 24 de Maio</p>
@@ -93,8 +124,8 @@
         <h2 class="section-title"><span>🎁</span> Presentes Reservados</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>#</th><th>Convidado</th><th>Presentes</th><th>Data</th></tr></thead>
-                <tbody id="guests-table"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody>
+                <thead><tr><th>#</th><th>Convidado</th><th>Telefone</th><th>Presentes</th><th>Data</th></tr></thead>
+                <tbody id="guests-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -110,8 +141,33 @@
     </div>
 
     <p class="refresh-note">Os dados atualizam automaticamente em tempo real. Não precisa recarregar a página.</p>
+    </div><!-- end dashboard -->
 
     <script>
+        const ADMIN_PASS = '240374';
+
+        function checkPassword() {
+            const input = document.getElementById('login-input');
+            const error = document.getElementById('login-error');
+            if (input.value === ADMIN_PASS) {
+                sessionStorage.setItem('admin-auth', 'true');
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('visible');
+                initFirebase();
+            } else {
+                input.classList.add('error');
+                error.textContent = 'Senha incorreta';
+                setTimeout(() => { input.classList.remove('error'); error.textContent = ''; }, 1500);
+            }
+        }
+        document.getElementById('login-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+        // Auto-login if session exists
+        if (sessionStorage.getItem('admin-auth') === 'true') {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('visible');
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyDaRr5DMr6sSpkfS7vi9FGUkrgwRxtERuA",
             authDomain: "cha-leo-isa.firebaseapp.com",
@@ -123,6 +179,10 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        function initFirebase() {
+            // Start listeners only after login
+        }
 
         const GIFT_NAMES = {
             'panelas-aco': 'Jogo de Panelas (Aço Cirúrgico)',
@@ -165,6 +225,20 @@
             return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
         }
 
+        function phoneLink(phone) {
+            if (!phone || phone === '-') return '-';
+            const clean = phone.replace(/\D/g, '');
+            const num = clean.startsWith('55') ? clean : '55' + clean;
+            const display = phone.replace(/\D/g,'').replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+            return `<a href="https://wa.me/${num}" target="_blank" class="phone-link"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.019-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.616l4.584-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.143 0-4.144-.663-5.804-1.794l-.405-.27-2.723.873.894-2.664-.296-.427A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>${display || phone}</a>`;
+        }
+
+        function findPhoneByName(name) {
+            const entries = Object.values(allRsvp);
+            const match = entries.find(r => r.name && r.name.toLowerCase().trim() === name.toLowerCase().trim());
+            return match ? match.phone : null;
+        }
+
         // Real-time RSVP listener
         let allRsvp = {};
         db.ref('rsvp').on('value', snap => {
@@ -198,7 +272,7 @@
                 return `<tr>
                     <td>${i+1}</td>
                     <td><strong>${r.name}</strong></td>
-                    <td>${r.phone || '-'}</td>
+                    <td>${phoneLink(r.phone)}</td>
                     <td class="companions-list">${comps || '-'}</td>
                     <td class="timestamp">${formatDate(r.date)}</td>
                 </tr>`;
@@ -208,12 +282,14 @@
         function renderGuests() {
             const tbody = document.getElementById('guests-table');
             const entries = Object.values(allGuests).sort((a,b) => new Date(b.date) - new Date(a.date));
-            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="empty">Nenhum presente reservado ainda</td></tr>'; return; }
+            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty">Nenhum presente reservado ainda</td></tr>'; return; }
             tbody.innerHTML = entries.map((g, i) => {
                 const gifts = (g.gifts || g.giftIds || []).map(name => `<span class="badge badge-amber">${name}</span>`).join(' ');
+                const phone = findPhoneByName(g.name);
                 return `<tr>
                     <td>${i+1}</td>
                     <td><strong>${g.name}</strong></td>
+                    <td>${phone ? phoneLink(phone) : '<span style="color:#52525b;font-size:12px">sem telefone</span>'}</td>
                     <td>${gifts}</td>
                     <td class="timestamp">${formatDate(g.date)}</td>
                 </tr>`;
