@@ -641,21 +641,26 @@
         // Reset scroll on load to prevent bugs
         window.scrollTo(0, 0);
 
-        // Check if returning visitor
-        if (localStorage.getItem('cha-visited')) {
+        // Check if returning visitor (expires when browser closes)
+        if (sessionStorage.getItem('cha-visited')) {
             // Skip splash entirely — show main content immediately
             splashScreen.style.display = 'none';
             whiteFade.style.display = 'none';
             mainContent.classList.add('visible');
             document.body.style.backgroundColor = 'var(--bg)';
             document.body.style.overflow = 'auto';
-            // Show hero fully revealed (no animations)
+            // Show hero fully revealed WITHOUT transitions (no white flash)
             const hero = document.getElementById('hero');
+            hero.style.transition = 'none';
+            hero.style.background = 'transparent';
+            hero.querySelector('.hero-video-bg').style.cssText = 'opacity:1;transition:none;';
+            hero.querySelector('.hero-overlay').style.cssText = 'opacity:1;transition:none;';
             hero.classList.add('hero-revealed');
             hero.querySelectorAll('.hero-ornament, .hero-pretitle, .hero-names, .hero-date, .hero-bottom').forEach(el => {
+                el.style.transition = 'none';
                 el.classList.add('hero-text-visible');
             });
-            // Show music button for returning visitors
+            // Show music button
             setTimeout(() => {
                 document.getElementById('music-btn').classList.add('visible');
             }, 100);
@@ -687,7 +692,7 @@
                 // Staggered hero text intro
                 heroIntroSequence();
                 // Mark as visited
-                localStorage.setItem('cha-visited', 'true');
+                sessionStorage.setItem('cha-visited', 'true');
             },500);
         }
         function heroIntroSequence() {
@@ -723,7 +728,7 @@
                 setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
             }, 5600);
         }
-        if (!localStorage.getItem('cha-visited')) {
+        if (!sessionStorage.getItem('cha-visited')) {
             document.body.style.overflow='hidden';
             const iv=getActiveSplash();iv.currentTime=0;iv.pause();
         }
