@@ -93,6 +93,26 @@
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
+        /* SKIP INTRO — for returning visitors */
+        #main-content.skip-intro-content { display: flex !important; opacity: 1 !important; transition: none !important; }
+        .hero.skip-intro { background: transparent !important; transition: none !important; }
+        .hero.skip-intro .hero-video-bg { opacity: 1 !important; transition: none !important; }
+        .hero.skip-intro .hero-overlay { opacity: 1 !important; transition: none !important; }
+        .hero.skip-intro .hero-ornament,
+        .hero.skip-intro .hero-pretitle,
+        .hero.skip-intro .hero-names,
+        .hero.skip-intro .hero-date,
+        .hero.skip-intro .hero-bottom { opacity: 1 !important; transform: none !important; transition: none !important; }
+        .hero.skip-intro .hero-pretitle { color: rgba(255,255,255,0.85) !important; }
+        .hero.skip-intro .hero-names { color: var(--white) !important; text-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
+        .hero.skip-intro .hero-names .amp { color: rgba(255,255,255,0.8) !important; }
+        .hero.skip-intro .hero-date { color: rgba(255,255,255,0.9) !important; text-shadow: 0 2px 10px rgba(0,0,0,.3) !important; }
+        .hero.skip-intro .hero-date-line { background: rgba(255,255,255,0.4) !important; }
+        .hero.skip-intro .hero-diamond { border-color: rgba(255,255,255,0.5) !important; }
+        .hero.skip-intro .hero-rsvp { color: rgba(255,255,255,0.7) !important; }
+        .hero.skip-intro .hero-scroll-arrow svg { color: var(--white) !important; }
+        .music-btn.skip-intro-music { opacity: 1 !important; pointer-events: all !important; }
+
         /* COUNTDOWN */
         .countdown-section { width: 100%; background: var(--olive); padding: 40px 24px; text-align: center; }
         .countdown-monogram { width: 60px; margin: 0 auto 14px; }
@@ -646,31 +666,27 @@
             // Skip splash entirely — show main content immediately
             splashScreen.style.display = 'none';
             whiteFade.style.display = 'none';
-            mainContent.classList.add('visible');
+            mainContent.classList.add('skip-intro-content');
             document.body.style.backgroundColor = 'var(--bg)';
             document.body.style.overflow = 'auto';
-            // Show hero fully revealed WITHOUT transitions (no white flash)
-            const hero = document.getElementById('hero');
-            hero.style.transition = 'none';
-            hero.style.background = 'transparent';
-            const heroVid = hero.querySelector('.hero-video-bg');
-            heroVid.style.cssText = 'opacity:1 !important;transition:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;';
-            heroVid.play().catch(() => {});
-            const heroOverlay = hero.querySelector('.hero-overlay');
-            heroOverlay.style.cssText = 'opacity:1 !important;transition:none;position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.25) 40%,rgba(0,0,0,.30) 70%,rgba(0,0,0,.50));';
-            hero.classList.add('hero-revealed');
-            hero.querySelectorAll('.hero-ornament, .hero-pretitle, .hero-names, .hero-date, .hero-bottom').forEach(el => {
-                el.style.transition = 'none';
-                el.classList.add('hero-text-visible');
-            });
-            // Show music button and start music
-            setTimeout(() => {
-                const mb = document.getElementById('music-btn');
-                mb.classList.add('visible');
+            // Instant hero reveal via CSS class
+            document.getElementById('hero').classList.add('skip-intro', 'hero-revealed');
+            // Show music button immediately
+            document.getElementById('music-btn').classList.add('skip-intro-music');
+            // Auto-start music (will work if Safari allows, otherwise user clicks button)
+            window.addEventListener('DOMContentLoaded', () => {
                 const bgm = document.getElementById('bg-music');
                 bgm.volume = 0.4;
-                bgm.play().then(() => { mb.classList.remove('muted'); }).catch(() => { mb.classList.add('muted'); });
-            }, 300);
+                bgm.play().then(() => {
+                    document.getElementById('music-btn').classList.remove('muted');
+                }).catch(() => {
+                    // Safari blocks autoplay — start on first touch/click
+                    document.addEventListener('click', function resumeAudio() {
+                        bgm.play().then(() => { document.getElementById('music-btn').classList.remove('muted'); });
+                        document.removeEventListener('click', resumeAudio);
+                    }, { once: true });
+                });
+            }, { once: true });
         } else {
             // First visit — normal splash flow
             splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
