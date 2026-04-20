@@ -11,14 +11,6 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-    <script>
-        // MUST run before first paint — detect returning visitor
-        if (sessionStorage.getItem('cha-visited')) {
-            document.documentElement.classList.add('skip-intro');
-        }
-        // Prevent browser from restoring scroll position on refresh
-        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    </script>
     <style>
         :root {
             --bg: #FAF8F3; --bg-warm: #F5F1EB; --bg-cream: #EDE8DF; --bg-rsvp: #E5DFD4;
@@ -101,28 +93,6 @@
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-        /* SKIP INTRO — for returning visitors (triggered from <head> script) */
-        html.skip-intro #splash-screen,
-        html.skip-intro #white-fade { display: none !important; }
-        html.skip-intro #main-content { display: flex !important; opacity: 1 !important; transition: none !important; }
-        html.skip-intro .hero { background: transparent !important; transition: none !important; }
-        html.skip-intro .hero-video-bg { opacity: 1 !important; transition: none !important; }
-        html.skip-intro .hero-overlay { opacity: 1 !important; transition: none !important; }
-        html.skip-intro .hero-ornament,
-        html.skip-intro .hero-pretitle,
-        html.skip-intro .hero-names,
-        html.skip-intro .hero-date,
-        html.skip-intro .hero-bottom { opacity: 1 !important; transform: none !important; transition: none !important; }
-        html.skip-intro .hero-pretitle { color: rgba(255,255,255,0.85) !important; }
-        html.skip-intro .hero-names { color: var(--white) !important; text-shadow: 0 2px 20px rgba(0,0,0,.3) !important; }
-        html.skip-intro .hero-names .amp { color: rgba(255,255,255,0.8) !important; }
-        html.skip-intro .hero-date { color: rgba(255,255,255,0.9) !important; text-shadow: 0 2px 10px rgba(0,0,0,.3) !important; }
-        html.skip-intro .hero-date-line { background: rgba(255,255,255,0.4) !important; }
-        html.skip-intro .hero-diamond { border-color: rgba(255,255,255,0.5) !important; }
-        html.skip-intro .hero-rsvp { color: rgba(255,255,255,0.7) !important; }
-        html.skip-intro .hero-scroll-arrow svg { color: var(--white) !important; }
-        html.skip-intro .music-btn { opacity: 1 !important; pointer-events: all !important; }
-        html.skip-intro body { overflow: auto !important; background-color: var(--bg) !important; }
 
         /* COUNTDOWN */
         .countdown-section { width: 100%; background: var(--olive); padding: 40px 24px; text-align: center; }
@@ -406,7 +376,7 @@
         <section class="countdown-section" id="countdown">
             <div class="countdown-monogram reveal"><img src="emblema-leo-isa.png" alt="L&I"></div>
             <h2 class="countdown-title reveal rd1">Contagem Regressiva</h2>
-            <p class="countdown-subtitle reveal rd2">PARA O DIA MAIS ESPECIAL DAS NOSSAS VIDAS</p>
+            <p class="countdown-subtitle reveal rd2">PARA O NOSSO CHÁ DE PANELA</p>
             <div class="countdown-grid reveal rd3">
                 <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">DIAS</span></div>
                 <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">HORAS</span></div>
@@ -526,20 +496,6 @@
             </div>
         </section>
 
-        <!-- TRANSPORT -->
-        <section class="transport-section" id="transporte">
-            <img src="accommodation-icon-mQBd7pDb.png" alt="Fonte" class="section-art fountain-art reveal">
-            <h2 class="section-title-script reveal rd1">Como Chegar</h2>
-            <p class="section-subtitle-caps reveal rd2">ORIENTAÇÕES DE TRANSPORTE</p>
-            <p class="transport-text reveal rd3">
-                A melhor opção é vir de <strong>carro próprio</strong> para explorar a região com liberdade.
-                O local possui <strong>estacionamento gratuito e amplo</strong>, então não se preocupe com vagas.
-            </p>
-            <img src="bus-illustration-eVtX45sg.png" alt="Transporte" class="bus-art reveal">
-            <p class="transport-tip reveal rd4">
-                <em>Qualquer dúvida sobre transporte, entre em contato conosco pelo WhatsApp.</em>
-            </p>
-        </section>
 
         <!-- GIFTS -->
         <section class="gifts-section" id="presentes">
@@ -614,7 +570,9 @@
         <!-- RSVP -->
         <section class="rsvp-section" id="rsvp">
             <div class="rsvp-photo-wrapper">
-                <img src="leo-isa-moldurados.png" alt="Leonardo e Isabelle" class="rsvp-couple-photo">
+                <video autoplay loop muted playsinline style="width:100%;height:auto;display:block;">
+                    <source src="video-final-pagina.mp4" type="video/mp4">
+                </video>
             </div>
             <div id="rsvp-form-anchor" style="scroll-margin-top:60px"></div>
             <h2 class="section-title-script reveal">Confirmação</h2>
@@ -668,40 +626,17 @@
               splashVideoH=document.getElementById('splash-video-h'), splashVideoV=document.getElementById('splash-video-v');
         let hasStarted=false;
         function getActiveSplash(){return window.matchMedia('(max-width:768px),(orientation:portrait)').matches?splashVideoV:splashVideoH}
-
-        // Reset scroll on load to prevent bugs
-        window.scrollTo(0, 0);
-
-        // Check if returning visitor
-        if (document.documentElement.classList.contains('skip-intro')) {
-            // Everything is handled by CSS via html.skip-intro
-            // Just need to start music
-            const bgm = document.getElementById('bg-music');
-            bgm.volume = 0.4;
-            bgm.play().then(() => {
-                document.getElementById('music-btn').classList.remove('muted');
-            }).catch(() => {
-                // Safari blocks autoplay — enable on first user interaction
-                document.addEventListener('click', function resumeAudio() {
-                    bgm.play().then(() => { document.getElementById('music-btn').classList.remove('muted'); });
-                    document.removeEventListener('click', resumeAudio);
-                }, { once: true });
-            });
-        } else {
-            // First visit — normal splash flow
-            splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
-            splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause()});
-            splashScreen.addEventListener('click',()=>{
-                if(hasStarted)return; hasStarted=true;
-                tapIndicator.classList.add('hidden');
-                const v=getActiveSplash();
-                v.play().catch(()=>showMain());
-                splashScreen.style.cursor='default';
-                v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
-                v.addEventListener('ended',()=>showMain());
-            });
-        }
-
+        splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
+        splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause()});
+        splashScreen.addEventListener('click',()=>{
+            if(hasStarted)return; hasStarted=true;
+            tapIndicator.classList.add('hidden');
+            const v=getActiveSplash();
+            v.play().catch(()=>showMain());
+            splashScreen.style.cursor='default';
+            v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
+            v.addEventListener('ended',()=>showMain());
+        });
         function showMain(){
             whiteFade.classList.add('active');
             setTimeout(()=>{
@@ -712,10 +647,7 @@
                 musicBtn.classList.add('visible');
                 startMusic();
                 setTimeout(()=>{whiteFade.classList.add('fade-out');setTimeout(()=>{whiteFade.style.display='none'},1200)},300);
-                // Staggered hero text intro
                 heroIntroSequence();
-                // Mark as visited
-                sessionStorage.setItem('cha-visited', 'true');
             },500);
         }
         function heroIntroSequence() {
@@ -725,36 +657,19 @@
             const names = hero.querySelector('.hero-names');
             const date = hero.querySelector('.hero-date');
             const bottom = hero.querySelector('.hero-bottom');
-
-            // Lock scroll during intro
             document.body.style.overflow = 'hidden';
-
-            // Step 1: Ornament line expands
             setTimeout(() => { ornament.classList.add('hero-text-visible'); }, 300);
-
-            // Step 2: "Chá de Panela e Roda de Violão" fades up
             setTimeout(() => { pretitle.classList.add('hero-text-visible'); }, 600);
-
-            // Step 3: "Leonardo & Isabelle" enters with scale + slide
             setTimeout(() => { names.classList.add('hero-text-visible'); }, 1800);
-
-            // Step 4: Date appears
             setTimeout(() => { date.classList.add('hero-text-visible'); }, 3000);
-
-            // Step 5: "Confirme sua presença" appears
             setTimeout(() => { bottom.classList.add('hero-text-visible'); }, 3600);
-
-            // Step 6: Video fades in 2s after "Confirme sua presença"
             setTimeout(() => {
                 hero.classList.add('hero-revealed');
-                // Unlock scroll after video transition finishes (2.5s transition)
                 setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
             }, 5600);
         }
-        if (!document.documentElement.classList.contains('skip-intro')) {
-            document.body.style.overflow='hidden';
-            const iv=getActiveSplash();iv.currentTime=0;iv.pause();
-        }
+        document.body.style.overflow='hidden';
+        const iv=getActiveSplash();iv.currentTime=0;iv.pause();
 
         // MUSIC
         const bgMusic=document.getElementById('bg-music'), musicBtn=document.getElementById('music-btn');
