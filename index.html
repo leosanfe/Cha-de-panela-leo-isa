@@ -11,6 +11,11 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script>
+        // Prevent browser from restoring scroll position on refresh
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+    </script>
     <style>
         :root {
             --bg: #FAF8F3; --bg-warm: #F5F1EB; --bg-cream: #EDE8DF; --bg-rsvp: #E5DFD4;
@@ -27,7 +32,16 @@
         body { font-family: var(--sans); color: var(--text); background: #1a1815; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
         /* SPLASH */
-        #splash-screen { position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #000; overflow: hidden; }
+        #splash-screen { position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #B8C5CC; overflow: hidden; }
+        .splash-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .splash-poster.poster-h { display: block; }
+        .splash-poster.poster-v { display: none; }
+        @media (max-width: 768px), (orientation: portrait) {
+            .splash-poster.poster-h { display: none; }
+            .splash-poster.poster-v { display: block; }
+        }
+        #splash-screen video { z-index: 2; }
+        .tap-indicator { z-index: 10; }
         #splash-screen video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
         #splash-screen .video-horizontal { display: block; }
         #splash-screen .video-vertical { display: none; }
@@ -347,6 +361,8 @@
 
     <!-- SPLASH -->
     <div id="splash-screen">
+        <img src="inicio.png" alt="" class="splash-poster poster-h">
+        <img src="inicio.png" alt="" class="splash-poster poster-v">
         <video id="splash-video-h" class="video-horizontal" muted playsinline preload="auto"><source src="Video-inicial-horizontal.mp4" type="video/mp4"></video>
         <video id="splash-video-v" class="video-vertical" muted playsinline preload="auto"><source src="Video-inicial-vertical.mp4" type="video/mp4"></video>
         <div class="tap-indicator" id="tap-indicator"><span>toque para abrir</span><div class="tap-icon"></div></div>
@@ -620,25 +636,42 @@
     </div>
 
     <script>
+        // Force scroll to top on every load
+        window.scrollTo(0, 0);
+
         // SPLASH
         const splashScreen=document.getElementById('splash-screen'), whiteFade=document.getElementById('white-fade'),
               mainContent=document.getElementById('main-content'), tapIndicator=document.getElementById('tap-indicator'),
               splashVideoH=document.getElementById('splash-video-h'), splashVideoV=document.getElementById('splash-video-v');
         let hasStarted=false;
+        let videoReady=false;
         function getActiveSplash(){return window.matchMedia('(max-width:768px),(orientation:portrait)').matches?splashVideoV:splashVideoH}
-        splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause()});
-        splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause()});
+
+        // Mark video as ready when it has enough data
+        function onVideoReady() { videoReady = true; }
+        splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause();onVideoReady()});
+        splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause();onVideoReady()});
+
         splashScreen.addEventListener('click',()=>{
             if(hasStarted)return; hasStarted=true;
             tapIndicator.classList.add('hidden');
             const v=getActiveSplash();
-            v.play().catch(()=>showMain());
-            splashScreen.style.cursor='default';
-            v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
-            v.addEventListener('ended',()=>showMain());
+            if (videoReady) {
+                // Video loaded — play the animation
+                v.play().catch(()=>showMain());
+                splashScreen.style.cursor='default';
+                v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
+                v.addEventListener('ended',()=>showMain());
+            } else {
+                // Video not loaded — skip splash gracefully
+                showMain();
+            }
         });
+
         function showMain(){
             whiteFade.classList.add('active');
+            // Reset scroll before showing content
+            window.scrollTo(0, 0);
             setTimeout(()=>{
                 splashScreen.style.display='none';
                 mainContent.classList.add('visible');
@@ -646,6 +679,7 @@
                 document.body.style.overflow='auto';
                 musicBtn.classList.add('visible');
                 startMusic();
+                window.scrollTo(0, 0);
                 setTimeout(()=>{whiteFade.classList.add('fade-out');setTimeout(()=>{whiteFade.style.display='none'},1200)},300);
                 heroIntroSequence();
             },500);
@@ -658,6 +692,7 @@
             const date = hero.querySelector('.hero-date');
             const bottom = hero.querySelector('.hero-bottom');
             document.body.style.overflow = 'hidden';
+            window.scrollTo(0, 0);
             setTimeout(() => { ornament.classList.add('hero-text-visible'); }, 300);
             setTimeout(() => { pretitle.classList.add('hero-text-visible'); }, 600);
             setTimeout(() => { names.classList.add('hero-text-visible'); }, 1800);
@@ -820,8 +855,8 @@
                 const section = document.createElement('div');
                 section.className = 'gift-room-section';
                 section.dataset.roomId = room.id;
-                // Default open on first render, otherwise restore state
-                if (isFirstRender || openRooms.has(room.id)) section.classList.add('open');
+                // Only restore previously opened sections (default: closed)
+                if (openRooms.has(room.id)) section.classList.add('open');
                 section.innerHTML = `
                     <div class="gift-room-header" onclick="this.parentElement.classList.toggle('open')">
                         <img src="${room.img}" alt="${room.name}" class="gift-room-img">
