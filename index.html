@@ -343,7 +343,7 @@
 <body>
 
     <!-- AUDIO -->
-    <audio id="bg-music" loop preload="auto"><source src="Ballerina.mp3" type="audio/mpeg"></audio>
+    <audio id="bg-music" loop preload="auto"><source src="341 - Com fé espera no Senhor - Orquestra.mp3" type="audio/mpeg"></audio>
 
     <!-- MUSIC BUTTON -->
     <button class="music-btn muted" id="music-btn" aria-label="Tocar/Pausar música">
@@ -383,7 +383,7 @@
             </div>
             <div class="hero-bottom">
                 <div class="hero-date-lines"><div class="hero-date-line"></div><div class="hero-diamond"></div><div class="hero-date-line"></div></div>
-                <a class="hero-rsvp" href="#countdown">Role para baixo</a>
+                <span class="hero-rsvp" style="pointer-events:none; cursor:default;">Role para baixo</span>
                 <div class="hero-scroll-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div>
             </div>
         </section>
@@ -422,8 +422,13 @@
                         Google Maps
                     </a>
                 </div>
-                <div class="reveal rd4" style="max-width:380px; margin:24px auto 0; text-align:center;">
-                    <img src="bilhete-versao2.png" alt="Bilhete - O que levar" style="width:100%; border-radius:12px;">
+                <div class="reveal rd4" style="max-width:380px; margin:24px auto 0; text-align:center; background:rgba(255,255,255,0.85); backdrop-filter:blur(4px); border-radius:16px; padding:24px 20px;">
+                    <h4 style="font-family:var(--script); font-size:22px; color:var(--olive-text); margin-bottom:16px;">O que trazer:</h4>
+                    <p style="font-family:var(--serif); font-size:14px; color:var(--text); line-height:1.7; margin-bottom:14px;">🦟 <strong>Repelente de insetos</strong> — o local é no meio da natureza!</p>
+                    <p style="font-family:var(--serif); font-size:14px; color:var(--text); line-height:1.7; margin-bottom:18px;">🎵 <strong>Instrumentos musicais</strong> — traga seu violão, violino, saxofone, clarinete, tuba… qualquer instrumento é bem-vindo em nosso círculo!</p>
+                    <div style="width:60px; height:1px; background:var(--divider); margin:0 auto 16px;"></div>
+                    <p style="font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">⚠️ Regras locais</p>
+                    <p style="font-family:var(--serif); font-size:13px; color:var(--text-light); line-height:1.6;">Não alimente os animais ou os peixes 🐟</p>
                 </div>
             </div>
         </section>
@@ -591,7 +596,7 @@
                 </video>
             </div>
             <div id="rsvp-form-anchor" style="scroll-margin-top:60px"></div>
-            <h2 class="section-title-script reveal">Confirmação</h2>
+            <h2 class="section-title-script reveal" style="margin-top:40px;">Confirmação</h2>
             <p class="section-subtitle-caps reveal rd1">ESPERAMOS VOCÊ LÁ</p>
             <form class="rsvp-form" id="rsvp-form">
                 <div class="form-group reveal">
@@ -708,7 +713,7 @@
 
         // MUSIC
         const bgMusic=document.getElementById('bg-music'), musicBtn=document.getElementById('music-btn');
-        bgMusic.volume=0.4;
+        bgMusic.volume=0.2;
         function startMusic(){bgMusic.play().then(()=>{musicBtn.classList.remove('muted')}).catch(()=>{musicBtn.classList.add('muted')})}
         musicBtn.addEventListener('click',()=>{if(bgMusic.paused){bgMusic.play();musicBtn.classList.remove('muted')}else{bgMusic.pause();musicBtn.classList.add('muted')}});
 
@@ -755,9 +760,10 @@
         ];
 
         const GIFTS = [
-            // Cozinha
-            { id:'panelas-aco', name:'Jogo de Panelas', qty:1, room:'cozinha', img:'panelas.jpeg', sug:'Aço Cirúrgico' },
-            { id:'panela-ceramica', name:'Panela 100% Cerâmica', qty:1, room:'cozinha', img:'panela-ceramica.jpeg', sug:'Fogão por indução' },
+            // ===== COZINHA =====
+            { id:'panelas-aco', name:'Jogo de Panelas', qty:2, room:'cozinha', img:'panelas.jpeg', sug:'Aço Cirúrgico' },
+            { id:'panela-ceramica', name:'Panela de cerâmica', qty:2, room:'cozinha', img:'panela-ceramica.jpeg', sug:'Fogão por indução' },
+            { id:'panela-eletrica', name:'Panela Elétrica', qty:1, room:'cozinha', img:'itens-novos/panela eletrica.jpeg', sug:'' },
             { id:'frigideira-ceramica', name:'Frigideira Cerâmica', qty:1, room:'cozinha', img:'frigideira-ceramica.jpeg', sug:'100% cerâmica · Indução' },
             { id:'frigideira-aco', name:'Frigideira Aço Cirúrgico', qty:1, room:'cozinha', img:'frigideira-aco.jpeg', sug:'Fogão por indução' },
             { id:'panela-pedra', name:'Panela de Pedra Sabão', qty:1, room:'cozinha', img:'panela-pedra.jpeg', sug:'Pedra sabão natural' },
@@ -765,33 +771,110 @@
             { id:'airfryer', name:'Air Fryer', qty:1, room:'cozinha', img:'airfryer-inox.jpeg', sug:'Preto ou inox' },
             { id:'geladeira', name:'Geladeira', qty:1, room:'cozinha', img:'geladeira-inox.jpeg', sug:'Cor: inox' },
             { id:'forno', name:'Forno', qty:1, room:'cozinha', img:'forno-inox.jpeg', sug:'Preto ou inox' },
+            { id:'microondas', name:'Micro-ondas', qty:1, room:'cozinha', img:'itens-novos/microondas - inox.jpeg', sug:'Cor: inox' },
             { id:'liquidificador', name:'Liquidificador', qty:1, room:'cozinha', img:'liquidificador.jpeg', sug:'' },
             { id:'batedeira', name:'Batedeira', qty:1, room:'cozinha', img:'batedeira.jpeg', sug:'' },
+            { id:'mixer', name:'Mixer', qty:1, room:'cozinha', img:'itens-novos/mixer.jpeg', sug:'' },
+            { id:'mini-processador', name:'Mini Processador', qty:1, room:'cozinha', img:'itens-novos/Mini processador triturador de alimentos.jpeg', sug:'Triturador de alimentos' },
             { id:'chaleira', name:'Chaleira Elétrica', qty:1, room:'cozinha', img:'chaleira.jpeg', sug:'Elétrica' },
             { id:'filtro', name:'Filtro', qty:1, room:'cozinha', img:'filtro.jpeg', sug:'' },
             { id:'utensilios', name:'Conjunto de Utensílios', qty:1, room:'cozinha', img:'utensilios-bege.jpeg', sug:'Cor: bege' },
             { id:'facas', name:'Jogo de Facas', qty:1, room:'cozinha', img:'facas-bege.jpeg', sug:'Cor: bege' },
             { id:'talheres', name:'Talheres', qty:1, room:'cozinha', img:'talheres.jpeg', sug:'' },
-            // Quarto
-            { id:'jogo-cama', name:'Jogo de Cama', qty:3, room:'quarto', img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&h=200&fit=crop', sug:'' },
-            { id:'travesseiros', name:'Travesseiros', qty:4, room:'quarto', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop', sug:'' },
+            { id:'mesa-madeira', name:'Mesa de Madeira', qty:1, room:'cozinha', img:'itens-novos/Mesa de madeira.jpeg', sug:'' },
+            { id:'assadeiras', name:'Assadeiras', qty:1, room:'cozinha', img:'itens-novos/Assadeiras.jpeg', sug:'' },
+            { id:'forma-redonda', name:'Forma Redonda com Fundo Removível', qty:1, room:'cozinha', img:'itens-novos/Forma redonda com fundo removível.jpeg', sug:'' },
+            { id:'formas-pizza', name:'Formas de Pizza', qty:1, room:'cozinha', img:'itens-novos/Formas de pizza.jpeg', sug:'' },
+            { id:'forma-gelo', name:'Forma de Gelo', qty:1, room:'cozinha', img:'itens-novos/Forma de gelo.jpeg', sug:'' },
+            { id:'conjunto-tigelas', name:'Conjunto de Tigelas Inox', qty:1, room:'cozinha', img:'itens-novos/Conjunto de tigelas inox.jpeg', sug:'' },
+            { id:'travessa-vidro', name:'Travessa de Vidro com Tampa', qty:1, room:'cozinha', img:'itens-novos/Travessa de vidro com tampa.jpeg', sug:'' },
+            { id:'recipientes-vidro', name:'Recipientes de Vidro Hermético', qty:1, room:'cozinha', img:'itens-novos/Recipientes de Vidro Hermético.jpeg', sug:'' },
+            { id:'potes-hermeticos', name:'Potes Herméticos para Dispensa', qty:1, room:'cozinha', img:'itens-novos/Potes Herméticos para dispensa.jpeg', sug:'' },
+            { id:'prato-raso', name:'Prato Raso', qty:1, room:'cozinha', img:'itens-novos/Prato raso.jpeg', sug:'' },
+            { id:'prato-fundo', name:'Prato Fundo', qty:1, room:'cozinha', img:'itens-novos/Prato fundo.jpeg', sug:'' },
+            { id:'copos-vidro', name:'Copos de Vidro', qty:3, room:'cozinha', img:'itens-novos/Copos de vidro (3 unidades).jpeg', sug:'3 unidades' },
+            { id:'copos-sobremesa', name:'Copos de Sobremesa (Vidro)', qty:3, room:'cozinha', img:'itens-novos/Copos de sobremesa- vidro (3 unidades).jpeg', sug:'3 unidades' },
+            { id:'taca', name:'Taça', qty:1, room:'cozinha', img:'itens-novos/Taça.jpeg', sug:'' },
+            { id:'caneca', name:'Caneca', qty:1, room:'cozinha', img:'itens-novos/Caneca.jpeg', sug:'' },
+            { id:'jarra-suco', name:'Jarra de Suco (Vidro)', qty:1, room:'cozinha', img:'itens-novos/Jarra de suco - vidro.jpeg', sug:'' },
+            { id:'jarra', name:'Jarra', qty:1, room:'cozinha', img:'itens-novos/Jarra.jpeg', sug:'' },
+            { id:'garrafa-agua', name:'Garrafa de Água', qty:1, room:'cozinha', img:'itens-novos/Garrafa de água.jpeg', sug:'' },
+            { id:'garrafa-termica', name:'Garrafa Térmica de Café', qty:1, room:'cozinha', img:'itens-novos/Garrafa térmica de café.jpeg', sug:'' },
+            { id:'boleira', name:'Boleira com Tampa', qty:1, room:'cozinha', img:'itens-novos/Boleira com tampa.jpeg', sug:'' },
+            { id:'bandeja-bambu', name:'Bandeja Giratória de Bambu', qty:1, room:'cozinha', img:'itens-novos/Bandeja giratória de bambu.jpeg', sug:'' },
+            { id:'tabua-corte', name:'Tábua de Corte (Vidro)', qty:1, room:'cozinha', img:'itens-novos/Tábua de Corte - vidro.jpeg', sug:'' },
+            { id:'escorredor-louca', name:'Escorredor de Louça', qty:1, room:'cozinha', img:'itens-novos/Escorredor de louça.jpeg', sug:'' },
+            { id:'escorredor', name:'Escorredor', qty:1, room:'cozinha', img:'itens-novos/Escorredor.jpeg', sug:'' },
+            { id:'porta-bucha', name:'Porta Bucha e Detergente', qty:1, room:'cozinha', img:'itens-novos/Porta bucha e detergente.jpeg', sug:'' },
+            { id:'lixeira-cozinha', name:'Lixeira para Cozinha', qty:1, room:'cozinha', img:'itens-novos/Lixeira para cozinha.jpeg', sug:'' },
+            { id:'lixeira-pia', name:'Lixeira de Pia', qty:1, room:'cozinha', img:'itens-novos/lixeira de pia.jpeg', sug:'' },
+            { id:'suporte-papel-toalha', name:'Suporte Porta Papel Toalha', qty:1, room:'cozinha', img:'itens-novos/Suporte porta papel toalha.jpeg', sug:'' },
+            { id:'porta-pao', name:'Porta Pão', qty:1, room:'cozinha', img:'itens-novos/Porta pão.jpeg', sug:'' },
+            { id:'balanca-cozinha', name:'Balança de Cozinha', qty:1, room:'cozinha', img:'itens-novos/Balança de cozinha.jpeg', sug:'' },
+            { id:'acucareiro', name:'Açucareiro', qty:1, room:'cozinha', img:'itens-novos/Açucareiro.jpeg', sug:'' },
+            { id:'saleiro', name:'Saleiro', qty:1, room:'cozinha', img:'itens-novos/Saleiro.jpeg', sug:'' },
+            { id:'pegadores', name:'Pegadores', qty:1, room:'cozinha', img:'itens-novos/Pegadores.jpeg', sug:'' },
+            { id:'peneira', name:'Peneira', qty:1, room:'cozinha', img:'itens-novos/Peneira.jpeg', sug:'' },
+            { id:'abridor-lata', name:'Abridor de Lata', qty:1, room:'cozinha', img:'itens-novos/Abridor de lata.jpeg', sug:'' },
+            { id:'descascador', name:'Descascador de Legumes', qty:1, room:'cozinha', img:'itens-novos/Descascador de legumes.jpeg', sug:'' },
+            { id:'funil', name:'Funil', qty:1, room:'cozinha', img:'itens-novos/Funil.jpeg', sug:'' },
+            { id:'rolo-massa', name:'Rolo para Massa', qty:1, room:'cozinha', img:'itens-novos/Rolo para massa.jpeg', sug:'' },
+            { id:'colher-pau', name:'Colher de Pau', qty:1, room:'cozinha', img:'itens-novos/colher de pau.jpeg', sug:'' },
+            { id:'colher-sobremesa', name:'Colher de Sobremesa (Inox)', qty:2, room:'cozinha', img:'itens-novos/colher de sobremesa - inox (2 unidadeS).jpeg', sug:'2 unidades' },
+            { id:'copo-medidor', name:'Copo Medidor Ajustável', qty:1, room:'cozinha', img:'itens-novos/copo medidor ajustavel.jpeg', sug:'' },
+            { id:'pano-prato', name:'Pano de Prato', qty:1, room:'cozinha', img:'itens-novos/pano de prato.jpeg', sug:'' },
+            { id:'tapete-cozinha', name:'Tapete de Cozinha', qty:1, room:'cozinha', img:'itens-novos/Tapete de cozinha.jpeg', sug:'' },
+
+            // ===== QUARTO =====
+            { id:'conjunto-cama', name:'Conjunto de Cama Queen', qty:1, room:'quarto', img:'itens-novos/Conjunto de cama Queen (quarto).jpeg', sug:'' },
+            { id:'cobre-leito', name:'Cobre Leito Queen', qty:1, room:'quarto', img:'itens-novos/Cobre leito Queen (quarto).jpeg', sug:'' },
+            { id:'coberdrom', name:'Coberdrom Queen', qty:1, room:'quarto', img:'itens-novos/Coberdrom Queen.jpeg', sug:'' },
+            { id:'travesseiros', name:'Travesseiros', qty:6, room:'quarto', img:'itens-novos/Travesseiro (6 unidades quarto).jpeg', sug:'6 unidades' },
+            { id:'protetor-colchao', name:'Protetor de Colchão Queen', qty:1, room:'quarto', img:'itens-novos/Protetor de colchão cama Queen (quarto).jpeg', sug:'' },
+            { id:'protetor-colchao-azul', name:'Protetor de Colchão Queen (Azul)', qty:1, room:'quarto', img:'itens-novos/Protetor de colchão cama Queen azul (quarto).jpeg', sug:'' },
+            { id:'manta-sofa-quarto', name:'Manta para Sofá (Quarto)', qty:1, room:'quarto', img:'itens-novos/Manta para sofá (quarto).jpeg', sug:'' },
             { id:'abajur', name:'Abajur', qty:2, room:'quarto', img:'gift-abajur.png', sug:'' },
-            { id:'cobertor', name:'Cobertor', qty:2, room:'quarto', img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop', sug:'' },
             { id:'ventilador', name:'Ventilador', qty:2, room:'quarto', img:'gift-ventilador.png', sug:'' },
-            // Banheiro
-            { id:'toalhas-banho', name:'Toalhas de Banho', qty:4, room:'banheiro', img:'https://images.unsplash.com/photo-1616627561950-9f746e330187?w=200&h=200&fit=crop', sug:'' },
-            { id:'tapete-banheiro', name:'Tapete de Banheiro', qty:2, room:'banheiro', img:'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=200&h=200&fit=crop', sug:'' },
-            { id:'lixeira-ban', name:'Lixeira', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=200&h=200&fit=crop', sug:'' },
-            { id:'espelho', name:'Espelho Decorativo', qty:1, room:'banheiro', img:'https://images.unsplash.com/photo-1618220179428-22790b461013?w=200&h=200&fit=crop', sug:'' },
-            // Sala
-            { id:'almofadas', name:'Almofadas Decorativas', qty:4, room:'sala', img:'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&h=200&fit=crop', sug:'' },
-            { id:'cortina', name:'Cortina', qty:2, room:'sala', img:'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=200&h=200&fit=crop', sug:'' },
-            { id:'tapete-sala', name:'Tapete', qty:1, room:'sala', img:'https://images.unsplash.com/photo-1600166898405-da9535204843?w=200&h=200&fit=crop', sug:'' },
-            // Lavanderia
-            { id:'maq-lavar', name:'Máquina de Lavar', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=200&h=200&fit=crop', sug:'' },
-            { id:'ferro', name:'Ferro de Passar', qty:1, room:'lavanderia', img:'gift-ferro.png', sug:'' },
-            { id:'aspirador', name:'Aspirador de Pó', qty:1, room:'lavanderia', img:'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&h=200&fit=crop', sug:'' },
-            { id:'tabua', name:'Tábua de Passar', qty:1, room:'lavanderia', img:'gift-tabua.png', sug:'' },
+            { id:'guarda-roupa', name:'Guarda-roupa', qty:1, room:'quarto', img:'itens-novos/Guarda-roupa (quarto).jpeg', sug:'' },
+            { id:'organizador-guarda-roupa', name:'Organizador de Guarda-roupa', qty:1, room:'quarto', img:'itens-novos/Organizador de guarda-roupa.jpeg', sug:'' },
+            { id:'organizador-gaveta', name:'Organizador de Gaveta', qty:1, room:'quarto', img:'itens-novos/Organizador de gaveta ( quarto).jpeg', sug:'' },
+            { id:'caixa-organizadora', name:'Caixa Organizadora', qty:1, room:'quarto', img:'itens-novos/Caixa Organizadora (quarto).jpeg', sug:'' },
+            { id:'cabide', name:'Cabide', qty:1, room:'quarto', img:'itens-novos/Cabide (quarto).jpeg', sug:'' },
+            { id:'cabide-calca', name:'Cabide para Calça', qty:1, room:'quarto', img:'itens-novos/Cabide para calça (quarto).jpeg', sug:'' },
+            { id:'sapateira', name:'Sapateira Closet', qty:1, room:'quarto', img:'itens-novos/Sapateira Closet (quarto).jpeg', sug:'' },
+
+            // ===== BANHEIRO =====
+            { id:'toalha-banho', name:'Toalha de Banho', qty:2, room:'banheiro', img:'itens-novos/Toalha de banho ( 2 unidades).jpeg', sug:'2 unidades' },
+            { id:'toalha-banho-2', name:'Toalha de Banho', qty:1, room:'banheiro', img:'itens-novos/Toalha de banho (banheiro).jpeg', sug:'' },
+            { id:'toalha-rosto', name:'Toalha de Rosto', qty:2, room:'banheiro', img:'itens-novos/Toalha de rosto (2 unidades).jpeg', sug:'2 unidades' },
+            { id:'tapete-banheiro', name:'Tapete de Banheiro Antiderrapante', qty:1, room:'banheiro', img:'itens-novos/Tapete de banheiro antiderrapante (banheiro).jpeg', sug:'' },
+            { id:'tapete-banheiro-secagem', name:'Tapete de Secagem Rápida', qty:1, room:'banheiro', img:'itens-novos/Tapete para banheiro de secagem rápida (banheiro).jpeg', sug:'' },
+            { id:'lixeira-antiodor', name:'Lixeira Antiodor para Banheiro', qty:1, room:'banheiro', img:'itens-novos/Lixeira antiodor para banheiro ( banheiro).jpeg', sug:'' },
+            { id:'limpeza-sanitaria', name:'Limpeza Sanitária', qty:1, room:'banheiro', img:'itens-novos/Limpeza sanitária ( banheiro).jpeg', sug:'' },
+            { id:'escova-limpeza', name:'Escova de Limpeza Ajustável', qty:1, room:'banheiro', img:'itens-novos/Escova de limpeza ajustável (banheiro).jpeg', sug:'' },
+            { id:'porta-escova-dente', name:'Porta Escova de Dente', qty:1, room:'banheiro', img:'itens-novos/Porta escova de dente ( banheiro).jpeg', sug:'' },
+
+            // ===== SALA =====
+            { id:'sofa', name:'Sofá', qty:1, room:'sala', img:'itens-novos/Sofá (sala).jpeg', sug:'' },
+            { id:'almofada-sofa', name:'Almofada para Sofá', qty:2, room:'sala', img:'itens-novos/Almofada para sofá (sala 2 unidades).jpeg', sug:'2 unidades' },
+            { id:'capa-almofada', name:'Capa de Almofada', qty:3, room:'sala', img:'itens-novos/Capa de almofada ( 3 unidades).jpeg', sug:'3 unidades' },
+            { id:'capa-almofada-2', name:'Capa para Almofada', qty:3, room:'sala', img:'itens-novos/capa pra almofada (3 unidades).jpeg', sug:'3 unidades' },
+            { id:'manta-sofa', name:'Manta para Sofá', qty:2, room:'sala', img:'itens-novos/Manta para sofá (2 unidades).jpeg', sug:'2 unidades' },
+            { id:'manta-sofa-sala', name:'Manta para Sofá', qty:2, room:'sala', img:'itens-novos/Manta para sofá 2 unidades (sala).jpeg', sug:'2 unidades' },
+            { id:'tapete-sala', name:'Tapete para Sala', qty:1, room:'sala', img:'itens-novos/Tapete para sala (sala).jpeg', sug:'' },
+
+            // ===== LAVANDERIA =====
+            { id:'maq-lavar', name:'Máquina de Lavar', qty:1, room:'lavanderia', img:'itens-novos/Máquina de lavar (lavanderia).jpeg', sug:'' },
+            { id:'ferro', name:'Ferro de Passar', qty:1, room:'lavanderia', img:'itens-novos/ferro de passar.jpeg', sug:'' },
+            { id:'tabua-passar', name:'Tábua de Passar', qty:1, room:'lavanderia', img:'itens-novos/Tábua de passar (lavanderia).jpeg', sug:'' },
+            { id:'aspirador', name:'Aspirador de Pó', qty:1, room:'lavanderia', img:'itens-novos/Aspirador de pó (lavanderia).jpeg', sug:'' },
+            { id:'mop-flat', name:'Mop Flat', qty:1, room:'lavanderia', img:'itens-novos/Mop Flat (lavanderia).jpeg', sug:'' },
+            { id:'pa-vassoura', name:'Pá e Vassoura', qty:1, room:'lavanderia', img:'itens-novos/Pá e vassoura ( lavanderia).jpeg', sug:'' },
+            { id:'cesto-roupa-1', name:'Cesto de Roupa Suja', qty:1, room:'lavanderia', img:'itens-novos/Cesto de roupa suja versao 1.jpeg', sug:'Versão 1' },
+            { id:'cesto-roupa-2', name:'Cesto de Roupa Suja', qty:1, room:'lavanderia', img:'itens-novos/Cesto de roupa suja versao 2.jpeg', sug:'Versão 2' },
+            { id:'balde-2un', name:'Balde', qty:2, room:'lavanderia', img:'itens-novos/Balde (2 unidades - lavanderia).jpeg', sug:'2 unidades' },
+            { id:'balde-bacia', name:'Balde e Bacia', qty:1, room:'lavanderia', img:'itens-novos/Balde e bacia (lavanderia).jpeg', sug:'' },
+            { id:'porta-sabao', name:'Porta Sabão', qty:1, room:'lavanderia', img:'itens-novos/Porta sabão (lavanderia).jpeg', sug:'' },
         ];
 
         let selectedGifts = [];
