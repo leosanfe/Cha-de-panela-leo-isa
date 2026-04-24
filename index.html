@@ -1087,12 +1087,8 @@
                 });
             }
 
-            let m = `🎉 *Presença confirmada - Chá de Panela*\n\n*Nome:* ${d.name}\n*Telefone:* ${d.phone||'-'}`;
-            if (comps.length) {
-                m += `\n\n*Acompanhantes:*`;
-                comps.forEach(c => m += `\n• ${c.name} (${c.type})`);
-            }
-            window.open(`https://wa.me/5521966807208?text=${encodeURIComponent(m)}`, '_blank');
+            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 [digite os nomes aqui]\n\npara o Chá de Panela do Leonardo e Isabelle 🎉`;
+            window.open(`https://wa.me/5521995080295?text=${encodeURIComponent(m)}`, '_blank');
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
         });
