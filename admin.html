@@ -129,8 +129,8 @@
         <h2 class="section-title"><span>📋</span> Confirmações de Presença</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>#</th><th>Nome</th><th>Telefone</th><th>Acompanhantes</th><th>Data</th><th>Ações</th></tr></thead>
-                <tbody id="rsvp-table"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
+                <thead><tr><th>#</th><th>Nome</th><th>Telefone</th><th>Acompanhantes</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
+                <tbody id="rsvp-table"><tr><td colspan="7" class="empty">Carregando...</td></tr></tbody>
             </table>
             <div class="add-person-bar">
                 <input type="text" class="inline-input" id="add-name" placeholder="Nome completo" style="flex:2">
@@ -311,15 +311,17 @@
             } else {
                 rsvpKeys = raw.sort((a,b) => new Date(b[1].date) - new Date(a[1].date)).map(([k]) => k);
             }
-            if (rsvpKeys.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhuma confirmação ainda</td></tr>'; return; }
+            if (rsvpKeys.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Nenhuma confirmação ainda</td></tr>'; return; }
             tbody.innerHTML = rsvpKeys.map((key, i) => {
                 const r = allRsvp[key];
                 const comps = (r.companions || []).map(c => `${c.name} (${c.type})`).join(', ');
-                return `<tr data-key="${key}">
+                const st = r.status === 'declined' ? '<span class="badge badge-red">Não vai</span>' : '<span class="badge badge-green">Confirmado</span>';
+                return `<tr data-key="${key}" style="${r.status === 'declined' ? 'opacity:.6' : ''}">
                     <td>${i+1}</td>
                     <td><strong>${r.name}</strong></td>
                     <td>${phoneLink(r.phone)}</td>
                     <td class="companions-list">${comps || '-'}</td>
+                    <td>${st}</td>
                     <td class="timestamp">${formatDate(r.date)}</td>
                     <td><div class="actions-cell">
                         <button class="action-btn" onclick="editPhone('${key}')">📞</button>

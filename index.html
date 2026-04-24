@@ -620,11 +620,19 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     Enviar Confirmação
                 </button>
+                <p class="reveal rd3" style="text-align:center;margin-top:12px;">
+                    <a href="#" id="decline-btn" style="font-family:var(--sans);font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer;">Infelizmente não poderei ir</a>
+                </p>
             </form>
             <div class="rsvp-success" id="rsvp-success">
                 <div class="rsvp-success-icon">🎉</div>
                 <h3 class="rsvp-success-title">Obrigado!</h3>
                 <p class="rsvp-success-text">Presença confirmada!<br>Estamos ansiosos para te ver lá!</p>
+            </div>
+            <div class="rsvp-success" id="rsvp-declined" style="display:none;">
+                <div class="rsvp-success-icon">😢</div>
+                <h3 class="rsvp-success-title">Que pena!</h3>
+                <p class="rsvp-success-text">Sentiremos sua falta!<br>Esperamos te ver em uma próxima!</p>
             </div>
         </section>
 
@@ -1094,6 +1102,7 @@
                     name: d.name,
                     phone: d.phone || '',
                     companions: comps,
+                    status: 'confirmed',
                     date: new Date().toISOString()
                 });
             }
@@ -1102,6 +1111,27 @@
             window.open(`https://wa.me/5521995080295?text=${encodeURIComponent(m)}`, '_blank');
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
+        });
+
+        // Decline
+        document.getElementById('decline-btn').addEventListener('click', e => {
+            e.preventDefault();
+            const nameInput = document.querySelector('#rsvp-form input[name="name"]');
+            let name = nameInput ? nameInput.value.trim() : '';
+            if (!name) name = prompt('Qual o seu nome?');
+            if (!name) return;
+            if (firebaseReady) {
+                fbDb.ref('rsvp').push({
+                    name: name,
+                    phone: '',
+                    companions: [],
+                    status: 'declined',
+                    date: new Date().toISOString()
+                });
+            }
+            document.getElementById('rsvp-form').style.display = 'none';
+            document.getElementById('rsvp-declined').style.display = '';
+            document.getElementById('rsvp-declined').classList.add('show');
         });
 
         // REVEAL
