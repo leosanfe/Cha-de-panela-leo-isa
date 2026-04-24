@@ -144,8 +144,8 @@
         <h2 class="section-title"><span>🎁</span> Presentes Reservados</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>#</th><th>Convidado</th><th>Telefone</th><th>Presentes</th><th>Data</th></tr></thead>
-                <tbody id="guests-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
+                <thead><tr><th>#</th><th>Convidado</th><th>Telefone</th><th>Presentes</th><th>Data</th><th>Ações</th></tr></thead>
+                <tbody id="guests-table"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -154,7 +154,7 @@
         <h2 class="section-title"><span>📦</span> Status dos Presentes</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Presente</th><th>Reservado por</th><th>Reservados</th><th>Estoque Total</th><th>Status</th></tr></thead>
+                <thead><tr><th>Presente</th><th>Reservado por</th><th>Reservados</th><th>Disponível</th><th>Status</th></tr></thead>
                 <tbody id="gifts-status-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
             </table>
         </div>
@@ -362,9 +362,9 @@
 
         function renderGuests() {
             const tbody = document.getElementById('guests-table');
-            const entries = Object.values(allGuests).sort((a,b) => new Date(b.date) - new Date(a.date));
-            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty">Nenhum presente reservado ainda</td></tr>'; return; }
-            tbody.innerHTML = entries.map((g, i) => {
+            const guestEntries = Object.entries(allGuests).sort((a,b) => new Date(b[1].date) - new Date(a[1].date));
+            if (guestEntries.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum presente reservado ainda</td></tr>'; return; }
+            tbody.innerHTML = guestEntries.map(([gKey, g], i) => {
                 const gifts = (g.gifts || g.giftIds || []).map(name => `<span class="badge badge-amber">${name}</span>`).join(' ');
                 const phone = findPhoneByName(g.name);
                 return `<tr>
@@ -373,8 +373,21 @@
                     <td>${phone ? phoneLink(phone) : '<span style="color:#52525b;font-size:12px">sem telefone</span>'}</td>
                     <td>${gifts}</td>
                     <td class="timestamp">${formatDate(g.date)}</td>
+                    <td><button class="action-btn danger" onclick="deleteGuest('${gKey}')">✕</button></td>
                 </tr>`;
             }).join('');
+        }
+
+        function deleteGuest(key) {
+            const g = allGuests[key];
+            if (!g) return;
+            if (!confirm('Remover reserva de "' + g.name + '"? Os presentes voltarão ao estoque.')) return;
+            // Devolver cada presente ao estoque (decrementar reserved)
+            const ids = g.giftIds || [];
+            ids.forEach(id => {
+                db.ref('reserved/' + id).transaction(current => Math.max(0, (current || 0) - 1));
+            });
+            db.ref('guests/' + key).remove();
         }
 
         let allGiftStock = {};
@@ -417,7 +430,7 @@
                     <td>${reserved}</td>
                     <td><div class="stock-ctrl">
                         <button class="stock-btn" onclick="changeStock('${id}',-1)">−</button>
-                        <span class="stock-val">${stock}</span>
+                        <span class="stock-val">${avail}</span>
                         <button class="stock-btn" onclick="changeStock('${id}',1)">+</button>
                     </div></td>
                     <td>${status}</td>
