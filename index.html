@@ -919,6 +919,16 @@
                     updateConfirmBtn();
                 }
             });
+            // Listener de estoque do admin
+            let cachedGiftStock = {};
+            fbDb.ref('giftStock').on('value', snap => {
+                cachedGiftStock = snap.val() || {};
+                if (document.getElementById('gift-modal').classList.contains('open')) {
+                    renderGiftGrid();
+                    updateConfirmBtn();
+                }
+            });
+            window._getGiftStock = (id) => cachedGiftStock[id];
         }
 
         function renderGiftGrid() {
@@ -933,7 +943,7 @@
             ROOMS.forEach(room => {
                 const roomGifts = GIFTS.filter(g => g.room === room.id);
                 if (roomGifts.length === 0) return;
-                const availCount = roomGifts.filter(g => (g.qty - (reserved[g.id]||0)) > 0).length;
+                const availCount = roomGifts.filter(g => { const q = (window._getGiftStock && window._getGiftStock(g.id) !== undefined) ? window._getGiftStock(g.id) : g.qty; return (q - (reserved[g.id]||0)) > 0; }).length;
 
                 const section = document.createElement('div');
                 section.className = 'gift-room-section';
@@ -954,7 +964,8 @@
                 const itemsContainer = section.querySelector('.gift-room-items');
                 roomGifts.forEach(g => {
                     const res = reserved[g.id] || 0;
-                    const avail = g.qty - res;
+                    const stockQty = (window._getGiftStock && window._getGiftStock(g.id) !== undefined) ? window._getGiftStock(g.id) : g.qty;
+                    const avail = stockQty - res;
                     const taken = avail <= 0;
                     const isSelected = selectedGifts.includes(g.id);
                     const card = document.createElement('div');
@@ -963,7 +974,7 @@
                     card.innerHTML = `<img src="${g.img}" alt="${g.name}" class="gift-card-img" onerror="this.style.display='none'">
                         <p class="gift-card-name">${g.name}</p>
                         ${sugHtml}
-                        <p class="gift-card-qty">${taken ? 'Esgotado' : (g.qty > 1 ? avail + ' disponível(eis)' : '1 unidade')}</p>`;
+                        <p class="gift-card-qty">${taken ? 'Esgotado' : (stockQty > 1 ? avail + ' disponível(eis)' : '1 unidade')}</p>`;
                     if (!taken) {
                         card.addEventListener('click', () => {
                             if (isSelected) { selectedGifts = selectedGifts.filter(x => x !== g.id); }
