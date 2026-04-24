@@ -71,6 +71,21 @@
         @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
         .dashboard { display: none; }
         .dashboard.visible { display: block; }
+        .action-btn { padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: #a1a1aa; font-size: 11px; cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif; }
+        .action-btn:hover { background: rgba(255,255,255,.06); color: #fff; }
+        .action-btn.danger { border-color: rgba(248,113,113,.3); color: #f87171; }
+        .action-btn.danger:hover { background: rgba(248,113,113,.15); }
+        .action-btn.save { border-color: rgba(74,222,128,.3); color: #4ade80; }
+        .action-btn.save:hover { background: rgba(74,222,128,.15); }
+        .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+        .inline-input { background: #252636; border: 1px solid rgba(255,255,255,.15); border-radius: 6px; color: #fff; padding: 5px 8px; font-size: 13px; font-family: 'Inter', sans-serif; width: 140px; outline: none; }
+        .inline-input:focus { border-color: #60a5fa; }
+        .add-person-bar { display: flex; gap: 8px; padding: 16px; background: rgba(255,255,255,.02); border-top: 1px solid rgba(255,255,255,.04); flex-wrap: wrap; align-items: center; }
+        .add-person-bar input { flex: 1; min-width: 120px; }
+        .stock-ctrl { display: inline-flex; align-items: center; gap: 4px; }
+        .stock-btn { width: 22px; height: 22px; border-radius: 4px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: #a1a1aa; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+        .stock-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
+        .stock-val { min-width: 20px; text-align: center; font-size: 13px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -114,9 +129,14 @@
         <h2 class="section-title"><span>📋</span> Confirmações de Presença</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>#</th><th>Nome</th><th>Telefone</th><th>Acompanhantes</th><th>Data</th></tr></thead>
-                <tbody id="rsvp-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
+                <thead><tr><th>#</th><th>Nome</th><th>Telefone</th><th>Acompanhantes</th><th>Data</th><th>Ações</th></tr></thead>
+                <tbody id="rsvp-table"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
             </table>
+            <div class="add-person-bar">
+                <input type="text" class="inline-input" id="add-name" placeholder="Nome completo" style="flex:2">
+                <input type="tel" class="inline-input" id="add-phone" placeholder="Telefone" style="flex:1">
+                <button class="action-btn save" onclick="addPerson()">+ Adicionar</button>
+            </div>
         </div>
     </div>
 
@@ -134,8 +154,8 @@
         <h2 class="section-title"><span>📦</span> Status dos Presentes</h2>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Presente</th><th>Reservado por</th><th>Status</th><th>Progresso</th></tr></thead>
-                <tbody id="gifts-status-table"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody>
+                <thead><tr><th>Presente</th><th>Reservado por</th><th>Reservados</th><th>Estoque Total</th><th>Status</th></tr></thead>
+                <tbody id="gifts-status-table"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -185,38 +205,53 @@
         }
 
         const GIFT_NAMES = {
-            'panelas-aco': 'Jogo de Panelas (Aço Cirúrgico)',
-            'panela-ceramica': 'Panela 100% Cerâmica',
-            'frigideira-ceramica': 'Frigideira Cerâmica',
-            'frigideira-aco': 'Frigideira Aço Cirúrgico',
-            'panela-pedra': 'Panela de Pedra Sabão',
-            'leiteira-ceramica': 'Leiteira Cerâmica',
-            'airfryer': 'Air Fryer',
-            'geladeira': 'Geladeira',
-            'forno': 'Forno',
-            'liquidificador': 'Liquidificador',
-            'batedeira': 'Batedeira',
-            'chaleira': 'Chaleira Elétrica',
-            'filtro': 'Filtro',
-            'utensilios': 'Conjunto de Utensílios',
-            'facas': 'Jogo de Facas',
-            'talheres': 'Talheres',
-            'jogo-cama': 'Jogo de Cama',
-            'travesseiros': 'Travesseiros',
-            'abajur': 'Abajur',
-            'cobertor': 'Cobertor',
-            'ventilador': 'Ventilador',
-            'toalhas-banho': 'Toalhas de Banho',
-            'tapete-banheiro': 'Tapete de Banheiro',
-            'lixeira-ban': 'Lixeira (Banheiro)',
-            'espelho': 'Espelho Decorativo',
-            'almofadas': 'Almofadas Decorativas',
-            'cortina': 'Cortina',
-            'tapete-sala': 'Tapete (Sala)',
-            'maq-lavar': 'Máquina de Lavar',
-            'ferro': 'Ferro de Passar',
-            'aspirador': 'Aspirador de Pó',
-            'tabua': 'Tábua de Passar',
+            'panelas-aco':'Jogo de Panelas','panela-ceramica':'Panela de cerâmica','panela-eletrica':'Panela Elétrica',
+            'frigideira-ceramica':'Frigideira Cerâmica','frigideira-aco':'Frigideira Aço Cirúrgico',
+            'panela-pedra':'Panela de Pedra Sabão','leiteira-ceramica':'Leiteira Cerâmica',
+            'airfryer':'Air Fryer','geladeira':'Geladeira','forno':'Forno','microondas':'Micro-ondas',
+            'liquidificador':'Liquidificador','batedeira':'Batedeira','mixer':'Mixer','mini-processador':'Mini Processador',
+            'chaleira':'Chaleira Elétrica','filtro':'Filtro','utensilios':'Conjunto de Utensílios',
+            'facas':'Jogo de Facas','talheres':'Talheres','mesa-madeira':'Mesa de Madeira',
+            'assadeiras':'Assadeiras','forma-redonda':'Forma Redonda','formas-pizza':'Formas de Pizza',
+            'forma-gelo':'Forma de Gelo','conjunto-tigelas':'Conjunto de Tigelas Inox',
+            'travessa-vidro':'Travessa de Vidro','recipientes-vidro':'Recipientes de Vidro Hermético',
+            'potes-hermeticos':'Potes Herméticos','prato-raso':'Prato Raso','prato-fundo':'Prato Fundo',
+            'copos-vidro':'Copos de Vidro','copos-sobremesa':'Copos de Sobremesa',
+            'taca':'Taça','caneca':'Caneca','jarra-suco':'Jarra de Suco','jarra':'Jarra',
+            'garrafa-agua':'Garrafa de Água','garrafa-termica':'Garrafa Térmica',
+            'boleira':'Boleira com Tampa','bandeja-bambu':'Bandeja Giratória de Bambu',
+            'tabua-corte':'Tábua de Corte','escorredor-louca':'Escorredor de Louça','escorredor':'Escorredor',
+            'porta-bucha':'Porta Bucha e Detergente','lixeira-cozinha':'Lixeira Cozinha','lixeira-pia':'Lixeira de Pia',
+            'suporte-papel-toalha':'Suporte Papel Toalha','porta-pao':'Porta Pão',
+            'balanca-cozinha':'Balança de Cozinha','acucareiro':'Açucareiro','saleiro':'Saleiro',
+            'pegadores':'Pegadores','peneira':'Peneira','abridor-lata':'Abridor de Lata',
+            'descascador':'Descascador de Legumes','funil':'Funil','rolo-massa':'Rolo para Massa',
+            'colher-pau':'Colher de Pau','colher-sobremesa':'Colher de Sobremesa',
+            'copo-medidor':'Copo Medidor','pano-prato':'Pano de Prato','tapete-cozinha':'Tapete de Cozinha',
+            'conjunto-cama':'Conjunto de Cama Queen','cobre-leito':'Cobre Leito Queen','coberdrom':'Coberdrom Queen',
+            'travesseiros':'Travesseiros','protetor-colchao':'Protetor de Colchão','protetor-colchao-azul':'Protetor Colchão Azul',
+            'manta-sofa-quarto':'Manta Sofá (Quarto)','abajur':'Abajur','ventilador':'Ventilador',
+            'guarda-roupa':'Guarda-roupa','organizador-guarda-roupa':'Organizador Guarda-roupa',
+            'organizador-gaveta':'Organizador de Gaveta','caixa-organizadora':'Caixa Organizadora',
+            'cabide':'Cabide','cabide-calca':'Cabide para Calça','sapateira':'Sapateira Closet',
+            'toalha-banho':'Toalha de Banho','toalha-banho-2':'Toalha de Banho (2)',
+            'toalha-rosto':'Toalha de Rosto','tapete-banheiro':'Tapete Banheiro Antiderrapante',
+            'tapete-banheiro-secagem':'Tapete Secagem Rápida','lixeira-antiodor':'Lixeira Antiodor',
+            'limpeza-sanitaria':'Limpeza Sanitária','escova-limpeza':'Escova Limpeza Ajustável',
+            'porta-escova-dente':'Porta Escova de Dente',
+            'sofa':'Sofá','almofada-sofa':'Almofada para Sofá','capa-almofada':'Capa de Almofada',
+            'capa-almofada-2':'Capa para Almofada','manta-sofa':'Manta para Sofá',
+            'manta-sofa-sala':'Manta para Sofá (Sala)','tapete-sala':'Tapete para Sala',
+            'maq-lavar':'Máquina de Lavar','ferro':'Ferro de Passar','tabua-passar':'Tábua de Passar',
+            'aspirador':'Aspirador de Pó','mop-flat':'Mop Flat','pa-vassoura':'Pá e Vassoura',
+            'cesto-roupa-1':'Cesto de Roupa Suja (1)','cesto-roupa-2':'Cesto de Roupa Suja (2)',
+            'balde-2un':'Balde','balde-bacia':'Balde e Bacia','porta-sabao':'Porta Sabão',
+        };
+        const GIFT_DEFAULT_QTY = {
+            'panelas-aco':2,'panela-ceramica':2,'copos-vidro':3,'copos-sobremesa':3,
+            'colher-sobremesa':2,'travesseiros':6,'toalha-banho':2,'toalha-rosto':2,
+            'abajur':2,'ventilador':2,'almofada-sofa':2,'capa-almofada':3,'capa-almofada-2':3,
+            'manta-sofa':2,'manta-sofa-sala':2,'balde-2un':2,
         };
 
         function formatDate(iso) {
@@ -263,20 +298,66 @@
             updateStats();
         });
 
+        let rsvpKeys = []; // ordered keys
+
         function renderRsvp() {
             const tbody = document.getElementById('rsvp-table');
-            const entries = Object.values(allRsvp).sort((a,b) => new Date(b.date) - new Date(a.date));
-            if (entries.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty">Nenhuma confirmação ainda</td></tr>'; return; }
-            tbody.innerHTML = entries.map((r, i) => {
+            const raw = Object.entries(allRsvp);
+            // Use stored order from Firebase, fallback to date sort
+            if (allRsvpOrder && allRsvpOrder.length) {
+                rsvpKeys = allRsvpOrder.filter(k => allRsvp[k]);
+                const remaining = raw.filter(([k]) => !rsvpKeys.includes(k)).sort((a,b) => new Date(b[1].date) - new Date(a[1].date)).map(([k]) => k);
+                rsvpKeys = [...rsvpKeys, ...remaining];
+            } else {
+                rsvpKeys = raw.sort((a,b) => new Date(b[1].date) - new Date(a[1].date)).map(([k]) => k);
+            }
+            if (rsvpKeys.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhuma confirmação ainda</td></tr>'; return; }
+            tbody.innerHTML = rsvpKeys.map((key, i) => {
+                const r = allRsvp[key];
                 const comps = (r.companions || []).map(c => `${c.name} (${c.type})`).join(', ');
-                return `<tr>
+                return `<tr data-key="${key}">
                     <td>${i+1}</td>
                     <td><strong>${r.name}</strong></td>
                     <td>${phoneLink(r.phone)}</td>
                     <td class="companions-list">${comps || '-'}</td>
                     <td class="timestamp">${formatDate(r.date)}</td>
+                    <td><div class="actions-cell">
+                        <button class="action-btn" onclick="editPhone('${key}')">📞</button>
+                        ${i > 0 ? `<button class="action-btn" onclick="moveRsvp('${key}',-1)">↑</button>` : ''}
+                        ${i < rsvpKeys.length-1 ? `<button class="action-btn" onclick="moveRsvp('${key}',1)">↓</button>` : ''}
+                        <button class="action-btn danger" onclick="deleteRsvp('${key}')">✕</button>
+                    </div></td>
                 </tr>`;
             }).join('');
+        }
+
+        function editPhone(key) {
+            const r = allRsvp[key];
+            const newPhone = prompt('Novo telefone:', r.phone || '');
+            if (newPhone !== null) db.ref('rsvp/' + key + '/phone').set(newPhone);
+        }
+
+        function moveRsvp(key, dir) {
+            const idx = rsvpKeys.indexOf(key);
+            const newIdx = idx + dir;
+            if (newIdx < 0 || newIdx >= rsvpKeys.length) return;
+            [rsvpKeys[idx], rsvpKeys[newIdx]] = [rsvpKeys[newIdx], rsvpKeys[idx]];
+            db.ref('rsvpOrder').set(rsvpKeys);
+            renderRsvp();
+        }
+
+        function deleteRsvp(key) {
+            if (!confirm('Remover "' + (allRsvp[key]?.name || '') + '"?')) return;
+            db.ref('rsvp/' + key).remove();
+        }
+
+        function addPerson() {
+            const name = document.getElementById('add-name').value.trim();
+            const phone = document.getElementById('add-phone').value.trim();
+            if (!name) { alert('Digite um nome'); return; }
+            db.ref('rsvp').push({ name, phone, companions: [], date: new Date().toISOString() });
+            document.getElementById('add-name').value = '';
+            document.getElementById('add-phone').value = '';
         }
 
         function renderGuests() {
@@ -296,9 +377,25 @@
             }).join('');
         }
 
+        let allGiftStock = {};
+        db.ref('giftStock').on('value', snap => {
+            allGiftStock = snap.val() || {};
+            renderGiftsStatus();
+        });
+
+        function getStock(id) {
+            if (allGiftStock[id] !== undefined) return allGiftStock[id];
+            return GIFT_DEFAULT_QTY[id] || 1;
+        }
+
+        function changeStock(id, delta) {
+            const current = getStock(id);
+            const newVal = Math.max(0, current + delta);
+            db.ref('giftStock/' + id).set(newVal);
+        }
+
         function renderGiftsStatus() {
             const tbody = document.getElementById('gifts-status-table');
-            // Build who reserved what from allGuests
             const reservedBy = {};
             Object.values(allGuests).forEach(g => {
                 (g.giftIds || []).forEach(id => {
@@ -306,35 +403,41 @@
                     reservedBy[id].push(g.name);
                 });
             });
-
             const rows = Object.keys(GIFT_NAMES).map(id => {
                 const name = GIFT_NAMES[id];
                 const reserved = allReserved[id] || 0;
+                const stock = getStock(id);
                 const people = (reservedBy[id] || []).join(', ');
-                const isTaken = reserved > 0;
-                const status = isTaken ? '<span class="badge badge-red">Reservado</span>' : '<span class="badge badge-green">Disponível</span>';
-                const pct = isTaken ? 100 : 0;
+                const avail = stock - reserved;
+                const isFull = avail <= 0;
+                const status = isFull ? '<span class="badge badge-red">Esgotado</span>' : `<span class="badge badge-green">${avail} disponível</span>`;
                 return `<tr>
                     <td>${name}</td>
                     <td style="font-size:13px;color:#a1a1aa">${people || '-'}</td>
+                    <td>${reserved}</td>
+                    <td><div class="stock-ctrl">
+                        <button class="stock-btn" onclick="changeStock('${id}',-1)">−</button>
+                        <span class="stock-val">${stock}</span>
+                        <button class="stock-btn" onclick="changeStock('${id}',1)">+</button>
+                    </div></td>
                     <td>${status}</td>
-                    <td><div class="gift-bar"><div class="gift-bar-fill ${isTaken ? 'full' : ''}" style="width:${pct}%"></div></div></td>
                 </tr>`;
             });
             tbody.innerHTML = rows.join('');
         }
 
+        let allRsvpOrder = [];
+        db.ref('rsvpOrder').on('value', snap => {
+            allRsvpOrder = snap.val() || [];
+            renderRsvp();
+        });
+
         function updateStats() {
             const rsvpEntries = Object.values(allRsvp);
             document.getElementById('stat-rsvp').textContent = rsvpEntries.length;
-            
-            // Total people = rsvp + their companions
             let totalPeople = 0;
-            rsvpEntries.forEach(r => {
-                totalPeople += 1 + (r.companions || []).length;
-            });
+            rsvpEntries.forEach(r => { totalPeople += 1 + (r.companions || []).length; });
             document.getElementById('stat-total-people').textContent = totalPeople;
-
             const reservedCount = Object.values(allReserved).filter(v => v > 0).length;
             document.getElementById('stat-gifts').textContent = reservedCount;
             document.getElementById('stat-avail').textContent = Object.keys(GIFT_NAMES).length - reservedCount;
