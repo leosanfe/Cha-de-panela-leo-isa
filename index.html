@@ -200,6 +200,7 @@
         .pix-copy-btn:hover { background: var(--olive-dark); }
         .pix-copy-btn.copied { background: #25D366; }
         .pix-name { font-family: var(--sans); font-size: 12px; color: var(--text-light); margin-top: 8px; }
+        .pix-arrow.open { transform: rotate(180deg); }
         .flowers-art { width: 220px; margin: 30px auto 0; display: block; opacity: .9; }
 
         /* GIFT MODAL */
@@ -522,7 +523,7 @@
         <section class="gifts-section" id="presentes">
             <h2 class="section-title-script reveal">Presentes</h2>
             <p class="section-subtitle-caps reveal rd1">UM GESTO DE CARINHO</p>
-            <p class="gifts-intro reveal rd2">Sua presença é o nosso maior presente. Para quem desejar nos presentear, escolha um item da nossa lista ou envie um PIX ❤️</p>
+            <p class="gifts-intro reveal rd2" style="font-size:14px;line-height:1.7;">O mais importante para nós é a sua presença! 🤍<br>Os presentes <strong>não são obrigatórios</strong>, mas para quem desejar nos presentear, preparamos uma listinha com carinho.</p>
             <div class="reveal rd3" style="margin-bottom:24px">
                 <button class="gift-list-btn" onclick="openGiftModal()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
@@ -530,11 +531,16 @@
                 </button>
             </div>
             <div class="pix-section reveal rd4">
-                <p class="pix-title">Ou presenteie via PIX</p>
-                <p class="pix-subtitle">Chave PIX (E-mail)</p>
-                <div class="pix-key-box"><span class="pix-key-text" id="pix-key">craniosanto1@gmail.com</span></div>
-                <button class="pix-copy-btn" id="pix-copy-btn" onclick="copyPix()">Copiar chave</button>
-                <p class="pix-name">Leonardo</p>
+                <div id="pix-toggle" onclick="document.getElementById('pix-content').style.display = document.getElementById('pix-content').style.display === 'none' ? 'block' : 'none'; this.querySelector('.pix-arrow').classList.toggle('open')" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <p class="pix-title" style="margin:0;">Ou presenteie via PIX</p>
+                    <svg class="pix-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;transition:transform .3s;"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div id="pix-content" style="display:none;margin-top:12px;">
+                    <p class="pix-subtitle">Chave PIX (E-mail)</p>
+                    <div class="pix-key-box"><span class="pix-key-text" id="pix-key">craniosanto1@gmail.com</span></div>
+                    <button class="pix-copy-btn" id="pix-copy-btn" onclick="copyPix()">Copiar chave</button>
+                    <p class="pix-name">Leonardo</p>
+                </div>
             </div>
             <img src="flower-bouquet-Cd59z_hq.png" alt="Flores" class="flowers-art reveal">
         </section>
