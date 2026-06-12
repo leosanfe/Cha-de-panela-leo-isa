@@ -320,7 +320,7 @@
 
         // Real-time RSVP listener
         let allRsvp = {};
-        db.ref('rsvp').on('value', snap => {
+        db.ref('casamento/rsvp').on('value', snap => {
             allRsvp = snap.val() || {};
             renderRsvp();
             updateStats();
@@ -328,7 +328,7 @@
 
         // Real-time guests listener
         let allGuests = {};
-        db.ref('guests').on('value', snap => {
+        db.ref('casamento/guests').on('value', snap => {
             allGuests = snap.val() || {};
             renderGuests();
             updateStats();
@@ -336,7 +336,7 @@
 
         // Real-time reserved listener
         let allReserved = {};
-        db.ref('reserved').on('value', snap => {
+        db.ref('casamento/reserved').on('value', snap => {
             allReserved = snap.val() || {};
             renderGiftsStatus();
             updateStats();
@@ -380,7 +380,7 @@
         function editPhone(key) {
             const r = allRsvp[key];
             const newPhone = prompt('Novo telefone:', r.phone || '');
-            if (newPhone !== null) db.ref('rsvp/' + key + '/phone').set(newPhone);
+            if (newPhone !== null) db.ref('casamento/rsvp/' + key + '/phone').set(newPhone);
         }
 
         function moveRsvp(key, dir) {
@@ -388,20 +388,20 @@
             const newIdx = idx + dir;
             if (newIdx < 0 || newIdx >= rsvpKeys.length) return;
             [rsvpKeys[idx], rsvpKeys[newIdx]] = [rsvpKeys[newIdx], rsvpKeys[idx]];
-            db.ref('rsvpOrder').set(rsvpKeys);
+            db.ref('casamento/rsvpOrder').set(rsvpKeys);
             renderRsvp();
         }
 
         function deleteRsvp(key) {
             if (!confirm('Remover "' + (allRsvp[key]?.name || '') + '"?')) return;
-            db.ref('rsvp/' + key).remove();
+            db.ref('casamento/rsvp/' + key).remove();
         }
 
         function addPerson() {
             const name = document.getElementById('add-name').value.trim();
             const phone = document.getElementById('add-phone').value.trim();
             if (!name) { alert('Digite um nome'); return; }
-            db.ref('rsvp').push({ name, phone, companions: [], date: new Date().toISOString() });
+            db.ref('casamento/rsvp').push({ name, phone, companions: [], date: new Date().toISOString() });
             document.getElementById('add-name').value = '';
             document.getElementById('add-phone').value = '';
         }
@@ -431,13 +431,13 @@
             // Devolver cada presente ao estoque (decrementar reserved)
             const ids = g.giftIds || [];
             ids.forEach(id => {
-                db.ref('reserved/' + id).transaction(current => Math.max(0, (current || 0) - 1));
+                db.ref('casamento/reserved/' + id).transaction(current => Math.max(0, (current || 0) - 1));
             });
-            db.ref('guests/' + key).remove();
+            db.ref('casamento/guests/' + key).remove();
         }
 
         let allGiftStock = {};
-        db.ref('giftStock').on('value', snap => {
+        db.ref('casamento/giftStock').on('value', snap => {
             allGiftStock = snap.val() || {};
             renderGiftsStatus();
         });
@@ -450,7 +450,7 @@
         function changeStock(id, delta) {
             const current = getStock(id);
             const newVal = Math.max(0, current + delta);
-            db.ref('giftStock/' + id).set(newVal);
+            db.ref('casamento/giftStock/' + id).set(newVal);
         }
 
         function renderGiftsStatus() {
@@ -486,7 +486,7 @@
         }
 
         let allRsvpOrder = [];
-        db.ref('rsvpOrder').on('value', snap => {
+        db.ref('casamento/rsvpOrder').on('value', snap => {
             allRsvpOrder = snap.val() || [];
             renderRsvp();
         });

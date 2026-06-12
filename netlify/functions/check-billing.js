@@ -45,7 +45,7 @@ module.exports = async (event, context) => {
         // If status is PAID (or equivalent, check both uppercase and lowercase),
         // we trigger the firebase update just like the webhook, in case webhook didn't do it yet!
         if (status === 'PAID' || status === 'CONFIRMED' || status === 'paid') {
-            const pendingUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/pending_payments/${billingId}.json`;
+            const pendingUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/casamento/pending_payments/${billingId}.json`;
             const pendingRes = await fetch(pendingUrl);
             if (pendingRes.ok) {
                 const paymentData = await pendingRes.json();
@@ -59,8 +59,8 @@ module.exports = async (event, context) => {
                         body: JSON.stringify({ status: 'paid' })
                     });
 
-                    // 2. Reserve gifts in /guests
-                    const guestsUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/guests.json`;
+                    // 2. Reserve gifts in /casamento/guests
+                    const guestsUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/casamento/guests.json`;
                     await fetch(guestsUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -72,9 +72,9 @@ module.exports = async (event, context) => {
                         })
                     });
 
-                    // 3. Increment stock count in /reserved
+                    // 3. Increment stock count in /casamento/reserved
                     for (const id of giftIds) {
-                        const reservedItemUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/reserved/${id}.json`;
+                        const reservedItemUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/casamento/reserved/${id}.json`;
                         const currentRes = await fetch(reservedItemUrl);
                         let currentCount = 0;
                         if (currentRes.ok) {
@@ -91,7 +91,7 @@ module.exports = async (event, context) => {
                     }
 
                     // 4. Write RSVP backup (if not already written)
-                    const rsvpQueryUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/rsvp.json`;
+                    const rsvpQueryUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/casamento/rsvp.json`;
                     const rsvpRes = await fetch(rsvpQueryUrl);
                     let alreadyRsvped = false;
                     if (rsvpRes.ok) {

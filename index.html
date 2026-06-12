@@ -1243,7 +1243,7 @@
 
         // Listener em tempo real do Firebase
         if (firebaseReady) {
-            fbDb.ref('reserved').on('value', snap => {
+            fbDb.ref('casamento/reserved').on('value', snap => {
                 cachedReserved = snap.val() || {};
                 saveReservedLocal(cachedReserved);
                 // Re-render se o modal está aberto
@@ -1254,7 +1254,7 @@
             });
             // Listener de estoque do admin
             let cachedGiftStock = {};
-            fbDb.ref('giftStock').on('value', snap => {
+            fbDb.ref('casamento/giftStock').on('value', snap => {
                 cachedGiftStock = snap.val() || {};
                 if (document.getElementById('gift-modal').classList.contains('open')) {
                     renderGiftGrid();
@@ -1531,7 +1531,7 @@
                     
                     // Set up real-time listener for this billing in Firebase (in case they pay and return)
                     if (firebaseReady) {
-                        fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
+                        fbDb.ref('casamento/pending_payments/' + data.billingId).on('value', snap => {
                             const val = snap.val();
                             if (val && val.status === 'paid') {
                                 processing.classList.remove('show');
@@ -1695,7 +1695,7 @@
                 // If we have a pending billing ID, check if it was processed by the webhook.
                 // If not (e.g. database delay), we run a backup local reservation write.
                 if (pendingBillingId && firebaseReady) {
-                    fbDb.ref('pending_payments/' + pendingBillingId).once('value', snap => {
+                    fbDb.ref('casamento/pending_payments/' + pendingBillingId).once('value', snap => {
                         const val = snap.val();
                         if (val && val.status === 'paid') {
                             processSuccess(name);
@@ -1730,10 +1730,10 @@
                             localStorage.setItem(alreadyRegisteredKey, 'true');
                             if (firebaseReady) {
                                 giftsToReserve.forEach(id => {
-                                    fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
+                                    fbDb.ref('casamento/reserved/' + id).transaction(current => (current || 0) + 1);
                                 });
                                 const giftNames = giftsToReserve.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
-                                fbDb.ref('guests').push({
+                                fbDb.ref('casamento/guests').push({
                                     name: name,
                                     gifts: giftNames,
                                     giftIds: [...giftsToReserve],
@@ -1791,7 +1791,7 @@
 
             // Salvar confirmação no Firebase
             if (firebaseReady) {
-                fbDb.ref('rsvp').push({
+                fbDb.ref('casamento/rsvp').push({
                     name: d.name,
                     phone: d.phone || '',
                     companions: comps,
@@ -1826,7 +1826,7 @@
             if (!name) name = prompt('Qual o seu nome?');
             if (!name) return;
             if (firebaseReady) {
-                fbDb.ref('rsvp').push({
+                fbDb.ref('casamento/rsvp').push({
                     name: name,
                     phone: '',
                     companions: [],

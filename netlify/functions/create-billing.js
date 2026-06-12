@@ -141,7 +141,7 @@ exports.handler = async (event, context) => {
         }
 
         // Save metadata to Firebase Realtime Database
-        const fbUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/pending_payments/${billing.id}.json`;
+        const fbUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/casamento/pending_payments/${billing.id}.json`;
         const fbRes = await fetch(fbUrl, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
