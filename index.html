@@ -97,6 +97,10 @@
             .hero-bottom {
                 bottom: 20px;
             }
+            .footer {
+                width: 112%;
+                margin-left: -6%;
+            }
         }
 
         /* COUNTDOWN */
@@ -501,6 +505,16 @@
         .inspo-indicator-dot.active {
             background: var(--olive);
             transform: scale(1.2);
+        }
+        .footer {
+            width: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         }
     </style>
 </head>
@@ -1020,7 +1034,7 @@
         </div>
 
         <!-- FOOTER (IMAGEM FINAL DO SITE) -->
-        <footer class="footer" style="width:100%; overflow:hidden; padding:0; margin:0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);">
+        <footer class="footer">
             <img src="Itens-Site-Casamento/finaldosite.png" alt="Leonardo & Isabelle" style="width:100%; height:auto; display:block;">
             <div id="footer-verse-container" style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 380px; text-align: center; z-index: 5; padding: 0 24px; pointer-events: none;">
                 <p id="footer-verse-text" data-text="Esperei com paciência no Senhor, e ele se inclinou para mim, e ouviu o meu clamor. - Salmos 40" style="font-family: var(--serif); font-size: clamp(14px, 3.2vw, 17px); font-style: italic; color: var(--text-light); line-height: 1.6; min-height: 54px; margin-bottom: 8px; margin-top: 0;"></p>

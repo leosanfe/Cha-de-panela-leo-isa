@@ -103,13 +103,7 @@ exports.handler = async (event, context) => {
                 }
             ],
             returnUrl: successRedirectUrl,
-            completionUrl: successRedirectUrl,
-            customer: {
-                name: name,
-                cellphone: formattedPhone,
-                email: `convidado_${cleanPhone || Date.now()}@leoeisa.com.br`,
-                taxId: generateCPF()
-            }
+            completionUrl: successRedirectUrl
         };
 
         const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
