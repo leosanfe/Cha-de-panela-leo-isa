@@ -123,25 +123,58 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // Use V1 checkout for both PIX and CARD
+        // 2. Create product in AbacatePay (V2)
+        const productExternalId = `gift_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+        const productRes = await fetch('https://api.abacatepay.com/v2/products/create', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${abacateKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                externalId: productExternalId,
+                name: productNamesText.substring(0, 100),
+                price: totalCents,
+                currency: 'BRL'
+            })
+        });
+
+        if (!productRes.ok) {
+            const errBody = await productRes.text();
+            console.error('Erro ao criar produto no AbacatePay (V2):', errBody);
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ error: 'Erro ao cadastrar produto no AbacatePay (V2).', details: errBody })
+            };
+        }
+
+        const productData = await productRes.json();
+        const productId = productData.data?.id;
+
+        if (!productId) {
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ error: 'ID do produto não retornado pelo AbacatePay (V2).' })
+            };
+        }
+
+        // 3. Create Checkout in AbacatePay (V2)
         const abacateBody = {
-            frequency: 'ONE_TIME',
-            methods: [method === 'pix' ? 'PIX' : 'CARD'],
-            products: [
+            customerId: customerId,
+            items: [
                 {
-                    externalId: validGiftIds.join(','),
-                    name: productNamesText.substring(0, 100),
-                    description: `Presente para Léo e Isa: ${productNamesText.substring(0, 100)}`,
-                    quantity: 1,
-                    price: totalCents
+                    id: productId,
+                    quantity: 1
                 }
             ],
-            returnUrl: successRedirectUrl,
+            methods: [method === 'pix' ? 'PIX' : 'CARD'],
             completionUrl: successRedirectUrl,
-            customerId: customerId
+            returnUrl: successRedirectUrl
         };
 
-        const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
+        const abacateRes = await fetch('https://api.abacatepay.com/v2/checkouts/create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${abacateKey}`,
@@ -152,11 +185,11 @@ exports.handler = async (event, context) => {
 
         if (!abacateRes.ok) {
             const errBody = await abacateRes.text();
-            console.error('Erro no AbacatePay:', errBody);
+            console.error('Erro no AbacatePay V2 Checkout:', errBody);
             return {
                 statusCode: 500,
                 headers,
-                body: JSON.stringify({ error: 'Erro ao gerar checkout no AbacatePay.', details: errBody })
+                body: JSON.stringify({ error: 'Erro ao gerar checkout no AbacatePay V2.', details: errBody })
             };
         }
 
