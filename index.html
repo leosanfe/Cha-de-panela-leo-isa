@@ -1056,11 +1056,17 @@
         function startMusic(){bgMusic.play().then(()=>{musicBtn.classList.remove('muted')}).catch(()=>{musicBtn.classList.add('muted')})}
         musicBtn.addEventListener('click',()=>{if(bgMusic.paused){bgMusic.play();musicBtn.classList.remove('muted')}else{bgMusic.pause();musicBtn.classList.add('muted')}});
 
-        // Show music button and play music on first interaction
+        // Show music button and play music on first interaction (click, scroll, or touch)
         musicBtn.classList.add('visible');
-        document.addEventListener('click', () => {
+        function playOnInteraction() {
             startMusic();
-        }, { once: true });
+            document.removeEventListener('click', playOnInteraction);
+            document.removeEventListener('scroll', playOnInteraction, { passive: true });
+            document.removeEventListener('touchstart', playOnInteraction, { passive: true });
+        }
+        document.addEventListener('click', playOnInteraction);
+        document.addEventListener('scroll', playOnInteraction, { passive: true });
+        document.addEventListener('touchstart', playOnInteraction, { passive: true });
 
         // STICKY NAV
         const stickyNav=document.getElementById('sticky-nav'), heroEl=document.getElementById('hero');
