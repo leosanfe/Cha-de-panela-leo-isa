@@ -1,4 +1,7 @@
 const GIFTS = [
+    // ===== TESTE =====
+    { id: 'teste-cota', name: 'Cota de Teste (1 Real)', price: 'R$ 1,00' },
+
     // ===== COTAS ESPECIAIS =====
     { id: 'cota-ostentacao', name: 'O gerente ficou maluco! (Cota Ostentação)', price: 'R$ 3.000,00' },
     { id: 'tv-grande', name: 'Smart TV Grande', price: 'R$ 2.200,00' },
