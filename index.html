@@ -11,6 +11,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
         // Prevent browser from restoring scroll position on refresh
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -818,7 +819,7 @@
                 
                  <div class="rsvp-success" id="rsvp-success">
                     <h3 class="rsvp-success-title" id="rsvp-success-title">Obrigado!</h3>
-                    <img src="Itens-Site-Casamento/confirmacao.png" alt="Presença Confirmada" style="width: 100%; max-width: 320px; height: auto; border-radius: 12px; margin: 16px auto; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <img src="Itens-Site-Casamento/confirmacao.png" class="rsvp-success-img" alt="Presença Confirmada" style="width: 100%; max-width: 320px; height: auto; border-radius: 12px; margin: 16px auto; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.05); opacity: 0; transform: translateY(10px) scale(0.98); transition: opacity 0.8s ease, transform 0.8s ease;">
                     <p id="rsvp-success-verse" style="font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--text-light); line-height: 1.6; margin: 16px 0; padding: 0 12px;"></p>
                     <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; border-top: 1px solid var(--divider); padding-top: 16px;">
                         <a href="#presentes" onclick="handleRsvpPresentear(event)" style="font-family: var(--sans); font-size: 14px; color: var(--olive); text-decoration: underline; font-weight: 600;">🎁 Presentear os noivos (Opcional)</a>
@@ -1846,17 +1847,35 @@
 
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
+
+            // Fade in the confirmation image
+            setTimeout(() => {
+                const img = document.querySelector('.rsvp-success-img');
+                if (img) {
+                    img.style.opacity = '1';
+                    img.style.transform = 'translateY(0) scale(1)';
+                }
+            }, 50);
+
+            // Trigger confetti explosion
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#7192B6', '#C8B99A', '#FAF9F6', '#2C2C2C']
+                });
+            }
         });
 
         window.handleRsvpPresentear = function(event) {
             if (event) event.preventDefault();
             
-            // Scroll to gifts and open the modal
+            // Scroll to gifts section
             const giftsSection = document.getElementById('presentes');
             if (giftsSection) {
                 giftsSection.scrollIntoView({ behavior: 'smooth' });
             }
-            openGiftModal();
         };
 
         window.handleRsvpFechar = function(event) {
@@ -1872,6 +1891,13 @@
                 // Clear any companions
                 const compList = document.getElementById('companion-list');
                 if (compList) compList.innerHTML = '';
+            }
+
+            // Reset image animation state
+            const img = document.querySelector('.rsvp-success-img');
+            if (img) {
+                img.style.opacity = '0';
+                img.style.transform = 'translateY(10px) scale(0.98)';
             }
         };
 
