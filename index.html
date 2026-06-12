@@ -1389,9 +1389,7 @@
 
         function handleGiftConfirm() {
             if (selectedGifts.length === 0) return;
-            const mainNameInput = document.querySelector('#rsvp-form input[name="name"]');
-            
-            document.getElementById('gift-rsvp-name').value = localStorage.getItem('rsvp-confirmed-name') || (mainNameInput ? mainNameInput.value.trim() : '');
+            document.getElementById('gift-rsvp-name').value = '';
             showGiftStep('rsvp');
         }
 
@@ -1403,8 +1401,6 @@
             checkoutGuestName = name;
             checkoutGuestPhone = "";
             checkoutGuestCompanions = [];
-
-            localStorage.setItem('rsvp-confirmed-name', name);
 
             preparePaymentStep();
         }
