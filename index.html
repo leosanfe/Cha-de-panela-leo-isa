@@ -757,11 +757,31 @@
                     </div>
 
                     <!-- PIX Content -->
-                    <div class="payment-content" id="payment-content-pix" style="text-align:center; padding:10px 0;">
-                        <p style="font-family:var(--serif); font-size:14px; color:var(--text-light); margin-bottom:16px; line-height:1.5;">
-                            Você será redirecionado para a página do **AbacatePay** para obter o código Pix Copia e Cola e o QR Code oficial.
-                        </p>
-                        <button class="submit-btn" style="background:var(--olive);" onclick="redirectToAbacatePayCheckout('pix')">Gerar PIX</button>
+                    <div class="payment-content" id="payment-content-pix">
+                        <!-- Stage 1: Generate button -->
+                        <div id="pix-generation-stage" style="text-align:center; padding:10px 0;">
+                            <p style="font-family:var(--serif); font-size:14px; color:var(--text-light); margin-bottom:16px; line-height:1.5;">
+                                Clique abaixo para obter o código Pix Copia e Cola e o QR Code oficial do presente.
+                            </p>
+                            <button class="submit-btn" style="background:var(--olive);" onclick="redirectToAbacatePayCheckout('pix')">Gerar PIX</button>
+                        </div>
+                        
+                        <!-- Stage 2: QR Code & Copy code (initially hidden) -->
+                        <div id="pix-details-stage" style="display:none; text-align:center;">
+                            <p style="font-family:var(--serif); font-size:13.5px; color:var(--text-light); margin-bottom:12px; line-height:1.5;">
+                                Transfira utilizando o QR Code ou o código Copia e Cola abaixo. A confirmação é automática!
+                            </p>
+                            <div class="pix-qr-container">
+                                <img id="payment-pix-qr" class="pix-qr-img" src="" alt="QR Code PIX">
+                            </div>
+                            <div class="pix-code-box" id="payment-pix-code">
+                                Gerando PIX...
+                            </div>
+                            <div class="pix-actions">
+                                <button class="pix-copy-btn" style="width: 100%; padding: 14px;" id="gift-pix-copy-btn" onclick="copyGiftPix()">Copiar Código PIX</button>
+                                <button class="submit-btn" style="background: var(--olive); margin-top: 8px;" onclick="completePaymentFlow()">Já fiz a transferência</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Stripe Content -->
@@ -1277,32 +1297,69 @@
                 return res.json();
             })
             .then(data => {
-                if (data.url && data.billingId) {
-                    localStorage.setItem('pending-billing-id', data.billingId);
-                    
-                    // Set up real-time listener for this billing in Firebase
-                    if (firebaseReady) {
-                        fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
-                            const val = snap.val();
-                            if (val && val.status === 'paid') {
-                                processing.classList.remove('show');
-                                document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
-                                showGiftStep('thanks');
-                                const thanksVid = document.getElementById('thanks-video');
-                                if (thanksVid) {
-                                    const bgMusic = document.getElementById('bg-music');
-                                    if (bgMusic) bgMusic.pause();
-                                    thanksVid.currentTime = 0;
-                                    thanksVid.play().catch(e => console.log('Play blocked', e));
+                if (method === 'pix') {
+                    if (data.pixCode && data.billingId) {
+                        localStorage.setItem('pending-billing-id', data.billingId);
+                        currentPixCode = data.pixCode;
+                        
+                        document.getElementById('payment-pix-qr').src = data.pixQrBase64;
+                        document.getElementById('payment-pix-code').textContent = data.pixCode;
+
+                        // Set up real-time listener for this billing in Firebase
+                        if (firebaseReady) {
+                            fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
+                                const val = snap.val();
+                                if (val && val.status === 'paid') {
+                                    processing.classList.remove('show');
+                                    document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
+                                    showGiftStep('thanks');
+                                    const thanksVid = document.getElementById('thanks-video');
+                                    if (thanksVid) {
+                                        const bgMusic = document.getElementById('bg-music');
+                                        if (bgMusic) bgMusic.pause();
+                                        thanksVid.currentTime = 0;
+                                        thanksVid.play().catch(e => console.log('Play blocked', e));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+
+                        // Hide loading spinner, restore PIX view, show details
+                        processing.classList.remove('show');
+                        document.getElementById('payment-choice-view').style.display = 'block';
+                        document.getElementById('payment-content-pix').style.display = 'block';
+                        document.getElementById('pix-generation-stage').style.display = 'none';
+                        document.getElementById('pix-details-stage').style.display = 'block';
+                    } else {
+                        throw new Error('Pix transparente inválido.');
                     }
-                    
-                    // Redirect to AbacatePay checkout url
-                    window.location.href = data.url;
                 } else {
-                    throw new Error('Url inválida recebida.');
+                    if (data.url && data.billingId) {
+                        localStorage.setItem('pending-billing-id', data.billingId);
+                        
+                        // Set up real-time listener for this billing in Firebase (in case they pay and return)
+                        if (firebaseReady) {
+                            fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
+                                const val = snap.val();
+                                if (val && val.status === 'paid') {
+                                    processing.classList.remove('show');
+                                    document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
+                                    showGiftStep('thanks');
+                                    const thanksVid = document.getElementById('thanks-video');
+                                    if (thanksVid) {
+                                        const bgMusic = document.getElementById('bg-music');
+                                        if (bgMusic) bgMusic.pause();
+                                        thanksVid.currentTime = 0;
+                                        thanksVid.play().catch(e => console.log('Play blocked', e));
+                                    }
+                                }
+                            });
+                        }
+                        
+                        window.location.href = data.url;
+                    } else {
+                        throw new Error('Url de checkout de cartão inválida.');
+                    }
                 }
             })
             .catch(err => {
@@ -1313,11 +1370,12 @@
                 document.getElementById('payment-choice-view').style.display = 'block';
                 if (method === 'pix') {
                     document.getElementById('payment-content-pix').style.display = 'block';
+                    document.getElementById('pix-generation-stage').style.display = 'block';
+                    document.getElementById('pix-details-stage').style.display = 'none';
                 } else {
                     document.getElementById('payment-content-card').style.display = 'block';
                 }
-            });
-        }
+            }
 
         function copyGiftPix() {
             if (!currentPixCode) return;
@@ -1366,38 +1424,51 @@
         }
 
         function completePaymentFlow() {
-            // Hide choice view and content areas
+            const pendingBillingId = localStorage.getItem('pending-billing-id');
+            if (!pendingBillingId) {
+                showThanksDirectly();
+                return;
+            }
+
+            // Show checking spinner
+            const processing = document.getElementById('payment-processing');
+            document.getElementById('processing-title').textContent = "Confirmando...";
+            document.getElementById('processing-desc').textContent = "Estamos verificando o status do pagamento junto ao AbacatePay...";
+            processing.classList.add('show');
+
             document.getElementById('payment-choice-view').style.display = 'none';
             document.getElementById('payment-content-pix').style.display = 'none';
             document.getElementById('payment-content-card').style.display = 'none';
 
-            // Show processing spinner
-            const processing = document.getElementById('payment-processing');
-            document.getElementById('processing-title').textContent = "Confirmando...";
-            document.getElementById('processing-desc').textContent = "Aguarde um instante enquanto confirmamos sua contribuição via PIX...";
-            processing.classList.add('show');
-
-            setTimeout(() => {
-                if (firebaseReady) {
-                    selectedGifts.forEach(id => {
-                        fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
-                    });
-                    const giftNames = selectedGifts.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
-                    fbDb.ref('guests').push({
-                        name: checkoutGuestName,
-                        gifts: giftNames,
-                        giftIds: [...selectedGifts],
-                        date: new Date().toISOString()
-                    });
-                } else {
-                    const reserved = getReserved();
-                    selectedGifts.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
-                    saveReservedLocal(reserved);
-                }
-
-                // Hide spinner
+            // Call status check API
+            fetch(`/api/check-billing?id=${pendingBillingId}`)
+            .then(res => res.json())
+            .then(data => {
                 processing.classList.remove('show');
+                
+                if (data.status === 'PAID' || data.status === 'CONFIRMED' || data.status === 'paid') {
+                    showThanksDirectly();
+                } else {
+                    alert('Seu PIX ainda consta como pendente no AbacatePay. Por favor, realize a transferência e tente novamente.');
+                    // Restore PIX details view
+                    document.getElementById('payment-choice-view').style.display = 'block';
+                    document.getElementById('payment-content-pix').style.display = 'block';
+                    document.getElementById('pix-generation-stage').style.display = 'none';
+                    document.getElementById('pix-details-stage').style.display = 'block';
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                processing.classList.remove('show');
+                alert('Erro ao conectar com o servidor para checagem. Por favor, verifique novamente.');
+                // Restore PIX details view
+                document.getElementById('payment-choice-view').style.display = 'block';
+                document.getElementById('payment-content-pix').style.display = 'block';
+                document.getElementById('pix-generation-stage').style.display = 'none';
+                document.getElementById('pix-details-stage').style.display = 'block';
+            });
 
+            function showThanksDirectly() {
                 // Personalize and show thanks view
                 document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
                 showGiftStep('thanks');
@@ -1412,7 +1483,7 @@
                         console.log('Play blocked', err);
                     });
                 }
-            }, 2000);
+            }
         }
 
         // Close modal on overlay click

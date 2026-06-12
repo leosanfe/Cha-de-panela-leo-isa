@@ -63,86 +63,159 @@ exports.handler = async (event, context) => {
         const siteUrl = process.env.SITE_URL || 'http://localhost:8000';
         const successRedirectUrl = `${siteUrl}/?payment_success=true&name=${encodeURIComponent(name)}&gifts=${encodeURIComponent(validGiftIds.join(','))}`;
 
-        // Create billing at AbacatePay
-        const paymentMethods = method === 'pix' ? ['PIX'] : (method === 'card' ? ['CARD'] : ['PIX', 'CARD']);
-
-        const abacateBody = {
-            frequency: 'ONE_TIME',
-            methods: paymentMethods,
-            products: [
-                {
-                    externalId: validGiftIds.join(','),
-                    name: productNamesText,
+        if (method === 'pix') {
+            // Use AbacatePay v2 Transparent Checkout for PIX
+            const abacateBody = {
+                method: "PIX",
+                data: {
+                    amount: totalCents,
+                    expiresIn: 3600,
                     description: `Presente para Léo e Isa: ${productNamesText.substring(0, 100)}`,
-                    quantity: 1,
-                    price: totalCents
+                    externalId: validGiftIds.join(','),
+                    metadata: {
+                        name: name,
+                        gifts: productNamesText
+                    }
                 }
-            ],
-            returnUrl: successRedirectUrl,
-            completionUrl: successRedirectUrl,
-            customerId: null
-        };
+            };
 
-        const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${abacateKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(abacateBody)
-        });
+            const abacateRes = await fetch('https://api.abacatepay.com/v2/transparents/create', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${abacateKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(abacateBody)
+            });
 
-        if (!abacateRes.ok) {
-            const errBody = await abacateRes.text();
-            console.error('Erro no AbacatePay:', errBody);
+            if (!abacateRes.ok) {
+                const errBody = await abacateRes.text();
+                console.error('Erro no AbacatePay (Transparent PIX):', errBody);
+                return {
+                    statusCode: 500,
+                    headers,
+                    body: JSON.stringify({ error: 'Erro ao gerar Pix transparente no AbacatePay.', details: errBody })
+                };
+            }
+
+            const abacateData = await abacateRes.json();
+            const billing = abacateData.data;
+
+            if (!billing || !billing.id || !billing.brCode) {
+                return {
+                    statusCode: 500,
+                    headers,
+                    body: JSON.stringify({ error: 'Resposta inválida do AbacatePay no Pix transparente.' })
+                };
+            }
+
+            // Save metadata to Firebase Realtime Database
+            const fbUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/pending_payments/${billing.id}.json`;
+            const fbRes = await fetch(fbUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    companions: companions || [],
+                    giftIds: validGiftIds,
+                    giftNames,
+                    status: 'pending',
+                    date: new Date().toISOString()
+                })
+            });
+
+            if (!fbRes.ok) {
+                console.error('Erro ao salvar no Firebase:', await fbRes.text());
+            }
+
             return {
-                statusCode: 500,
+                statusCode: 200,
                 headers,
-                body: JSON.stringify({ error: 'Erro ao gerar a cobrança no AbacatePay.', details: errBody })
+                body: JSON.stringify({
+                    billingId: billing.id,
+                    pixCode: billing.brCode,
+                    pixQrBase64: billing.brCodeBase64
+                })
+            };
+        } else {
+            // Use standard checkout link for Card
+            const abacateBody = {
+                frequency: 'ONE_TIME',
+                methods: ['CARD'],
+                products: [
+                    {
+                        externalId: validGiftIds.join(','),
+                        name: productNamesText,
+                        description: `Presente para Léo e Isa: ${productNamesText.substring(0, 100)}`,
+                        quantity: 1,
+                        price: totalCents
+                    }
+                ],
+                returnUrl: successRedirectUrl,
+                completionUrl: successRedirectUrl,
+                customerId: null
+            };
+
+            const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${abacateKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(abacateBody)
+            });
+
+            if (!abacateRes.ok) {
+                const errBody = await abacateRes.text();
+                console.error('Erro no AbacatePay (Standard Card Billing):', errBody);
+                return {
+                    statusCode: 500,
+                    headers,
+                    body: JSON.stringify({ error: 'Erro ao gerar cobrança de cartão no AbacatePay.', details: errBody })
+                };
+            }
+
+            const abacateData = await abacateRes.json();
+            const billing = abacateData.data;
+
+            if (!billing || !billing.id || !billing.url) {
+                return {
+                    statusCode: 500,
+                    headers,
+                    body: JSON.stringify({ error: 'Resposta inválida do AbacatePay para cartão.' })
+                };
+            }
+
+            // Save metadata to Firebase Realtime Database
+            const fbUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/pending_payments/${billing.id}.json`;
+            const fbRes = await fetch(fbUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    companions: companions || [],
+                    giftIds: validGiftIds,
+                    giftNames,
+                    status: 'pending',
+                    date: new Date().toISOString()
+                })
+            });
+
+            if (!fbRes.ok) {
+                console.error('Erro ao salvar no Firebase:', await fbRes.text());
+            }
+
+            return {
+                statusCode: 200,
+                headers,
+                body: JSON.stringify({
+                    url: billing.url,
+                    billingId: billing.id
+                })
             };
         }
-
-        const abacateData = await abacateRes.json();
-        const billing = abacateData.data;
-
-        if (!billing || !billing.id || !billing.url) {
-            return {
-                statusCode: 500,
-                headers,
-                body: JSON.stringify({ error: 'Resposta inválida do AbacatePay.' })
-            };
-        }
-
-        // Save metadata to Firebase Realtime Database
-        const fbUrl = `https://cha-leo-isa-default-rtdb.firebaseio.com/pending_payments/${billing.id}.json`;
-        const fbRes = await fetch(fbUrl, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name,
-                phone,
-                companions: companions || [],
-                giftIds: validGiftIds,
-                giftNames,
-                status: 'pending',
-                date: new Date().toISOString()
-            })
-        });
-
-        if (!fbRes.ok) {
-            console.error('Erro ao salvar no Firebase:', await fbRes.text());
-        }
-
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({
-                url: billing.url,
-                billingId: billing.id
-            })
-        };
     } catch (err) {
         console.error('Erro na criação do checkout:', err);
         return {
