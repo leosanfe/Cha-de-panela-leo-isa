@@ -820,10 +820,9 @@
                     <h3 class="rsvp-success-title" id="rsvp-success-title">Obrigado!</h3>
                     <img src="Itens-Site-Casamento/confirmacao.png" alt="Presença Confirmada" style="width: 100%; max-width: 320px; height: auto; border-radius: 12px; margin: 16px auto; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                     <p id="rsvp-success-verse" style="font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--text-light); line-height: 1.6; margin: 16px 0; padding: 0 12px;"></p>
-                    <p class="rsvp-success-text" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Redirecionando para o WhatsApp em instantes...</p>
                     <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; border-top: 1px solid var(--divider); padding-top: 16px;">
                         <a href="#presentes" onclick="handleRsvpPresentear(event)" style="font-family: var(--sans); font-size: 14px; color: var(--olive); text-decoration: underline; font-weight: 600;">🎁 Presentear os noivos (Opcional)</a>
-                        <a href="#" onclick="handleRsvpJaPresenteei(event)" style="font-family: var(--sans); font-size: 11px; color: var(--text-light); text-decoration: none; opacity: 0.8;">Já presenteei / Apenas ir para o WhatsApp</a>
+                        <a href="#" onclick="handleRsvpFechar(event)" style="font-family: var(--sans); font-size: 11px; color: var(--text-light); text-decoration: none; opacity: 0.8;">Já presenteei / Fechar</a>
                     </div>
                 </div>
                 <div class="rsvp-success" id="rsvp-declined" style="display:none;">
@@ -1847,24 +1846,10 @@
 
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
-
-            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 ${d.name}${comps.length > 0 ? '\n👉 ' + comps.map(c => c.name).join('\n👉 ') : ''}\n\npara o Casamento do Leonardo e Isabelle 🎉`;
-            
-            rsvpWhatsappUrl = `https://wa.me/5521995080295?text=${encodeURIComponent(m)}`;
-            rsvpTimeoutId = setTimeout(() => {
-                window.location.href = rsvpWhatsappUrl;
-            }, 6000);
         });
-
-        let rsvpTimeoutId = null;
-        let rsvpWhatsappUrl = '';
 
         window.handleRsvpPresentear = function(event) {
             if (event) event.preventDefault();
-            if (rsvpTimeoutId) clearTimeout(rsvpTimeoutId);
-            
-            // Open WhatsApp link in new window/tab
-            window.open(rsvpWhatsappUrl, '_blank');
             
             // Scroll to gifts and open the modal
             const giftsSection = document.getElementById('presentes');
@@ -1874,12 +1859,20 @@
             openGiftModal();
         };
 
-        window.handleRsvpJaPresenteei = function(event) {
+        window.handleRsvpFechar = function(event) {
             if (event) event.preventDefault();
-            if (rsvpTimeoutId) clearTimeout(rsvpTimeoutId);
             
-            // Redirect to WhatsApp immediately
-            window.location.href = rsvpWhatsappUrl;
+            // Hide success screen and show RSVP form again
+            const rsvpSuccess = document.getElementById('rsvp-success');
+            const rsvpForm = document.getElementById('rsvp-form');
+            if (rsvpSuccess) rsvpSuccess.classList.remove('show');
+            if (rsvpForm) {
+                rsvpForm.style.display = '';
+                rsvpForm.reset();
+                // Clear any companions
+                const compList = document.getElementById('companion-list');
+                if (compList) compList.innerHTML = '';
+            }
         };
 
         // Decline
