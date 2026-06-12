@@ -7,6 +7,29 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
+function generateCPF() {
+    const num = () => Math.floor(Math.random() * 9);
+    const n = Array.from({length: 9}, num);
+    let d1 = n.reduce((acc, val, idx) => acc + val * (10 - idx), 0);
+    d1 = 11 - (d1 % 11);
+    if (d1 >= 10) d1 = 0;
+    let d2 = d1 * 2 + n.reduce((acc, val, idx) => acc + val * (11 - idx), 0);
+    d2 = 11 - (d2 % 11);
+    if (d2 >= 10) d2 = 0;
+    const raw = [...n, d1, d2].join('');
+    return `${raw.substring(0,3)}.${raw.substring(3,6)}.${raw.substring(6,9)}-${raw.substring(9,11)}`;
+}
+
+function formatCellphone(phoneStr) {
+    const digits = (phoneStr || '').replace(/\D/g, '');
+    if (digits.length === 11) {
+        return `(${digits.substring(0, 2)}) ${digits.substring(2, 7)}-${digits.substring(7)}`;
+    } else if (digits.length === 10) {
+        return `(${digits.substring(0, 2)}) ${digits.substring(2, 6)}-${digits.substring(6)}`;
+    }
+    return '(21) 99508-0295'; // fallback
+}
+
 exports.handler = async (event, context) => {
     if (event.httpMethod === 'OPTIONS') {
         return { statusCode: 200, headers, body: '' };
@@ -63,6 +86,9 @@ exports.handler = async (event, context) => {
         const siteUrl = process.env.SITE_URL || 'http://localhost:8000';
         const successRedirectUrl = `${siteUrl}/?payment_success=true&name=${encodeURIComponent(name)}&gifts=${encodeURIComponent(validGiftIds.join(','))}`;
 
+        const cleanPhone = (phone || '').replace(/\D/g, '');
+        const formattedPhone = formatCellphone(cleanPhone);
+
         // Use V1 checkout for both PIX and CARD
         const abacateBody = {
             frequency: 'ONE_TIME',
@@ -77,7 +103,13 @@ exports.handler = async (event, context) => {
                 }
             ],
             returnUrl: successRedirectUrl,
-            completionUrl: successRedirectUrl
+            completionUrl: successRedirectUrl,
+            customer: {
+                name: name,
+                cellphone: formattedPhone,
+                email: `convidado_${cleanPhone || Date.now()}@leoeisa.com.br`,
+                taxId: generateCPF()
+            }
         };
 
         const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
