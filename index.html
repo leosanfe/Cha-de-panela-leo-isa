@@ -47,7 +47,7 @@
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: var(--sans); color: var(--text); background: url('Itens-Site-Casamento/background-leo-isa.png') repeat; background-attachment: fixed; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--sans); color: var(--text); background: url('Itens-Site-Casamento/backgroundpapel.png') repeat; background-attachment: fixed; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
         /* SPLASH */
         #splash-screen { display: none !important; }
@@ -266,7 +266,9 @@
         .companion-btn:hover { border-color: var(--olive); color: var(--olive); }
         .companion-list { display: flex; flex-direction: column; gap: 8px; }
         .companion-item { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); border-radius: 8px; padding: 10px 14px; }
-        .companion-item input { flex: 1; border: none; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--text); outline: none; }
+        .comp-inputs { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .comp-inputs input { width: 100%; border: none; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--text); outline: none; padding: 4px 0; }
+        .comp-inputs input:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 6px; }
         .comp-type { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--olive); background: rgba(62,84,103,.1); padding: 3px 8px; border-radius: 4px; }
         .companion-remove { width: 24px; height: 24px; border: none; background: rgba(139,32,32,.1); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 14px; transition: all .3s; }
         .companion-remove:hover { background: rgba(139,32,32,.2); }
@@ -823,25 +825,6 @@
                     <p class="pix-name">Leonardo</p>
                 </div>
             </div>
-            <!-- GIFTS PHOTO STACK (SCROLL TRIGGERED) -->
-            <div id="gifts-photos-section" style="width: 100%; position: relative; height: 180vh; background: transparent; margin-top: 20px; margin-bottom: -220px; z-index: 10;">
-                <div class="gifts-sticky-child" style="position: sticky; top: calc(50vh - 175px); height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;">
-                    <div class="gifts-photos-container" style="position: relative; width: 280px; height: 350px;">
-                        <div class="gift-photo-card" id="gift-photo-1" style="position: absolute; inset: 0; z-index: 4; opacity: 1; pointer-events: none;">
-                            <img src="Itens-Site-Casamento/A1.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
-                        </div>
-                        <div class="gift-photo-card" id="gift-photo-2" style="position: absolute; inset: 0; z-index: 5; opacity: 0; pointer-events: none;">
-                            <img src="Itens-Site-Casamento/A2.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
-                        </div>
-                        <div class="gift-photo-card" id="gift-photo-3" style="position: absolute; inset: 0; z-index: 6; opacity: 0; pointer-events: none;">
-                            <img src="Itens-Site-Casamento/A3.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
-                        </div>
-                        <div class="gift-photo-card" id="gift-photo-4" style="position: absolute; inset: 0; z-index: 7; opacity: 0; pointer-events: none;">
-                            <img src="Itens-Site-Casamento/A4.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- GIFT MODAL -->
@@ -1109,10 +1092,13 @@
             d.className='companion-item';
             d.id='comp-'+cc;
             
-            let innerHTML = `<span class="comp-type">${t}</span><input type="text" placeholder="Nome" name="comp_${cc}" required>`;
+            let innerHTML = `<span class="comp-type">${t}</span>`;
+            innerHTML += `<div class="comp-inputs">`;
+            innerHTML += `<input type="text" placeholder="Nome" name="comp_${cc}" required>`;
             if (t === 'criança') {
                 innerHTML += `<input type="text" placeholder="Nascimento (DD/MM/AAAA)" name="comp_birth_${cc}" required oninput="this.value=this.value.replace(/[^0-9\\/]/g,'')" maxlength="10">`;
             }
+            innerHTML += `</div>`;
             innerHTML += `<button type="button" class="companion-remove" onclick="document.getElementById('comp-${cc}').remove()">✕</button>`;
             
             d.innerHTML = innerHTML;
@@ -1781,7 +1767,7 @@
             fd.forEach((v, k) => d[k] = v);
             const comps = [];
             document.querySelectorAll('.companion-item').forEach(i => {
-                const nameInput = i.querySelector('input[name^="comp_"]');
+                const nameInput = i.querySelector('input[name^="comp_"]:not([name^="comp_birth_"])');
                 const n = nameInput ? nameInput.value.trim() : '';
                 if (n) {
                     const comp = { type: i.querySelector('.comp-type').textContent, name: n };
@@ -1944,79 +1930,7 @@
         const dresscodeEl = document.getElementById('dresscode');
         if (dresscodeEl) typingObserver.observe(dresscodeEl);
 
-        // GIFTS SCROLL ANIMATION FOR A1-A4
-        function setGiftPhotoState(num, p) {
-            const el = document.getElementById('gift-photo-' + num);
-            if (!el) return;
-            el.style.opacity = p;
-        }
 
-        let giftsStart = 0;
-        let giftsEnd = 0;
-
-        function updateGiftsOffsets() {
-            const section = document.getElementById('gifts-photos-section');
-            if (!section) return;
-            let top = 0;
-            let obj = section;
-            while (obj) {
-                top += obj.offsetTop;
-                obj = obj.offsetParent;
-            }
-            giftsStart = top;
-            giftsEnd = giftsStart + section.offsetHeight - window.innerHeight;
-        }
-
-        // Initialize offsets
-        updateGiftsOffsets();
-        window.addEventListener('resize', updateGiftsOffsets);
-        setTimeout(updateGiftsOffsets, 1000); // Re-run after layout settles
-
-        window.addEventListener('scroll', () => {
-            if (giftsStart === 0 && giftsEnd === 0) {
-                updateGiftsOffsets();
-            }
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
-            
-            if (scrollTop < giftsStart) {
-                setGiftPhotoState(1, 1);
-                setGiftPhotoState(2, 0);
-                setGiftPhotoState(3, 0);
-                setGiftPhotoState(4, 0);
-                return;
-            }
-            if (scrollTop > giftsEnd) {
-                setGiftPhotoState(1, 0);
-                setGiftPhotoState(2, 0);
-                setGiftPhotoState(3, 0);
-                setGiftPhotoState(4, 1);
-                return;
-            }
-            
-            let progress = (scrollTop - giftsStart) / (giftsEnd - giftsStart);
-            progress = Math.max(0, Math.min(1, progress));
-            
-            // Cross-fade logic (only one image fully visible, other fading out/in)
-            if (progress <= 0.33) {
-                let t = progress / 0.33;
-                setGiftPhotoState(1, 1 - t);
-                setGiftPhotoState(2, t);
-                setGiftPhotoState(3, 0);
-                setGiftPhotoState(4, 0);
-            } else if (progress <= 0.66) {
-                let t = (progress - 0.33) / 0.33;
-                setGiftPhotoState(1, 0);
-                setGiftPhotoState(2, 1 - t);
-                setGiftPhotoState(3, t);
-                setGiftPhotoState(4, 0);
-            } else {
-                let t = (progress - 0.66) / 0.34;
-                setGiftPhotoState(1, 0);
-                setGiftPhotoState(2, 0);
-                setGiftPhotoState(3, 1 - t);
-                setGiftPhotoState(4, t);
-            }
-        });
 
         // FOOTER BIBLE VERSE TYPING EFFECT
         const footerVerseObserver = new IntersectionObserver((entries) => {
