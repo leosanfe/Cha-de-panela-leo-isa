@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel — Chá de Panela Leo & Isa</title>
+    <title>Painel Admin — Casamento Leo & Isa</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -102,8 +102,8 @@
 
     <div class="dashboard" id="dashboard">
     <div class="header">
-        <h1>🎁 Painel — Chá de Panela</h1>
-        <p><span class="live-dot"></span> Atualização em tempo real · Leonardo & Isabelle · 24 de Maio</p>
+        <h1>🎁 Painel Admin — Casamento</h1>
+        <p><span class="live-dot"></span> Atualização em tempo real · Leonardo & Isabelle · 20 de Junho</p>
     </div>
 
     <div class="stats" id="stats">
@@ -205,53 +205,97 @@
         }
 
         const GIFT_NAMES = {
-            'panelas-aco':'Jogo de Panelas','panela-ceramica':'Panela de cerâmica','panela-eletrica':'Panela Elétrica',
-            'frigideira-ceramica':'Frigideira Cerâmica','frigideira-aco':'Frigideira Aço Cirúrgico',
-            'panela-pedra':'Panela de Pedra Sabão','leiteira-ceramica':'Leiteira Cerâmica',
-            'airfryer':'Air Fryer','geladeira':'Geladeira','forno':'Forno','microondas':'Micro-ondas',
-            'liquidificador':'Liquidificador','batedeira':'Batedeira','mixer':'Mixer','mini-processador':'Mini Processador',
-            'chaleira':'Chaleira Elétrica','filtro':'Filtro','utensilios':'Conjunto de Utensílios',
-            'facas':'Jogo de Facas','talheres':'Talheres','mesa-madeira':'Mesa de Madeira',
-            'assadeiras':'Assadeiras','forma-redonda':'Forma Redonda','formas-pizza':'Formas de Pizza',
-            'forma-gelo':'Forma de Gelo','conjunto-tigelas':'Conjunto de Tigelas Inox',
-            'travessa-vidro':'Travessa de Vidro','recipientes-vidro':'Recipientes de Vidro Hermético',
-            'potes-hermeticos':'Potes Herméticos','prato-raso':'Prato Raso','prato-fundo':'Prato Fundo',
-            'copos-vidro':'Copos de Vidro','copos-sobremesa':'Copos de Sobremesa',
-            'taca':'Taça','caneca':'Caneca','jarra-suco':'Jarra de Suco','jarra':'Jarra',
-            'garrafa-agua':'Garrafa de Água','garrafa-termica':'Garrafa Térmica',
-            'boleira':'Boleira com Tampa','bandeja-bambu':'Bandeja Giratória de Bambu',
-            'tabua-corte':'Tábua de Corte','escorredor-louca':'Escorredor de Louça','escorredor':'Escorredor',
-            'porta-bucha':'Porta Bucha e Detergente','lixeira-cozinha':'Lixeira Cozinha','lixeira-pia':'Lixeira de Pia',
-            'suporte-papel-toalha':'Suporte Papel Toalha','porta-pao':'Porta Pão',
-            'balanca-cozinha':'Balança de Cozinha','acucareiro':'Açucareiro','saleiro':'Saleiro',
-            'pegadores':'Pegadores','peneira':'Peneira','abridor-lata':'Abridor de Lata',
-            'descascador':'Descascador de Legumes','funil':'Funil','rolo-massa':'Rolo para Massa',
-            'colher-pau':'Colher de Pau','colher-sobremesa':'Colher de Sobremesa',
-            'copo-medidor':'Copo Medidor','pano-prato':'Pano de Prato','tapete-cozinha':'Tapete de Cozinha',
-            'conjunto-cama':'Conjunto de Cama Queen','cobre-leito':'Cobre Leito Queen','coberdrom':'Coberdrom Queen',
-            'travesseiros':'Travesseiros','protetor-colchao':'Protetor de Colchão','protetor-colchao-azul':'Protetor Colchão Azul',
-            'manta-sofa-quarto':'Manta Sofá (Quarto)','abajur':'Abajur','ventilador':'Ventilador',
-            'guarda-roupa':'Guarda-roupa','organizador-guarda-roupa':'Organizador Guarda-roupa',
-            'organizador-gaveta':'Organizador de Gaveta','caixa-organizadora':'Caixa Organizadora',
-            'cabide':'Cabide','cabide-calca':'Cabide para Calça','sapateira':'Sapateira Closet',
-            'toalha-banho':'Toalha de Banho','toalha-banho-2':'Toalha de Banho (2)',
-            'toalha-rosto':'Toalha de Rosto','tapete-banheiro':'Tapete Banheiro Antiderrapante',
-            'tapete-banheiro-secagem':'Tapete Secagem Rápida','lixeira-antiodor':'Lixeira Antiodor',
-            'limpeza-sanitaria':'Limpeza Sanitária','escova-limpeza':'Escova Limpeza Ajustável',
-            'porta-escova-dente':'Porta Escova de Dente',
-            'sofa':'Sofá','almofada-sofa':'Almofada para Sofá','capa-almofada':'Capa de Almofada',
-            'capa-almofada-2':'Capa para Almofada','manta-sofa':'Manta para Sofá',
-            'manta-sofa-sala':'Manta para Sofá (Sala)','tapete-sala':'Tapete para Sala',
-            'maq-lavar':'Máquina de Lavar','ferro':'Ferro de Passar','tabua-passar':'Tábua de Passar',
-            'aspirador':'Aspirador de Pó','mop-flat':'Mop Flat','pa-vassoura':'Pá e Vassoura',
-            'cesto-roupa-1':'Cesto de Roupa Suja (1)','cesto-roupa-2':'Cesto de Roupa Suja (2)',
-            'balde-2un':'Balde','balde-bacia':'Balde e Bacia','porta-sabao':'Porta Sabão',
+            'cota-ostentacao': "O gerente ficou maluco! (Cota Ostentação) - R$ 3.000,00",
+            'tv-grande': "Smart TV Grande - R$ 2.200,00",
+            'vida-sem-dividas': "Começar a vida sem dívidas - R$ 1.500,00",
+            'mesa-cozinha': "Mesa da Cozinha - R$ 850,00",
+            'poltrona-chefe': "Poltrona do chefe da casa - R$ 700,00",
+            'robo-aspirador': "Robô Aspirador - R$ 450,00",
+            'mesa-centro': "Mesa de Centro - R$ 280,00",
+            'espelho-adnet': "Espelho Adnet redondo para o hall - R$ 250,00",
+            'quadro-decorativo': "Quadro Decorativo Grande para Sala - R$ 200,00",
+            'tapete-geometrico': "Tapete Geométrico para Sala - R$ 170,00",
+            'luminaria-chao': "Luminária de Chão Moderna - R$ 150,00",
+            'planta-artificial': "Planta artificial alta com vaso minimalista - R$ 110,00",
+            'almofadas-decorativas': "Jogo de Almofadas Decorativas - R$ 75,00",
+            'quadros-menores': "Kit de Quadros Menores - R$ 60,00",
+            'capacho-divertido': "Capacho divertido para a porta de entrada - R$ 50,00",
+            'moringa-agua': "Moringa de Água de Cabeceira - R$ 45,00",
+            'voo-executivo': "Upgrade na viagem (Voo Executivo) - R$ 600,00",
+            'spa-dois': "SPA a dois (Dia de rei e rainha) - R$ 550,00",
+            'ajuda-lua-mel': "Ajuda na Lua de Mel - R$ 500,00",
+            'passeios-viagem': "Passeios radicais ou culturais na viagem - R$ 260,00",
+            'massagens-relaxar': "Massagens para relaxar pós-casamento - R$ 220,00",
+            'ingressos-atracoes': "Ingressos para atrações diversas - R$ 135,00",
+            'jantar-velas': "Jantar romântico à luz de velas - R$ 160,00",
+            'noite-fondue': "Noite do Fondue (Aparelho + Ingredientes) - R$ 180,00",
+            'cafe-cama': "Café da manhã de hotel servido na cama - R$ 90,00",
+            'noiva-massagem-15d': "Massagem da noiva no noivo toda noite por 15 dias - R$ 500,00",
+            'noivo-louca-15d': "Noivo lava a louça durante 15 dias todo dia - R$ 500,00",
+            'vale-compras': "Vale compras para gastar sem culpa - R$ 400,00",
+            'smartfit-1mes': "1 mês de SmartFit pra incentivar - R$ 119,90",
+            'delivery-sexta': "Patrocínio do Delivery de Sexta - R$ 80,00",
+            'salvar-miojo': "Salvando o casal do miojo (Jantar) - R$ 100,00",
+            'imas-geladeira': "Imãs de geladeira de viagem fake - R$ 10,00",
+            'churrascao-picanha': "Churrascão com Picanha - R$ 350,00",
+            'caixa-som-bluetooth': "Caixa de som Bluetooth para o churrasco - R$ 300,00",
+            'churrascao-contrafile': "Churrascão com Contrafilé - R$ 120,00",
+            'acendedor-churrasqueira': "Acendedor de churrasqueira - R$ 15,00",
+            'bebidas-especiais': "Bebidas especiais (Sucos finos/imports) - R$ 145,00",
+            'bandeja-bambu-cama': "Bandeja de bambu para café na cama - R$ 65,00",
+            'tabua-corte': "Tábua de corte estilosa - R$ 55,00",
+            'kit-temperos': "Kit de temperos do chef - R$ 40,00",
+            'copos-americanos': "Jogo de copos americanos - R$ 25,00",
+            'potes-plastico': "Potes de plástico (com tampa!) - R$ 20,00",
+            'vaso-cristal': "Vaso de Cristal Decorativo - R$ 130,00",
+            'vela-aromatica': "Vela Aromática Decorativa - R$ 30,00"
         };
+
         const GIFT_DEFAULT_QTY = {
-            'panelas-aco':2,'panela-ceramica':2,'copos-vidro':3,'copos-sobremesa':3,
-            'colher-sobremesa':2,'travesseiros':6,'toalha-banho':2,'toalha-rosto':2,
-            'abajur':2,'ventilador':2,'almofada-sofa':2,'capa-almofada':3,'capa-almofada-2':3,
-            'manta-sofa':2,'manta-sofa-sala':2,'balde-2un':2,
+            'cota-ostentacao': 999,
+            'tv-grande': 1,
+            'vida-sem-dividas': 999,
+            'mesa-cozinha': 1,
+            'poltrona-chefe': 1,
+            'robo-aspirador': 1,
+            'mesa-centro': 1,
+            'espelho-adnet': 1,
+            'quadro-decorativo': 1,
+            'tapete-geometrico': 1,
+            'luminaria-chao': 1,
+            'planta-artificial': 1,
+            'almofadas-decorativas': 1,
+            'quadros-menores': 1,
+            'capacho-divertido': 1,
+            'moringa-agua': 1,
+            'voo-executivo': 999,
+            'spa-dois': 999,
+            'ajuda-lua-mel': 999,
+            'passeios-viagem': 999,
+            'massagens-relaxar': 999,
+            'ingressos-atracoes': 999,
+            'jantar-velas': 999,
+            'noite-fondue': 999,
+            'cafe-cama': 999,
+            'noiva-massagem-15d': 999,
+            'noivo-louca-15d': 999,
+            'vale-compras': 999,
+            'smartfit-1mes': 999,
+            'delivery-sexta': 999,
+            'salvar-miojo': 999,
+            'imas-geladeira': 999,
+            'churrascao-picanha': 999,
+            'caixa-som-bluetooth': 1,
+            'churrascao-contrafile': 999,
+            'acendedor-churrasqueira': 1,
+            'bebidas-especiais': 999,
+            'bandeja-bambu-cama': 1,
+            'tabua-corte': 1,
+            'kit-temperos': 1,
+            'copos-americanos': 1,
+            'potes-plastico': 1,
+            'vaso-cristal': 1,
+            'vela-aromatica': 1
         };
 
         function formatDate(iso) {

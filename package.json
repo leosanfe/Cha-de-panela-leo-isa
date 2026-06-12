@@ -1,0 +1,13 @@
+{
+  "name": "cha-de-panela-leo-isa",
+  "version": "1.0.0",
+  "description": "Site de Chá de Panela de Leonardo & Isabelle",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y http-server . -p 8000"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {}
+}

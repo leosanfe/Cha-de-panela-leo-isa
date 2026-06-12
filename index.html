@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chá de Panela — Leonardo & Isabelle</title>
-    <meta name="description" content="Convite exclusivo para o Chá de Panela de Leonardo e Isabelle. 24 de Maio de 2026, Chácara da Paz.">
+    <title>Casamento — Leonardo & Isabelle</title>
+    <meta name="description" content="Convite exclusivo para o Casamento de Leonardo e Isabelle. 20 de Junho de 2026.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -18,108 +18,74 @@
     </script>
     <style>
         :root {
-            --bg: #FAF8F3; --bg-warm: #F5F1EB; --bg-cream: #EDE8DF; --bg-rsvp: #E5DFD4;
-            --text: #2E3A4D; --text-light: #6E7D91; --text-muted: #9CA7B5;
-            --accent: #B85A4A; --gold: #D4A843; --gold-light: #E2C46E;
-            --olive: #7192B6; --olive-dark: #5A7DA3; --olive-light: #9DB8D4; --olive-text: #3E5F8A;
-            --cream: #F0EBE3; --white: #FFFFFF; --divider: #E0D8CE;
+            --bg: #FAF9F6;
+            --bg-warm: #F4F4F6;
+            --bg-cream: #EAEAEF;
+            --bg-rsvp: #DDE2E7;
+            --text: #2c3e50;
+            --text-light: #5a6b7c;
+            --text-muted: #8fa0b0;
+            --accent: #3E5467;
+            --slate-blue: #3E5467;
+            --slate-light: #7E95A8;
+            --slate-dark: #202D3A;
+            --cream: #FAF9F6;
+            --white: #FFFFFF;
+            --divider: #D6DEE4;
+            
+            /* Mapping old olive/gold color tokens to slate-blue system */
+            --olive: #3E5467;
+            --olive-dark: #202D3A;
+            --olive-light: #7E95A8;
+            --olive-text: #202D3A;
+            --gold: #7E95A8;
+            --gold-light: #EAEAEF;
+            
             --serif: 'Cormorant Garamond', Georgia, serif;
             --script: 'Great Vibes', cursive;
             --sans: 'Montserrat', 'Helvetica Neue', sans-serif;
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: var(--sans); color: var(--text); background: #1a1815; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--sans); color: var(--text); background: url('Itens-Site-Casamento/background-leo-isa.png') repeat; background-attachment: fixed; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
         /* SPLASH */
-        #splash-screen { position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #B8C5CC; overflow: hidden; }
-        .splash-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-        .splash-poster.poster-h { display: block; }
-        .splash-poster.poster-v { display: none; }
-        @media (max-width: 768px), (orientation: portrait) {
-            .splash-poster.poster-h { display: none; }
-            .splash-poster.poster-v { display: block; }
-        }
-        #splash-screen video { z-index: 2; }
-        .tap-indicator { z-index: 10; }
-        #splash-screen video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        #splash-screen .video-horizontal { display: block; }
-        #splash-screen .video-vertical { display: none; }
-        @media (max-width: 768px), (orientation: portrait) {
-            #splash-screen .video-horizontal { display: none; }
-            #splash-screen .video-vertical { display: block; }
-        }
-        .tap-indicator { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 10; animation: pulseFloat 2.5s ease-in-out infinite; pointer-events: none; }
-        .tap-indicator span { font-family: var(--serif); font-size: 15px; font-style: italic; color: rgba(255,255,255,0.7); text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-        .tap-indicator .tap-icon { width: 28px; height: 28px; border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; position: relative; opacity: 0.7; }
-        .tap-indicator .tap-icon::after { content:''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 8px; height: 8px; background: rgba(255,255,255,0.6); border-radius: 50%; }
-        @keyframes pulseFloat { 0%,100%{opacity:.7;transform:translateX(-50%) translateY(0)} 50%{opacity:1;transform:translateX(-50%) translateY(-8px)} }
-        .tap-indicator.hidden { opacity: 0; transition: opacity .5s; }
-        #white-fade { position: fixed; inset: 0; z-index: 1001; background: var(--white); opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in; }
-        #white-fade.active { opacity: 1; pointer-events: all; }
-        #white-fade.fade-out { opacity: 0; transition: opacity 1.2s ease-out; }
+        #splash-screen { display: none !important; }
+        #white-fade { display: none !important; }
 
         /* MAIN */
-        #main-content { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 480px; margin: 0 auto; opacity: 0; transition: opacity .8s; background: url('fundo-papel.png') repeat center top; background-size: 100% auto; box-shadow: 0 0 60px rgba(0,0,0,0.4); }
-        #main-content.visible { display: flex; opacity: 1; }
+        #main-content { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 480px; margin: 0 auto; opacity: 0; transition: opacity 1.5s ease; background: transparent; box-shadow: none; }
+        #main-content.visible { opacity: 1; }
 
-        /* HERO */
-        .hero { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; background: var(--white); transition: background 2.5s ease; }
-        .hero.hero-revealed { background: transparent; }
-        .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0; transition: opacity 2.5s ease; }
-        .hero.hero-revealed .hero-video-bg { opacity: 1; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.25) 40%, rgba(0,0,0,.30) 70%, rgba(0,0,0,.50)); z-index: 1; opacity: 0; transition: opacity 2.5s ease; }
-        .hero.hero-revealed .hero-overlay { opacity: 1; }
-        .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 60px 24px 80px; }
+        /* HERO SECTION */
+        .hero { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; position: relative; overflow: hidden; background: transparent; padding: 30px 0 80px 0; }
+        .hero-content { width: 100%; padding: 0 24px; z-index: 5; margin-top: -60px; position: relative; }
+        
+        .invitation-card-container { width: 100%; position: relative; margin: 0 auto; max-width: 420px; }
+        .invitation-card { width: 100%; height: auto; display: block; margin: 0 auto; opacity: 0; transform: translateY(30px); transition: opacity 1.5s ease, transform 1.5s ease; background: transparent; box-shadow: none; border-radius: 0; }
+        .invitation-card.hero-text-visible { opacity: 1; transform: translateY(0); }
+        
 
-        /* --- Hero staggered text intro --- */
-        .hero-ornament { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-light), transparent); margin-bottom: 28px; opacity: 0; transform: scaleX(0); transition: opacity 1.2s ease, transform 1.2s ease; }
-        .hero-ornament.hero-text-visible { opacity: 1; transform: scaleX(1); }
-
-        .hero-pretitle { font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--text); margin-bottom: 32px; opacity: 0; transform: translateY(18px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1), color 2.5s ease; }
-        .hero-pretitle.hero-text-visible { opacity: 1; transform: translateY(0); }
-        .hero.hero-revealed .hero-pretitle { color: rgba(255,255,255,0.85); }
-
-        .hero-names { font-family: var(--serif); font-size: clamp(36px,9vw,52px); font-weight: 400; color: var(--text); text-shadow: none; line-height: 1.2; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 1.6s cubic-bezier(.23,1,.32,1), transform 1.6s cubic-bezier(.23,1,.32,1), color 2.5s ease, text-shadow 2.5s ease; }
-        .hero-names.hero-text-visible { opacity: 1; transform: translateY(0) scale(1); }
-        .hero.hero-revealed .hero-names { color: var(--white); text-shadow: 0 2px 20px rgba(0,0,0,.3); }
-        .hero-names .amp { display: block; font-family: var(--serif); font-size: clamp(22px,5vw,34px); font-style: italic; color: var(--text-light); margin: 8px 0; font-weight: 300; text-shadow: none; letter-spacing: 0.05em; text-transform: lowercase; transition: color 2.5s ease; }
-        .hero.hero-revealed .hero-names .amp { color: rgba(255,255,255,0.8); }
-
-        .hero-date { font-family: var(--serif); font-size: clamp(20px,5vw,28px); font-weight: 300; font-style: italic; color: var(--text-light); margin-bottom: 24px; text-shadow: none; letter-spacing: 0.05em; opacity: 0; transform: translateY(16px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1), color 2.5s ease, text-shadow 2.5s ease; }
-        .hero-date.hero-text-visible { opacity: 1; transform: translateY(0); }
-        .hero.hero-revealed .hero-date { color: rgba(255,255,255,0.9); text-shadow: 0 2px 10px rgba(0,0,0,.3); }
-
-        .hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; z-index: 2; opacity: 0; transform: translateY(12px); transition: opacity 1.4s cubic-bezier(.23,1,.32,1), transform 1.4s cubic-bezier(.23,1,.32,1); }
+        .hero-bottom { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 35px; opacity: 0; transform: translateY(15px); transition: opacity 1.5s ease, transform 1.5s ease; }
         .hero-bottom.hero-text-visible { opacity: 1; transform: translateY(0); }
-
-        .hero-date-lines { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-        .hero-date-line { width: 40px; height: 1px; background: var(--divider); transition: background 2.5s ease; }
-        .hero.hero-revealed .hero-date-line { background: rgba(255,255,255,0.4); }
-        .hero-diamond { width: 8px; height: 8px; border: 1px solid var(--text-muted); transform: rotate(45deg); transition: border-color 2.5s ease; }
-        .hero.hero-revealed .hero-diamond { border-color: rgba(255,255,255,0.5); }
-        .hero-rsvp { font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 2.5s ease; }
-        .hero.hero-revealed .hero-rsvp { color: rgba(255,255,255,0.7); }
-        .hero-rsvp:hover { color: var(--gold-light); }
-        .hero-scroll-arrow { margin-top: 16px; }
-        .hero-scroll-arrow svg { width: 20px; height: 20px; color: var(--text-muted); opacity: .6; animation: bounce 2s ease-in-out infinite; transition: color 2.5s ease; }
-        .hero.hero-revealed .hero-scroll-arrow svg { color: var(--white); }
+        .hero-date-lines { display: flex; align-items: center; gap: 16px; margin-bottom: 15px; }
+        .hero-date-line { width: 40px; height: 1px; background: var(--divider); }
+        .hero-diamond { width: 8px; height: 8px; border: 1px solid var(--text-muted); transform: rotate(45deg); }
+        .hero-rsvp { font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; }
+        .hero-scroll-arrow { margin-top: 10px; }
+        .hero-scroll-arrow svg { width: 20px; height: 20px; color: var(--text-muted); opacity: .6; animation: bounce 2s ease-in-out infinite; }
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
 
         /* COUNTDOWN */
-        .countdown-section { width: 100%; background: var(--olive); padding: 40px 24px; text-align: center; }
-        .countdown-monogram { width: 60px; margin: 0 auto 14px; }
-        .countdown-monogram img { width: 100%; }
-        .countdown-title { font-family: var(--script); font-size: clamp(24px,5vw,34px); color: var(--cream); margin-bottom: 6px; }
-        .countdown-subtitle { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: rgba(240,235,227,.6); margin-bottom: 24px; }
-        .countdown-grid { display: grid; grid-template-columns: repeat(4,1fr); max-width: 400px; margin: 0 auto; }
-        .countdown-item { padding: 10px 8px; position: relative; }
-        .countdown-item:not(:last-child)::after { content:''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: rgba(240,235,227,.15); }
-        .countdown-number { font-family: var(--serif); font-size: clamp(28px,7vw,40px); font-weight: 300; color: var(--cream); display: block; line-height: 1; margin-bottom: 6px; }
-        .countdown-label { font-family: var(--sans); font-size: 8px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,235,227,.5); }
-        @media (max-width:400px) { .countdown-grid{grid-template-columns:repeat(2,1fr)} .countdown-item:nth-child(2)::after{display:none} }
+        .countdown-section { width: 100%; background: var(--bg); padding: 60px 24px 80px; text-align: center; position: relative; border-top: 1px solid var(--divider); }
+        .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 380px; margin: 0 auto 30px; gap: 8px; }
+        .countdown-item { padding: 12px 6px; position: relative; }
+        .countdown-item:not(:last-child)::after { content:''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: var(--divider); }
+        .countdown-number { font-family: var(--serif); font-size: clamp(28px, 7vw, 40px); font-weight: 300; color: var(--slate-blue); display: block; line-height: 1; margin-bottom: 8px; }
+        .countdown-label { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-light); }
+        .countdown-subtitle { font-family: var(--serif); font-size: 14px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--text-light); margin-top: 10px; }
+        .countdown-flowers { width: 180px; margin: 40px auto 0; display: block; opacity: 0.95; }
+        @media (max-width:400px) { .countdown-grid { gap: 4px; } .countdown-number { font-size: 24px; } }
 
         /* SECTION HEADER PATTERN */
         .section-art { display: block; margin: 0 auto 16px; }
@@ -146,28 +112,7 @@
         .loc-btn-calendar { background: var(--olive-light); color: var(--white); }
         .loc-btn-calendar:hover { background: var(--olive); transform: translateY(-2px); }
 
-        /* TIMELINE - ZIGZAG WATERCOLOR */
-        .timeline-section { width: 100%; background: transparent; padding: 60px 16px 20px; text-align: center; position: relative; overflow: hidden; }
-        .couple-art { width: 100px; height: auto; opacity: .8; }
-        .timeline { position: relative; max-width: 440px; margin: 0 auto; padding: 20px 0 10px; }
-        .timeline::before { content:''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1.5px; height: 100%; background: linear-gradient(to bottom, transparent, var(--olive-light) 5%, var(--olive-light) 95%, transparent); }
-        .tl-row { position: relative; display: flex; align-items: center; padding: 16px 0; min-height: 100px; }
-        .tl-row .tl-dot { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: var(--olive); border-radius: 50%; z-index: 3; border: 2px solid var(--cream); box-shadow: 0 0 0 2px var(--olive-light); }
-        .tl-row .tl-side-left { width: 45%; text-align: right; padding-right: 24px; }
-        .tl-row .tl-side-right { width: 45%; text-align: left; padding-left: 24px; margin-left: auto; }
-        .tl-row .tl-center { width: 10%; }
-        .tl-img { max-width: 100px; max-height: 100px; object-fit: contain; opacity: .85; filter: drop-shadow(0 2px 6px rgba(0,0,0,.06)); }
-        .tl-img.wide { max-width: 140px; }
-        .tl-time { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
-        .tl-name { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--olive-text); margin-bottom: 4px; letter-spacing: 0.5px; }
-        .tl-desc { font-family: var(--serif); font-size: 13px; font-style: italic; font-weight: 300; color: var(--text-light); line-height: 1.5; }
-        .tl-row.reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
-        .tl-row.reveal.revealed { opacity: 1; transform: translateY(0); }
-        .tl-row:nth-child(odd) .tl-side-left .tl-img-wrap { display: flex; justify-content: flex-end; }
-        .tl-row:nth-child(even) .tl-side-right .tl-img-wrap { display: flex; justify-content: flex-start; }
-        .tl-dual-img { display: flex; gap: 6px; }
-        .tl-dual-img img { max-width: 70px; max-height: 80px; }
-        .gate-art { width: 100%; max-width: 500px; margin: 20px auto 0; display: block; opacity: .5; }
+
 
         /* DRESS CODE */
         .dresscode-section { width: 100%; background: transparent; padding: 80px 24px; text-align: center; }
@@ -276,48 +221,43 @@
         .gift-go-rsvp:hover { background: var(--gold-light); color: var(--text); transform: translateY(-1px); }
 
         /* RSVP */
-        .rsvp-section { width: 100%; background: transparent; padding: 0; text-align: center; }
-        .rsvp-photo-wrapper { width: 100%; padding: 0; display: flex; justify-content: center; }
-        .rsvp-couple-photo { width: 100%; height: auto; display: block; }
-        .rsvp-form { max-width: 440px; margin: 0 auto; padding: 30px 24px 60px; text-align: left; }
-        .form-group { margin-bottom: 24px; }
+        .rsvp-section { width: 100%; position: relative; background: transparent; }
+        .rsvp-form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px 24px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 15px 40px rgba(62, 84, 103, 0.12);
+            border: 1px solid rgba(255,255,255,0.8);
+            margin: 0 auto;
+            text-align: left;
+        }
+        .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
         .form-label .req { color: var(--accent); }
-        .form-input, .form-textarea { width: 100%; padding: 14px 16px; border: none; border-radius: 8px; background: rgba(255,255,255,.6); font-family: var(--sans); font-size: 14px; color: var(--text); transition: background .3s, box-shadow .3s; outline: none; }
-        .form-input:focus, .form-textarea:focus { background: var(--white); box-shadow: 0 0 0 2px var(--olive-light); }
+        .form-input, .form-textarea { width: 100%; padding: 14px 16px; border: none; border-radius: 8px; background: rgba(0,0,0,0.04); font-family: var(--sans); font-size: 14px; color: var(--text); transition: background .3s, box-shadow .3s; outline: none; }
+        .form-input:focus, .form-textarea:focus { background: rgba(0,0,0,0.07); box-shadow: 0 0 0 2px var(--olive-light); }
         .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
-        .form-textarea { resize: vertical; min-height: 100px; }
-        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
-        .radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: var(--sans); font-size: 14px; }
-        .radio-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--olive); }
         .companion-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
         .companion-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border: 1px solid var(--divider); border-radius: 50px; background: var(--white); font-family: var(--sans); font-size: 13px; color: var(--text); cursor: pointer; transition: all .3s; }
         .companion-btn:hover { border-color: var(--olive); color: var(--olive); }
         .companion-list { display: flex; flex-direction: column; gap: 8px; }
-        .companion-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.6); border-radius: 8px; padding: 10px 14px; }
+        .companion-item { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); border-radius: 8px; padding: 10px 14px; }
         .companion-item input { flex: 1; border: none; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--text); outline: none; }
-        .comp-type { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--olive); background: rgba(107,124,94,.1); padding: 3px 8px; border-radius: 4px; }
+        .comp-type { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--olive); background: rgba(62,84,103,.1); padding: 3px 8px; border-radius: 4px; }
         .companion-remove { width: 24px; height: 24px; border: none; background: rgba(139,32,32,.1); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 14px; transition: all .3s; }
         .companion-remove:hover { background: rgba(139,32,32,.2); }
-        .form-icon-label { display: flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
-        .form-icon-label svg { width: 16px; height: 16px; color: var(--olive); }
         .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 8px; background: var(--olive-dark); color: var(--white); font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all .3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: var(--olive); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(90,107,78,.3); }
+        .submit-btn:hover { background: var(--olive); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(62,84,103,.3); }
         .submit-btn svg { width: 18px; height: 18px; }
-        .rsvp-success { display: none; text-align: center; padding: 40px 24px; }
+        .rsvp-success { display: none; text-align: center; padding: 20px 10px; }
         .rsvp-success.show { display: block; }
         .rsvp-success-icon { font-size: 48px; margin-bottom: 16px; }
         .rsvp-success-title { font-family: var(--script); font-size: 32px; color: var(--olive-dark); margin-bottom: 8px; }
         .rsvp-success-text { font-family: var(--sans); font-size: 14px; color: var(--text-light); }
-
-        /* FOOTER */
-        .footer { width: 100%; text-align: center; position: relative; overflow: hidden; }
-        .footer-bg { width: 100%; display: block; }
-        .footer-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 24px; background: rgba(0,0,0,0.35); }
-        .footer-rings { width: 70px; margin-bottom: 12px; }
-        .footer-names { font-family: var(--script); font-size: clamp(32px,8vw,42px); color: var(--white); margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-        .footer-date { font-family: var(--sans); font-size: 12px; letter-spacing: 3px; color: rgba(255,255,255,0.85); }
-        .footer-credit { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 16px; }
 
         /* MUSIC BUTTON */
         .music-btn { position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px; border-radius: 50%; background: rgba(59,53,48,0.75); backdrop-filter: blur(8px); border: none; cursor: pointer; z-index: 900; display: flex; align-items: center; justify-content: center; transition: all 0.3s; opacity: 0; pointer-events: none; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
@@ -339,12 +279,62 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s, transform .8s; }
         .reveal.revealed { opacity: 1; transform: translateY(0); }
         .rd1{transition-delay:.1s} .rd2{transition-delay:.2s} .rd3{transition-delay:.3s} .rd4{transition-delay:.4s}
+
+        /* Subtle reveal override for dresscode */
+        #dresscode .reveal { transform: translateY(10px); transition: opacity 1.2s ease, transform 1.2s ease; }
+        #dresscode .reveal.revealed { transform: translateY(0); opacity: 1; }
+
+        /* MANUAL DOS CONVIDADOS */
+        .manual-section { width: 100%; background: var(--bg); padding: 60px 24px; text-align: center; border-top: 1px solid var(--divider); }
+        .manual-grid { display: flex; flex-direction: column; gap: 16px; max-width: 440px; margin: 0 auto; text-align: left; }
+        .manual-item { display: flex; gap: 16px; background: var(--white); padding: 16px; border-radius: 16px; border: 1px solid var(--divider); box-shadow: 0 4px 12px rgba(0,0,0,0.01); transition: all 0.3s ease; }
+        .manual-item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(62, 84, 103, 0.06); border-color: var(--slate-light); }
+        .manual-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(62, 84, 103, 0.05); color: var(--slate-blue); border-radius: 50%; flex-shrink: 0; }
+        .manual-icon svg { width: 18px; height: 18px; }
+        .manual-content { display: flex; flex-direction: column; gap: 2px; }
+        .manual-item-title { font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--slate-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+        .manual-item-desc { font-family: var(--serif); font-size: 13.5px; font-style: italic; color: var(--text-light); line-height: 1.4; }
+
+        /* NEW MULTI-STEP GIFT CHECKOUT MODAL */
+        .gift-step { display: none; padding: 20px 24px 24px; }
+        .gift-step.show { display: block; }
+        
+        .selected-gift-header { display: flex; align-items: center; gap: 16px; background: rgba(62, 84, 103, 0.04); padding: 12px 16px; border-radius: 12px; margin-bottom: 20px; border: 1px dashed var(--divider); text-align: left; }
+        .selected-gift-header img { width: 56px; height: 56px; object-fit: contain; background: #fff; border-radius: 8px; padding: 4px; border: 1px solid var(--divider); }
+        .selected-gift-info { flex: 1; }
+        .selected-gift-title { font-family: var(--serif); font-size: 14px; font-weight: 600; color: var(--slate-dark); line-height: 1.3; }
+        .selected-gift-price { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 3px; }
+        
+        .payment-choice-card { flex: 1; border: 2px solid var(--divider); border-radius: 12px; padding: 16px 8px; text-align: center; cursor: pointer; background: #fff; transition: all 0.3s ease; }
+        .payment-choice-card:hover { border-color: var(--slate-light); transform: translateY(-1px); }
+        .payment-choice-card.selected { border-color: var(--olive) !important; background: rgba(62, 84, 103, 0.05) !important; }
+        
+        .payment-content { display: none; }
+        .payment-content.show { display: block; }
+        
+        .pix-qr-container { display: flex; justify-content: center; margin: 16px 0; }
+        .pix-qr-img { width: 170px; height: 170px; background: #fff; padding: 8px; border-radius: 12px; border: 1px solid var(--divider); }
+        .pix-code-box { background: rgba(0,0,0,0.03); border: 1px dashed var(--divider); border-radius: 8px; padding: 10px; font-family: var(--sans); font-size: 11px; color: var(--text-light); word-break: break-all; margin-bottom: 16px; max-height: 70px; overflow-y: auto; text-align: left; }
+        
+        .card-form { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+        .card-row { display: flex; gap: 12px; }
+        .card-row > div { flex: 1; }
+        
+        .payment-processing { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+        .payment-processing.show { display: flex; }
+        .spinner { width: 36px; height: 36px; border: 3px solid rgba(62, 84, 103, 0.1); border-top-color: var(--olive); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .thanks-step { display: none; padding: 24px; text-align: center; }
+        .thanks-step.show { display: block; }
+        .thanks-video-container { position: relative; width: 100%; max-width: 240px; aspect-ratio: 9/16; margin: 16px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15); background: #000; }
+        .thanks-video { width: 100%; height: 100%; object-fit: cover; display: block; }
     </style>
 </head>
 <body>
 
     <!-- AUDIO -->
-    <audio id="bg-music" loop preload="auto"><source src="341 - Com fé espera no Senhor - Orquestra.mp3" type="audio/mpeg"></audio>
+    <audio id="bg-music" loop preload="auto"><source src="Itens-Site-Casamento/voceeeu.mp3" type="audio/mpeg"></audio>
 
     <!-- MUSIC BUTTON -->
     <button class="music-btn muted" id="music-btn" aria-label="Tocar/Pausar música">
@@ -354,10 +344,8 @@
 
     <!-- STICKY NAV -->
     <nav class="sticky-nav" id="sticky-nav">
-        <a href="#details">Localização</a>
-        <a href="#programacao">Programação</a>
-        <a href="#presentes">Presentes</a>
         <a href="#rsvp">Confirmação</a>
+        <a href="#presentes">Presentes</a>
     </nav>
 
     <!-- SPLASH -->
@@ -374,13 +362,10 @@
 
         <!-- HERO -->
         <section class="hero" id="hero">
-            <video class="hero-video-bg" autoplay loop muted playsinline preload="metadata"><source src="background-inicio-novo.mp4" type="video/mp4"></video>
-            <div class="hero-overlay"></div>
             <div class="hero-content">
-                <div class="hero-ornament"></div>
-                <p class="hero-pretitle">Chá de Panela e Roda de Violão</p>
-                <h1 class="hero-names">Leonardo<span class="amp">&</span>Isabelle</h1>
-                <p class="hero-date" style="margin-top: 32px;">24 de maio | às 10h</p>
+                <div class="invitation-card-container">
+                    <img src="Itens-Site-Casamento/inicio-correto.png" alt="Convite de Casamento" class="invitation-card">
+                </div>
             </div>
             <div class="hero-bottom">
                 <div class="hero-date-lines"><div class="hero-date-line"></div><div class="hero-diamond"></div><div class="hero-date-line"></div></div>
@@ -390,116 +375,180 @@
         </section>
 
         <!-- COUNTDOWN -->
-        <section class="countdown-section" id="countdown">
-            <div class="countdown-monogram reveal"><img src="emblema-leo-isa.png" alt="L&I"></div>
-            <h2 class="countdown-title reveal rd1">Contagem Regressiva</h2>
-            <p class="countdown-subtitle reveal rd2">PARA O NOSSO CHÁ DE PANELA</p>
+        <section class="countdown-section" id="countdown" style="padding: 60px 24px 0;">
+            <h2 class="countdown-title reveal rd1" style="font-family:var(--serif);font-size:16px;letter-spacing:4px;text-transform:uppercase;color:var(--text-muted);font-weight:500;">Faltam</h2>
             <div class="countdown-grid reveal rd3">
                 <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">DIAS</span></div>
                 <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">HORAS</span></div>
                 <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">MINUTOS</span></div>
                 <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">SEGUNDOS</span></div>
             </div>
-        </section>
-
-        <!-- DETAILS -->
-        <section class="details-section" id="details">
-            <img src="leoisabuque.png" alt="Leo e Isa com buquê" class="section-art dog-art reveal">
-            <h2 class="section-title-script reveal rd1">Os Detalhes</h2>
-            <p class="section-subtitle-caps reveal rd2">TUDO O QUE VOCÊ PRECISA SABER</p>
-            <div class="location-card-wrapper reveal rd3">
-                <div class="location-content" style="position:relative; margin:0 auto; background:rgba(255,255,255,0.85); backdrop-filter:blur(4px); padding:28px 24px 0; border-radius:2rem; text-align:center; display:flex; flex-direction:column; align-items:center; max-width:380px;">
-                    <p class="location-label">Localização</p>
-                    <h3 class="location-name">Chácara da Paz</h3>
-                    <div class="location-time">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <span>A partir das 10h</span>
+            <p class="countdown-subtitle reveal rd2" style="font-family:var(--serif);font-size:16px;letter-spacing:4px;text-transform:uppercase;color:var(--text-light);margin-top:10px;margin-bottom:30px;">Para o nosso grande dia</p>
+            
+            <!-- POLAROIDS SECTION -->
+            <div id="polaroids-section" style="width: 100%; position: relative; height: 220vh; background: transparent; margin-top: 10px; margin-bottom: 0;">
+                <div style="position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 60px; overflow: hidden; z-index: 10;">
+                    <div class="polaroids-container" style="position: relative; width: 330px; height: 375px;">
+                        <div class="polaroid-card" id="polaroid-1" style="position: absolute; inset: 0; transform: rotate(-4deg) scale(0.95); z-index: 4; opacity: 1; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/polaroid1.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="polaroid-card" id="polaroid-2" style="position: absolute; inset: 0; transform: translate(300px, -100px) rotate(35deg) scale(0.95); z-index: 5; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/polaroid2.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="polaroid-card" id="polaroid-3" style="position: absolute; inset: 0; transform: translate(-300px, 120px) rotate(-45deg) scale(0.95); z-index: 6; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/polaroid3.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="polaroid-card" id="polaroid-4" style="position: absolute; inset: 0; transform: translate(80px, 300px) rotate(25deg) scale(0.95); z-index: 7; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/polaroid4.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
                     </div>
-                    <img src="finca-biniagual-illustration-v5DD0Tq2.png" alt="Chácara da Paz" class="location-venue-img">
-                </div>
-                <div class="location-buttons" style="justify-content:center; margin-top:28px;">
-                    <a href="https://share.google/YTdA6sTRfrGsy63ql" target="_blank" class="loc-btn loc-btn-maps" style="padding:16px 48px; font-size:14px; font-weight:500; letter-spacing:1px;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:20px;height:20px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Google Maps
-                    </a>
-                </div>
-                <div class="reveal rd4" style="max-width:380px; margin:24px auto 0; text-align:center; background:rgba(255,255,255,0.85); backdrop-filter:blur(4px); border-radius:16px; padding:24px 20px;">
-                    <h4 style="font-family:var(--script); font-size:22px; color:var(--olive-text); margin-bottom:16px;">O que trazer:</h4>
-                    <p style="font-family:var(--serif); font-size:14px; color:var(--text); line-height:1.7; margin-bottom:14px;">🦟 <strong>Repelente de insetos</strong> — o local é no meio da natureza!</p>
-                    <p style="font-family:var(--serif); font-size:14px; color:var(--text); line-height:1.7; margin-bottom:18px;">🎵 <strong>Instrumentos musicais</strong> — traga seu violão, violino, saxofone, clarinete, tuba… qualquer instrumento é bem-vindo em nosso círculo!</p>
-                    <div style="width:60px; height:1px; background:var(--divider); margin:0 auto 16px;"></div>
-                    <p style="font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">⚠️ Regras locais</p>
-                    <p style="font-family:var(--serif); font-size:13px; color:var(--text-light); line-height:1.6;">Não alimente os animais ou os peixes 🐟</p>
+                    <div class="polaroid-verse-container" style="margin-top: 24px; text-align: center; max-width: 360px;">
+                        <p style="font-family: var(--serif); font-size: clamp(16px, 3.8vw, 20px); font-style: italic; color: var(--slate-blue); line-height: 1.6; margin-bottom: 8px;">
+                            "Grandes coisas fez o Senhor por nós, e, por isso, estamos alegres."
+                        </p>
+                        <p style="font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin: 0;">
+                            Salmos 126:3
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- TIMELINE -->
-        <section class="timeline-section" id="programacao">
-            <h2 class="section-title-script reveal">Cronograma</h2>
-            <p class="section-subtitle-caps reveal rd1">O QUE PREPARAMOS PARA VOCÊS</p>
-            <div class="timeline">
-                <!-- 10h - Café -->
-                <div class="tl-row reveal">
-                    <div class="tl-side-left">
-                        <div class="tl-img-wrap"><img src="inicio.png" alt="Café da manhã" class="tl-img"></div>
+        <!-- MANUAL DOS CONVIDADOS -->
+        <section class="manual-section" id="manual">
+            <h2 class="section-title-script reveal">Manual dos Convidados</h2>
+            <p class="section-subtitle-caps reveal rd1">DICAS PARA O NOSSO GRANDE DIA</p>
+            
+            <div class="manual-grid">
+                <!-- Item 1: Confirmação -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </div>
-                    <div class="tl-center"><div class="tl-dot"></div></div>
-                    <div class="tl-side-right">
-                        <p class="tl-time">10h</p>
-                        <h4 class="tl-name">Início do Chá</h4>
-                        <p class="tl-desc">Te recepcionaremos com um café da manhã feito com muito carinho</p>
-                    </div>
-                </div>
-                <!-- 12h30 - Almoço -->
-                <div class="tl-row reveal">
-                    <div class="tl-side-left">
-                        <p class="tl-time">12h30</p>
-                        <h4 class="tl-name">Almoço</h4>
-                        <p class="tl-desc">Hora de recarregar as energias juntos</p>
-                    </div>
-                    <div class="tl-center"><div class="tl-dot"></div></div>
-                    <div class="tl-side-right">
-                        <div class="tl-img-wrap"><img src="almoco.png" alt="Almoço" class="tl-img"></div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Confirme sua presença</h4>
+                        <p class="manual-item-desc">Por favor, confirme se poderá ir no formulário de confirmação nesta página para nos ajudar no planejamento.</p>
                     </div>
                 </div>
-                <!-- 14h - Brincadeiras -->
-                <div class="tl-row reveal">
-                    <div class="tl-side-left">
-                        <div class="tl-img-wrap"><img src="brincadeiras.png" alt="Brincadeiras" class="tl-img wide"></div>
+
+                <!-- Item 2: Branco -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     </div>
-                    <div class="tl-center"><div class="tl-dot"></div></div>
-                    <div class="tl-side-right">
-                        <p class="tl-time">14h</p>
-                        <h4 class="tl-name">Brincadeiras</h4>
-                        <p class="tl-desc">Brincadeiras do casal com os convidados</p>
-                    </div>
-                </div>
-                <!-- 16h - Violão e Oração -->
-                <div class="tl-row reveal">
-                    <div class="tl-side-left">
-                        <p class="tl-time">16h</p>
-                        <h4 class="tl-name">Roda de Violão</h4>
-                        <p class="tl-desc">Violão e oração</p>
-                    </div>
-                    <div class="tl-center"><div class="tl-dot"></div></div>
-                    <div class="tl-side-right">
-                        <div class="tl-dual-img">
-                            <img src="violao.png" alt="Violão" class="tl-img">
-                            <img src="oracao.png" alt="Oração" class="tl-img">
-                        </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Branco é a cor da noiva</h4>
+                        <p class="manual-item-desc">Deixe o branco, off-white, champanhe e tons muito próximos exclusivamente para a noiva.</p>
                     </div>
                 </div>
-                <!-- 18h - Fim -->
-                <div class="tl-row reveal">
-                    <div class="tl-side-left">
-                        <div class="tl-img-wrap"><img src="fim.png" alt="Fim" class="tl-img"></div>
+
+                <!-- Item 3: Convidado não convida -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <div class="tl-center"><div class="tl-dot"></div></div>
-                    <div class="tl-side-right">
-                        <p class="tl-time">18h</p>
-                        <h4 class="tl-name">Fim…</h4>
-                        <p class="tl-desc">Até a próxima!</p>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Convidado não convida</h4>
+                        <p class="manual-item-desc">Nosso espaço é limitado e planejado com carinho apenas para as pessoas listadas no convite.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4: Cerimônia -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Participe da cerimônia</h4>
+                        <p class="manual-item-desc">Sua presença na cerimônia é a parte mais importante e emocionante do nosso dia.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5: Madrinhas -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/><path d="M17 22H7a2 2 0 0 1-2-2v-3a7 7 0 0 1 14 0v3a2 2 0 0 1-2 2z"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Verde é a cor das madrinhas</h4>
+                        <p class="manual-item-desc">Pedimos que evite usar tons de verde, pois esta cor está reservada para as nossas madrinhas.</p>
+                    </div>
+                </div>
+
+                <!-- Item 6: Pontualidade -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Seja pontual, não atrase</h4>
+                        <p class="manual-item-desc">Programe-se para chegar com antecedência e não perder nenhum momento especial.</p>
+                    </div>
+                </div>
+
+                <!-- Item 7: Fotógrafos -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Não atrapalhe os fotógrafos</h4>
+                        <p class="manual-item-desc">Temos profissionais incríveis registrando tudo. Evite ficar no caminho com o celular.</p>
+                    </div>
+                </div>
+
+                <!-- Item 8: Celular Silencioso -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="m1 1 22 22"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Celular no silencioso</h4>
+                        <p class="manual-item-desc">Durante a cerimônia, mantenha o aparelho sem som para não interromper a celebração.</p>
+                    </div>
+                </div>
+
+                <!-- Item 9: Decoração -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7v3a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z"/><path d="M12 14v8M9 18l3-2 3 2"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Não leve a decoração</h4>
+                        <p class="manual-item-desc">As flores e decorações fazem parte do charme e beleza do evento até o fim da festa.</p>
+                    </div>
+                </div>
+
+                <!-- Item 10: Despedida -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Despeça-se dos noivos</h4>
+                        <p class="manual-item-desc">Queremos muito receber o seu abraço carinhoso antes de você ir embora.</p>
+                    </div>
+                </div>
+
+                <!-- Item 11: Aproveite -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Aproveite bastante!</h4>
+                        <p class="manual-item-desc">Coma, dance, tire fotos e celebre intensamente este momento único conosco!</p>
+                    </div>
+                </div>
+
+                <!-- Item 12: Doces -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v20M18 2v20M6 12h12M6 7h12"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Mesa de Doces</h4>
+                        <p class="manual-item-desc">Aguarde a liberação oficial da mesa de doces para degustá-los.</p>
                     </div>
                 </div>
             </div>
@@ -507,17 +556,65 @@
 
         <!-- DRESS CODE -->
         <section class="dresscode-section" id="dresscode">
-            <h2 class="section-title-script reveal">Dress Code</h2>
-            <p class="section-subtitle-caps reveal rd1">ALGUMAS ORIENTAÇÕES</p>
-            <img src="dress-code-illustration-sBv8miCU.png" alt="Dress Code" class="dresscode-people reveal rd2">
+            <h2 class="section-title-script reveal" id="dresscode-title" data-text="Dress Code" style="min-height: 48px;"></h2>
+            <p class="section-subtitle-caps reveal rd1">SUGESTÃO DE VESTIMENTA</p>
+            <img src="Itens-Site-Casamento/dresscodenovo.png" alt="Dress Code" class="reveal rd2" style="width:100%; height:auto; display:block; max-width:280px; margin:0 auto 24px; border-radius:0; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.08));">
             <div class="dresscode-card reveal rd3">
-                <h3 class="dresscode-card-title">Roupas Leves para Chácara</h3>
-                <p class="dresscode-card-text">Venham com roupas leves e confortáveis! O evento é em uma chácara ao ar livre, então apostem em tecidos frescos e tons claros.</p>
-                <p class="dresscode-card-text">Sugestão de cores: <strong>branco, off-white, bege, creme</strong> — tons neutros e suaves combinam perfeitamente com o cenário 🌿</p>
-                <p class="dresscode-card-text">Recomendamos sapatos confortáveis — rasteirinhas, tênis ou sandálias são ótimas opções para o terreno da chácara.</p>
+                <p class="dresscode-card-text" style="font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">
+                    Roupas elegantes em tons claros e suaves. Não é necessário seguir uma cor específica, mas priorize peças leves e sofisticadas.
+                </p>
+                <span class="dresscode-highlight" style="font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--accent); background: rgba(62,84,103,0.06); padding: 8px 18px; border-radius: 50px; display: inline-block;">
+                    Evite: shorts, bonés, roupas esportivas e chinelos. ✨
+                </span>
             </div>
         </section>
 
+        <!-- RSVP -->
+        <section class="rsvp-section" id="rsvp" style="padding: 60px 24px 0; text-align: center; position: relative; z-index: 10;">
+            <div class="rsvp-form-card reveal">
+                <div id="rsvp-form-anchor" style="scroll-margin-top:60px"></div>
+                <h2 class="section-title-script" style="margin-top:0; margin-bottom:5px; text-align:center;">Confirmação</h2>
+                <p class="section-subtitle-caps" style="margin-bottom:24px; text-align:center; font-size:10px; letter-spacing:2px;">ESPERAMOS VOCÊ LÁ</p>
+                
+                <form id="rsvp-form">
+                    <div class="form-group">
+                        <label class="form-label">Nome completo <span class="req">*</span></label>
+                        <input type="text" class="form-input" name="name" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone <span class="req">*</span></label>
+                        <input type="tel" class="form-input" name="phone" placeholder="(21) 99999-9999" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Acompanhantes</label>
+                        <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Adicione as pessoas que irão com você</p>
+                        <div class="companion-buttons">
+                            <button type="button" class="companion-btn" onclick="addCompanion('adulto')">+ Adulto</button>
+                            <button type="button" class="companion-btn" onclick="addCompanion('criança')">+ Criança</button>
+                        </div>
+                        <div class="companion-list" id="companion-list"></div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Enviar Confirmação
+                    </button>
+                    <p style="text-align:center;margin-top:16px;margin-bottom:0;">
+                        <a href="#" id="decline-btn" style="font-family:var(--sans);font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer;">Infelizmente não poderei ir</a>
+                    </p>
+                </form>
+                
+                <div class="rsvp-success" id="rsvp-success">
+                    <div class="rsvp-success-icon">🎉</div>
+                    <h3 class="rsvp-success-title">Obrigado!</h3>
+                    <p class="rsvp-success-text">Presença confirmada!<br>Estamos ansiosos para te ver lá!</p>
+                </div>
+                <div class="rsvp-success" id="rsvp-declined" style="display:none;">
+                    <div class="rsvp-success-icon">😢</div>
+                    <h3 class="rsvp-success-title">Que pena!</h3>
+                    <p class="rsvp-success-text">Sentiremos sua falta!<br>Esperamos te ver em uma próxima!</p>
+                </div>
+            </div>
+        </section>
 
         <!-- GIFTS -->
         <section class="gifts-section" id="presentes">
@@ -542,7 +639,25 @@
                     <p class="pix-name">Leonardo</p>
                 </div>
             </div>
-            <img src="flower-bouquet-Cd59z_hq.png" alt="Flores" class="flowers-art reveal">
+            <!-- GIFTS PHOTO STACK (SCROLL TRIGGERED) -->
+            <div id="gifts-photos-section" style="width: 100%; position: relative; height: 180vh; background: transparent; margin-top: 20px; margin-bottom: -220px; z-index: 10;">
+                <div class="gifts-sticky-child" style="position: sticky; top: calc(50vh - 175px); height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;">
+                    <div class="gifts-photos-container" style="position: relative; width: 280px; height: 350px;">
+                        <div class="gift-photo-card" id="gift-photo-1" style="position: absolute; inset: 0; z-index: 4; opacity: 1; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/A1.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="gift-photo-card" id="gift-photo-2" style="position: absolute; inset: 0; z-index: 5; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/A2.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="gift-photo-card" id="gift-photo-3" style="position: absolute; inset: 0; z-index: 6; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/A3.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="gift-photo-card" id="gift-photo-4" style="position: absolute; inset: 0; z-index: 7; opacity: 0; pointer-events: none;">
+                            <img src="Itens-Site-Casamento/A4.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- GIFT MODAL -->
@@ -550,106 +665,146 @@
             <div class="gift-modal">
                 <div class="gift-modal-header">
                     <button class="gift-modal-close" onclick="closeGiftModal()">✕</button>
-                    <h3 class="gift-modal-title">Lista de Presentes</h3>
-                    <p class="gift-modal-desc">Sugestões dos noivos para padronizar a nossa casa. Selecione o que você pretende dar para que outros convidados não repitam.</p>
-                    <p class="gift-modal-tip">💡 Nenhum pagamento é feito aqui — apenas a reserva do presente</p>
-                    <div class="inspo-carousel" id="inspo-carousel">
-                        <img src="inspiracao-casa-1.png" alt="Inspiração 1" class="inspo-active">
-                        <img src="inspiracao-casa-2.png" alt="Inspiração 2">
-                        <img src="inspiracao-casa-3.png" alt="Inspiração 3">
-                        <div class="inspo-carousel-overlay">
-                            <span class="inspo-carousel-label">Inspiração da casa</span>
-                            <span class="inspo-carousel-subtitle">Paleta & estilo dos noivos</span>
+                    <div id="gift-header-details">
+                        <h3 class="gift-modal-title">Lista de Presentes</h3>
+                        <p class="gift-modal-desc">Sugestões dos noivos para padronizar a nossa casa. Selecione o que você pretende dar para que outros convidados não repitam.</p>
+                        <p class="gift-modal-tip">💡 Faça a confirmação e o pagamento de forma simples e rápida</p>
+                        <div class="inspo-carousel" id="inspo-carousel">
+                            <img src="inspiracao-casa-1.png" alt="Inspiração 1" class="inspo-active">
+                            <img src="inspiracao-casa-2.png" alt="Inspiração 2">
+                            <img src="inspiracao-casa-3.png" alt="Inspiração 3">
+                            <div class="inspo-carousel-overlay">
+                                <span class="inspo-carousel-label">Inspiração da casa</span>
+                                <span class="inspo-carousel-subtitle">Paleta & estilo dos noivos</span>
+                            </div>
+                            <div class="inspo-dots"><span class="active"></span><span></span><span></span></div>
                         </div>
-                        <div class="inspo-dots"><span class="active"></span><span></span><span></span></div>
-                    </div>
-                    <div class="inspo-palette">
-                        <span class="inspo-palette-label">Paleta:</span>
-                        <div class="inspo-palette-colors">
-                            <span class="inspo-swatch" style="background:#F5F0E8" title="Creme"></span>
-                            <span class="inspo-swatch" style="background:#C8B99A" title="Bege"></span>
-                            <span class="inspo-swatch" style="background:#2C2C2C" title="Preto"></span>
-                            <span class="inspo-swatch" style="background:#A8A8A8" title="Inox"></span>
-                            <span class="inspo-swatch" style="background:#E8DDD1" title="Areia"></span>
+                        <div class="inspo-palette">
+                            <span class="inspo-palette-label">Paleta:</span>
+                            <div class="inspo-palette-colors">
+                                <span class="inspo-swatch" style="background:#F5F0E8" title="Creme"></span>
+                                <span class="inspo-swatch" style="background:#C8B99A" title="Bege"></span>
+                                <span class="inspo-swatch" style="background:#2C2C2C" title="Preto"></span>
+                                <span class="inspo-swatch" style="background:#A8A8A8" title="Inox"></span>
+                                <span class="inspo-swatch" style="background:#E8DDD1" title="Areia"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="gift-grid" id="gift-grid"></div>
-                <div class="gift-modal-footer" id="gift-footer-main">
-                    <button class="gift-confirm-btn" id="gift-confirm-btn" onclick="showGiftNameStep()">🎁 Presentear</button>
+
+                <!-- PASSO 0: Seleção de Presentes -->
+                <div class="gift-step show" id="gift-step-select">
+                    <div class="gift-grid" id="gift-grid"></div>
+                    <div class="gift-modal-footer" id="gift-footer-main">
+                        <button class="gift-confirm-btn" id="gift-confirm-btn" onclick="handleGiftConfirm()">🎁 Presentear</button>
+                    </div>
                 </div>
-                <div class="gift-name-step" id="gift-name-step">
-                    <h3>Quase lá!</h3>
-                    <p>Digite seu nome para confirmar o presente</p>
-                    <input type="text" class="gift-name-input" id="gift-name-input" placeholder="Seu nome completo">
-                    <br>
-                    <button class="gift-final-btn" onclick="confirmGift()">Confirmar presente</button>
+
+                <!-- PASSO 1: Confirmação de Presença (RSVP) -->
+                <div class="gift-step" id="gift-step-rsvp">
+                    <h3 class="gift-modal-title" style="text-align:center; margin-bottom: 6px;">Confirmação de Presença</h3>
+                    <p class="gift-modal-desc" style="text-align:center; margin-bottom: 20px;">Por favor, confirme sua presença para liberar a tela de pagamento do presente.</p>
+                    
+                    <form id="gift-rsvp-form" onsubmit="handleGiftRsvpSubmit(event)">
+                        <div class="form-group">
+                            <label class="form-label">Nome completo <span class="req">*</span></label>
+                            <input type="text" class="form-input" id="gift-rsvp-name" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone <span class="req">*</span></label>
+                            <input type="tel" class="form-input" id="gift-rsvp-phone" placeholder="(21) 99999-9999" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Acompanhantes</label>
+                            <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Adicione as pessoas que irão com você</p>
+                            <div class="companion-buttons">
+                                <button type="button" class="companion-btn" onclick="addGiftCompanion('adulto')">+ Adulto</button>
+                                <button type="button" class="companion-btn" onclick="addGiftCompanion('criança')">+ Criança</button>
+                            </div>
+                            <div class="companion-list" id="gift-companion-list"></div>
+                        </div>
+                        <button type="submit" class="submit-btn" style="margin-top: 24px;">
+                            Confirmar Presença
+                        </button>
+                    </form>
                 </div>
-                <div class="gift-success-step" id="gift-success-step">
-                    <div class="success-icon">🎉</div>
-                    <h3>Presente registrado!</h3>
-                    <p>Obrigado pela generosidade!<br>Agora confirme sua presença no evento.</p>
-                    <button class="gift-go-rsvp" onclick="closeGiftModal();document.getElementById('rsvp-form-anchor').scrollIntoView({behavior:'smooth'})">Confirmar presença ↓</button>
+
+                <!-- PASSO 2: Tela de Pagamento -->
+                <div class="gift-step" id="gift-step-payment">
+                    <!-- Top Gift Header Info -->
+                    <div class="selected-gift-header">
+                        <img id="payment-gift-img" src="" alt="">
+                        <div class="selected-gift-info">
+                            <div class="selected-gift-title" id="payment-gift-title">Mesa da Cozinha</div>
+                            <div class="selected-gift-price" id="payment-gift-price">R$ 850,00</div>
+                        </div>
+                    </div>
+
+                    <div id="payment-choice-view">
+                        <h4 style="font-family:var(--serif); font-size:16px; color:var(--slate-dark); margin-bottom:14px; text-align:center;">Como deseja nos presentear?</h4>
+
+                        <!-- Selector Cards -->
+                        <div style="display:flex; gap:12px; margin-bottom:20px;">
+                            <div id="choice-pix" class="payment-choice-card" onclick="selectPaymentMethod('pix')">
+                                <span style="font-size:26px; display:block; margin-bottom:6px;">📱</span>
+                                <span style="font-family:var(--sans); font-size:12px; font-weight:600; color:var(--text); display:block; letter-spacing:0.5px;">PIX</span>
+                            </div>
+                            <div id="choice-stripe" class="payment-choice-card" onclick="selectPaymentMethod('card')">
+                                <span style="font-size:26px; display:block; margin-bottom:6px;">💳</span>
+                                <span style="font-family:var(--sans); font-size:12px; font-weight:600; color:var(--text); display:block; letter-spacing:0.5px;">Cartão de Crédito</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PIX Content -->
+                    <div class="payment-content" id="payment-content-pix" style="text-align:center; padding:10px 0;">
+                        <p style="font-family:var(--serif); font-size:14px; color:var(--text-light); margin-bottom:16px; line-height:1.5;">
+                            Você será redirecionado para a página do **AbacatePay** para obter o código Pix Copia e Cola e o QR Code oficial.
+                        </p>
+                        <button class="submit-btn" style="background:var(--olive);" onclick="redirectToAbacatePayCheckout('pix')">Gerar PIX no AbacatePay ➔</button>
+                    </div>
+
+                    <!-- Stripe Content -->
+                    <div class="payment-content" id="payment-content-card" style="text-align:center; padding:10px 0;">
+                        <p style="font-family:var(--serif); font-size:14px; color:var(--text-light); margin-bottom:20px; line-height:1.6; max-width: 360px; margin-left: auto; margin-right: auto;">
+                            Você será redirecionado para a página do **AbacatePay** para enviar sua contribuição com cartão de crédito.
+                        </p>
+                        <button class="submit-btn" style="background:var(--olive-dark);" onclick="redirectToAbacatePayCheckout('card')">Contribuir com Cartão ➔</button>
+                    </div>
+
+                    <!-- Processing overlay (inside Step 2) -->
+                    <div class="payment-processing" id="payment-processing">
+                        <div class="spinner"></div>
+                        <h4 id="processing-title" style="font-family:var(--serif); font-size:18px; color:var(--slate-dark); margin-bottom:8px;">Carregando...</h4>
+                        <p id="processing-desc" style="font-family:var(--sans); font-size:12px; color:var(--text-light);">Aguarde um instante...</p>
+                    </div>
+                </div>
+
+                <!-- PASSO 3: Vídeo de Agradecimento (Sucesso) -->
+                <div class="gift-step" id="gift-step-thanks">
+                    <div class="success-icon" style="font-size: 48px; margin-bottom: 12px; text-align: center;">🎉</div>
+                    <h3 class="gift-modal-title" style="text-align: center; font-size: 28px; margin-bottom: 6px;">Obrigado, <span id="thanks-guest-name">Convidado</span>!</h3>
+                    <p class="gift-modal-desc" style="text-align: center; line-height: 1.5;">
+                        Sua presença foi confirmada e o presente foi registrado! Assistam à mensagem que preparamos para você:
+                    </p>
+                    
+                    <div class="thanks-video-container">
+                        <video id="thanks-video" class="thanks-video" playsinline controls>
+                            <source src="whatsapp-video.mp4" type="video/mp4">
+                            Seu navegador não suporta vídeos.
+                        </video>
+                    </div>
+                    
+                    <button class="gift-final-btn" style="width: 100%; margin-top: 16px;" onclick="closeGiftModal()">Fechar Lista</button>
                 </div>
             </div>
         </div>
 
-        <!-- RSVP -->
-        <section class="rsvp-section" id="rsvp">
-            <div class="rsvp-photo-wrapper">
-                <video autoplay loop muted playsinline style="width:100%;height:auto;display:block;">
-                    <source src="video-final-pagina.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div id="rsvp-form-anchor" style="scroll-margin-top:60px"></div>
-            <h2 class="section-title-script reveal" style="margin-top:40px;">Confirmação</h2>
-            <p class="section-subtitle-caps reveal rd1">ESPERAMOS VOCÊ LÁ</p>
-            <form class="rsvp-form" id="rsvp-form">
-                <div class="form-group reveal">
-                    <label class="form-label">Nome completo <span class="req">*</span></label>
-                    <input type="text" class="form-input" name="name" placeholder="Seu nome completo" required>
-                </div>
-                <div class="form-group reveal rd1">
-                    <label class="form-label">Telefone <span class="req">*</span></label>
-                    <input type="tel" class="form-input" name="phone" placeholder="(21) 99999-9999" required>
-                </div>
-                <div class="form-group reveal rd2">
-                    <label class="form-label">Acompanhantes</label>
-                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Adicione as pessoas que irão com você</p>
-                    <div class="companion-buttons">
-                        <button type="button" class="companion-btn" onclick="addCompanion('adulto')">+ Adulto</button>
-                        <button type="button" class="companion-btn" onclick="addCompanion('criança')">+ Criança</button>
-                    </div>
-                    <div class="companion-list" id="companion-list"></div>
-                </div>
-                <button type="submit" class="submit-btn reveal rd3">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    Enviar Confirmação
-                </button>
-                <p class="reveal rd3" style="text-align:center;margin-top:12px;">
-                    <a href="#" id="decline-btn" style="font-family:var(--sans);font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer;">Infelizmente não poderei ir</a>
-                </p>
-            </form>
-            <div class="rsvp-success" id="rsvp-success">
-                <div class="rsvp-success-icon">🎉</div>
-                <h3 class="rsvp-success-title">Obrigado!</h3>
-                <p class="rsvp-success-text">Presença confirmada!<br>Estamos ansiosos para te ver lá!</p>
-            </div>
-            <div class="rsvp-success" id="rsvp-declined" style="display:none;">
-                <div class="rsvp-success-icon">😢</div>
-                <h3 class="rsvp-success-title">Que pena!</h3>
-                <p class="rsvp-success-text">Sentiremos sua falta!<br>Esperamos te ver em uma próxima!</p>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <img src="finca-biniagual-illustration-v5DD0Tq2.png" alt="Chácara da Paz" class="footer-bg">
-            <div class="footer-overlay">
-                <img src="rings-illustration-tO3OeALU.png" alt="Alianças" class="footer-rings">
-                <p class="footer-names">Leonardo & Isabelle</p>
-                <p class="footer-date">24 · 05 · 2026</p>
-                <p class="footer-credit">Feito com amor</p>
+        <!-- FOOTER (IMAGEM FINAL DO SITE) -->
+        <footer class="footer" style="width:100%; overflow:hidden; padding:0; margin:0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%); mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
+            <img src="Itens-Site-Casamento/finaldosite.png" alt="Leonardo & Isabelle" style="width:100%; height:auto; display:block;">
+            <div id="footer-verse-container" style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 380px; text-align: center; z-index: 5; padding: 0 24px; pointer-events: none;">
+                <p id="footer-verse-text" data-text="Esperei com paciência no Senhor, e ele se inclinou para mim, e ouviu o meu clamor. - Salmos 40" style="font-family: var(--serif); font-size: clamp(14px, 3.2vw, 17px); font-style: italic; color: var(--text-light); line-height: 1.6; min-height: 54px; margin-bottom: 8px; margin-top: 0;"></p>
             </div>
         </footer>
     </div>
@@ -658,72 +813,23 @@
         // Force scroll to top on every load
         window.scrollTo(0, 0);
 
-        // SPLASH
-        const splashScreen=document.getElementById('splash-screen'), whiteFade=document.getElementById('white-fade'),
-              mainContent=document.getElementById('main-content'), tapIndicator=document.getElementById('tap-indicator'),
-              splashVideoH=document.getElementById('splash-video-h'), splashVideoV=document.getElementById('splash-video-v');
-        let hasStarted=false;
-        let videoReady=false;
-        function getActiveSplash(){return window.matchMedia('(max-width:768px),(orientation:portrait)').matches?splashVideoV:splashVideoH}
+        const mainContent=document.getElementById('main-content');
 
-        // Mark video as ready when it has enough data
-        function onVideoReady() { videoReady = true; }
-        splashVideoH.addEventListener('loadeddata',()=>{splashVideoH.currentTime=0;splashVideoH.pause();onVideoReady()});
-        splashVideoV.addEventListener('loadeddata',()=>{splashVideoV.currentTime=0;splashVideoV.pause();onVideoReady()});
-
-        splashScreen.addEventListener('click',()=>{
-            if(hasStarted)return; hasStarted=true;
-            tapIndicator.classList.add('hidden');
-            const v=getActiveSplash();
-            if (videoReady) {
-                // Video loaded — play the animation
-                v.play().catch(()=>showMain());
-                splashScreen.style.cursor='default';
-                v.addEventListener('timeupdate',function f(){if(v.duration-v.currentTime<=1.5){whiteFade.classList.add('active');v.removeEventListener('timeupdate',f)}});
-                v.addEventListener('ended',()=>showMain());
-            } else {
-                // Video not loaded — skip splash gracefully
-                showMain();
-            }
-        });
-
-        function showMain(){
-            whiteFade.classList.add('active');
-            // Reset scroll before showing content
-            window.scrollTo(0, 0);
-            setTimeout(()=>{
-                splashScreen.style.display='none';
-                mainContent.classList.add('visible');
-                document.body.style.backgroundColor='var(--bg)';
-                document.body.style.overflow='auto';
-                musicBtn.classList.add('visible');
-                startMusic();
-                window.scrollTo(0, 0);
-                setTimeout(()=>{whiteFade.classList.add('fade-out');setTimeout(()=>{whiteFade.style.display='none'},1200)},300);
-                heroIntroSequence();
-            },500);
-        }
         function heroIntroSequence() {
             const hero = document.getElementById('hero');
-            const ornament = hero.querySelector('.hero-ornament');
-            const pretitle = hero.querySelector('.hero-pretitle');
-            const names = hero.querySelector('.hero-names');
-            const date = hero.querySelector('.hero-date');
+            const card = hero.querySelector('.invitation-card');
             const bottom = hero.querySelector('.hero-bottom');
             document.body.style.overflow = 'hidden';
             window.scrollTo(0, 0);
-            setTimeout(() => { ornament.classList.add('hero-text-visible'); }, 300);
-            setTimeout(() => { pretitle.classList.add('hero-text-visible'); }, 600);
-            setTimeout(() => { names.classList.add('hero-text-visible'); }, 1800);
-            setTimeout(() => { date.classList.add('hero-text-visible'); }, 3000);
-            setTimeout(() => { bottom.classList.add('hero-text-visible'); }, 3600);
+            setTimeout(() => { if (card) card.classList.add('hero-text-visible'); }, 300);
+            setTimeout(() => { if (bottom) bottom.classList.add('hero-text-visible'); }, 1200);
             setTimeout(() => {
-                hero.classList.add('hero-revealed');
-                setTimeout(() => { document.body.style.overflow = 'auto'; }, 2500);
-            }, 5600);
+                document.body.style.overflow = 'auto';
+            }, 1900);
         }
-        document.body.style.overflow='hidden';
-        const iv=getActiveSplash();iv.currentTime=0;iv.pause();
+
+        mainContent.classList.add('visible');
+        heroIntroSequence();
 
         // MUSIC
         const bgMusic=document.getElementById('bg-music'), musicBtn=document.getElementById('music-btn');
@@ -731,10 +837,16 @@
         function startMusic(){bgMusic.play().then(()=>{musicBtn.classList.remove('muted')}).catch(()=>{musicBtn.classList.add('muted')})}
         musicBtn.addEventListener('click',()=>{if(bgMusic.paused){bgMusic.play();musicBtn.classList.remove('muted')}else{bgMusic.pause();musicBtn.classList.add('muted')}});
 
+        // Show music button and play music on first interaction
+        musicBtn.classList.add('visible');
+        document.addEventListener('click', () => {
+            startMusic();
+        }, { once: true });
+
         // STICKY NAV
         const stickyNav=document.getElementById('sticky-nav'), heroEl=document.getElementById('hero');
         const navLinks=stickyNav.querySelectorAll('a');
-        const sections=[{id:'details',el:document.getElementById('details')},{id:'programacao',el:document.getElementById('programacao')},{id:'presentes',el:document.getElementById('presentes')},{id:'rsvp',el:document.getElementById('rsvp')}];
+        const sections=[{id:'rsvp',el:document.getElementById('rsvp')},{id:'presentes',el:document.getElementById('presentes')}];
         window.addEventListener('scroll',()=>{
             const scrollY=window.scrollY;
             if(heroEl&&scrollY>heroEl.offsetHeight-100){stickyNav.classList.add('visible')}else{stickyNav.classList.remove('visible')}
@@ -744,7 +856,7 @@
         });
 
         // COUNTDOWN
-        const ed=new Date('2026-05-24T10:00:00-03:00').getTime();
+        const ed=new Date('2026-06-20T15:30:00-03:00').getTime();
         function uc(){const d=ed-Date.now();if(d<=0){['days','hours','minutes','seconds'].forEach(i=>document.getElementById(i).textContent='0');return}
         document.getElementById('days').textContent=Math.floor(d/864e5);
         document.getElementById('hours').textContent=String(Math.floor(d%864e5/36e5)).padStart(2,'0');
@@ -766,129 +878,76 @@
 
         // ========== GIFT LIST SYSTEM ==========
         const ROOMS = [
-            { id: 'cozinha', name: 'Cozinha', img: 'comodo-cozinha.png', emoji: '' },
-            { id: 'quarto', name: 'Quarto', img: 'comodo-quarto.png', emoji: '' },
-            { id: 'banheiro', name: 'Banheiro', img: 'comodo-banheiro.png', emoji: '' },
-            { id: 'sala', name: 'Sala', img: 'comodo-sala.png', emoji: '' },
-            { id: 'lavanderia', name: 'Lavanderia', img: 'comodo-lavanderia.png', emoji: '' },
+            { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' },
+            { id: 'casa', name: 'Casa Nova', img: 'comodo-sala.png', emoji: '🏠' },
+            { id: 'viagem', name: 'Lua de Mel & Viagens', img: 'bus-illustration-eVtX45sg.png', emoji: '✈️' },
+            { id: 'experiencia', name: 'Experiências Românticas', img: 'couple-dancing-XNVWWZw7.png', emoji: '❤️' },
+            { id: 'divertidos', name: 'Presentes Divertidos', img: 'brincadeiras.png', emoji: '😂' },
+            { id: 'churrasco', name: 'Churrasco & Lazer', img: 'almoco.png', emoji: '🍖' },
+            { id: 'cozinha', name: 'Cozinha & Utilidades', img: 'comodo-cozinha.png', emoji: '🍽️' },
+            { id: 'decoracao', name: 'Decoração & Charme', img: 'flower-bouquet-Cd59z_hq.png', emoji: '✨' }
         ];
 
         const GIFTS = [
-            // ===== COZINHA =====
-            { id:'panelas-aco', name:'Jogo de Panelas', qty:2, room:'cozinha', img:'panelas.jpeg', sug:'Aço Cirúrgico' },
-            { id:'panela-ceramica', name:'Panela de cerâmica', qty:2, room:'cozinha', img:'panela-ceramica.jpeg', sug:'Fogão por indução' },
-            { id:'panela-eletrica', name:'Panela Elétrica', qty:1, room:'cozinha', img:'itens-novos/panela eletrica.jpeg', sug:'' },
-            { id:'frigideira-ceramica', name:'Frigideira Cerâmica', qty:1, room:'cozinha', img:'frigideira-ceramica.jpeg', sug:'100% cerâmica · Indução' },
-            { id:'frigideira-aco', name:'Frigideira Aço Cirúrgico', qty:1, room:'cozinha', img:'frigideira-aco.jpeg', sug:'Fogão por indução' },
-            { id:'panela-pedra', name:'Panela de Pedra Sabão', qty:1, room:'cozinha', img:'panela-pedra.jpeg', sug:'Pedra sabão natural' },
-            { id:'leiteira-ceramica', name:'Leiteira Cerâmica', qty:1, room:'cozinha', img:'leiteira-ceramica.jpeg', sug:'100% cerâmica · Indução' },
-            { id:'airfryer', name:'Air Fryer', qty:1, room:'cozinha', img:'airfryer-inox.jpeg', sug:'Preto ou inox' },
-            { id:'microondas', name:'Micro-ondas', qty:1, room:'cozinha', img:'itens-novos/microondas - inox.jpeg', sug:'Cor: inox' },
-            { id:'liquidificador', name:'Liquidificador', qty:1, room:'cozinha', img:'liquidificador.jpeg', sug:'' },
-            { id:'batedeira', name:'Batedeira', qty:1, room:'cozinha', img:'batedeira.jpeg', sug:'' },
-            { id:'mixer', name:'Mixer', qty:1, room:'cozinha', img:'itens-novos/mixer.jpeg', sug:'' },
-            { id:'mini-processador', name:'Mini Processador', qty:1, room:'cozinha', img:'itens-novos/Mini processador triturador de alimentos.jpeg', sug:'Triturador de alimentos' },
-            { id:'chaleira', name:'Chaleira Elétrica', qty:1, room:'cozinha', img:'chaleira.jpeg', sug:'Elétrica' },
-            { id:'filtro', name:'Filtro', qty:1, room:'cozinha', img:'filtro.jpeg', sug:'' },
-            { id:'utensilios', name:'Conjunto de Utensílios', qty:1, room:'cozinha', img:'utensilios-bege.jpeg', sug:'Cor: bege' },
-            { id:'facas', name:'Jogo de Facas', qty:1, room:'cozinha', img:'facas-bege.jpeg', sug:'Cor: bege' },
-            { id:'talheres', name:'Talheres', qty:1, room:'cozinha', img:'talheres.jpeg', sug:'' },
-            { id:'mesa-madeira', name:'Mesa de Madeira', qty:1, room:'cozinha', img:'itens-novos/Mesa de madeira.jpeg', sug:'' },
-            { id:'assadeiras', name:'Assadeiras', qty:1, room:'cozinha', img:'itens-novos/Assadeiras.jpeg', sug:'' },
-            { id:'forma-redonda', name:'Forma Redonda com Fundo Removível', qty:1, room:'cozinha', img:'itens-novos/Forma redonda com fundo removível.jpeg', sug:'' },
-            { id:'formas-pizza', name:'Formas de Pizza', qty:1, room:'cozinha', img:'itens-novos/Formas de pizza.jpeg', sug:'' },
-            { id:'forma-gelo', name:'Forma de Gelo', qty:1, room:'cozinha', img:'itens-novos/Forma de gelo.jpeg', sug:'' },
-            { id:'conjunto-tigelas', name:'Conjunto de Tigelas Inox', qty:1, room:'cozinha', img:'itens-novos/Conjunto de tigelas inox.jpeg', sug:'' },
-            { id:'travessa-vidro', name:'Travessa de Vidro com Tampa', qty:1, room:'cozinha', img:'itens-novos/Travessa de vidro com tampa.jpeg', sug:'' },
-            { id:'recipientes-vidro', name:'Recipientes de Vidro Hermético', qty:1, room:'cozinha', img:'itens-novos/Recipientes de Vidro Hermético.jpeg', sug:'' },
-            { id:'potes-hermeticos', name:'Potes Herméticos para Dispensa', qty:1, room:'cozinha', img:'itens-novos/Potes Herméticos para dispensa.jpeg', sug:'' },
-            { id:'prato-raso', name:'Prato Raso', qty:1, room:'cozinha', img:'itens-novos/Prato raso.jpeg', sug:'' },
-            { id:'prato-fundo', name:'Prato Fundo', qty:1, room:'cozinha', img:'itens-novos/Prato fundo.jpeg', sug:'' },
-            { id:'copos-vidro', name:'Copos de Vidro', qty:3, room:'cozinha', img:'itens-novos/Copos de vidro (3 unidades).jpeg', sug:'3 unidades' },
-            { id:'copos-sobremesa', name:'Copos de Sobremesa (Vidro)', qty:3, room:'cozinha', img:'itens-novos/Copos de sobremesa- vidro (3 unidades).jpeg', sug:'3 unidades' },
-            { id:'taca', name:'Taça', qty:1, room:'cozinha', img:'itens-novos/Taça.jpeg', sug:'' },
-            { id:'caneca', name:'Caneca', qty:1, room:'cozinha', img:'itens-novos/Caneca.jpeg', sug:'' },
-            { id:'jarra-suco', name:'Jarra de Suco (Vidro)', qty:1, room:'cozinha', img:'itens-novos/Jarra de suco - vidro.jpeg', sug:'' },
-            { id:'jarra', name:'Jarra', qty:1, room:'cozinha', img:'itens-novos/Jarra.jpeg', sug:'' },
-            { id:'garrafa-agua', name:'Garrafa de Água', qty:1, room:'cozinha', img:'itens-novos/Garrafa de água.jpeg', sug:'' },
-            { id:'garrafa-termica', name:'Garrafa Térmica de Café', qty:1, room:'cozinha', img:'itens-novos/Garrafa térmica de café.jpeg', sug:'' },
-            { id:'boleira', name:'Boleira com Tampa', qty:1, room:'cozinha', img:'itens-novos/Boleira com tampa.jpeg', sug:'' },
-            { id:'bandeja-bambu', name:'Bandeja Giratória de Bambu', qty:1, room:'cozinha', img:'itens-novos/Bandeja giratória de bambu.jpeg', sug:'' },
-            { id:'tabua-corte', name:'Tábua de Corte (Vidro)', qty:1, room:'cozinha', img:'itens-novos/Tábua de Corte - vidro.jpeg', sug:'' },
-            { id:'escorredor-louca', name:'Escorredor de Louça', qty:1, room:'cozinha', img:'itens-novos/Escorredor de louça.jpeg', sug:'' },
-            { id:'escorredor', name:'Escorredor', qty:1, room:'cozinha', img:'itens-novos/Escorredor.jpeg', sug:'' },
-            { id:'porta-bucha', name:'Porta Bucha e Detergente', qty:1, room:'cozinha', img:'itens-novos/Porta bucha e detergente.jpeg', sug:'' },
-            { id:'lixeira-cozinha', name:'Lixeira para Cozinha', qty:1, room:'cozinha', img:'itens-novos/Lixeira para cozinha.jpeg', sug:'' },
-            { id:'lixeira-pia', name:'Lixeira de Pia', qty:1, room:'cozinha', img:'itens-novos/lixeira de pia.jpeg', sug:'' },
-            { id:'suporte-papel-toalha', name:'Suporte Porta Papel Toalha', qty:1, room:'cozinha', img:'itens-novos/Suporte porta papel toalha.jpeg', sug:'' },
-            { id:'porta-pao', name:'Porta Pão', qty:1, room:'cozinha', img:'itens-novos/Porta pão.jpeg', sug:'' },
-            { id:'balanca-cozinha', name:'Balança de Cozinha', qty:1, room:'cozinha', img:'itens-novos/Balança de cozinha.jpeg', sug:'' },
-            { id:'acucareiro', name:'Açucareiro', qty:1, room:'cozinha', img:'itens-novos/Açucareiro.jpeg', sug:'' },
-            { id:'saleiro', name:'Saleiro', qty:1, room:'cozinha', img:'itens-novos/Saleiro.jpeg', sug:'' },
-            { id:'pegadores', name:'Pegadores', qty:1, room:'cozinha', img:'itens-novos/Pegadores.jpeg', sug:'' },
-            { id:'peneira', name:'Peneira', qty:1, room:'cozinha', img:'itens-novos/Peneira.jpeg', sug:'' },
-            { id:'abridor-lata', name:'Abridor de Lata', qty:1, room:'cozinha', img:'itens-novos/Abridor de lata.jpeg', sug:'' },
-            { id:'descascador', name:'Descascador de Legumes', qty:1, room:'cozinha', img:'itens-novos/Descascador de legumes.jpeg', sug:'' },
-            { id:'funil', name:'Funil', qty:1, room:'cozinha', img:'itens-novos/Funil.jpeg', sug:'' },
-            { id:'rolo-massa', name:'Rolo para Massa', qty:1, room:'cozinha', img:'itens-novos/Rolo para massa.jpeg', sug:'' },
-            { id:'colher-pau', name:'Colher de Pau', qty:1, room:'cozinha', img:'itens-novos/colher de pau.jpeg', sug:'' },
-            { id:'colher-sobremesa', name:'Colher de Sobremesa (Inox)', qty:2, room:'cozinha', img:'itens-novos/colher de sobremesa - inox (2 unidadeS).jpeg', sug:'2 unidades' },
-            { id:'copo-medidor', name:'Copo Medidor Ajustável', qty:1, room:'cozinha', img:'itens-novos/copo medidor ajustavel.jpeg', sug:'' },
-            { id:'pano-prato', name:'Pano de Prato', qty:1, room:'cozinha', img:'itens-novos/pano de prato.jpeg', sug:'' },
-            { id:'tapete-cozinha', name:'Tapete de Cozinha', qty:1, room:'cozinha', img:'itens-novos/Tapete de cozinha.jpeg', sug:'' },
-            { id:'geladeira', name:'Geladeira', qty:1, room:'cozinha', img:'geladeira-inox.jpeg', sug:'Cor: inox' },
-            { id:'forno', name:'Forno', qty:1, room:'cozinha', img:'forno-inox.jpeg', sug:'Preto ou inox' },
+            // ===== COTAS ESPECIAIS =====
+            { id: 'cota-ostentacao', name: 'O gerente ficou maluco! (Cota Ostentação)', qty: 999, room: 'cotas', img: 'rings-illustration-tO3OeALU.png', price: 'R$ 3.000,00', sug: 'Cota de contribuição' },
+            { id: 'tv-grande', name: 'Smart TV Grande', qty: 1, room: 'cotas', img: 'emblema-leo-isa.png', price: 'R$ 2.200,00', sug: 'Para nossa sala de TV' },
+            { id: 'vida-sem-dividas', name: 'Começar a vida sem dívidas', qty: 999, room: 'cotas', img: 'rings-illustration-tO3OeALU.png', price: 'R$ 1.500,00', sug: 'Qualquer ajuda é muito bem-vinda!' },
 
-            // ===== QUARTO =====
-            { id:'conjunto-cama', name:'Conjunto de Cama Queen', qty:1, room:'quarto', img:'itens-novos/Conjunto de cama Queen (quarto).jpeg', sug:'' },
-            { id:'cobre-leito', name:'Cobre Leito Queen', qty:1, room:'quarto', img:'itens-novos/Cobre leito Queen (quarto).jpeg', sug:'' },
-            { id:'coberdrom', name:'Coberdrom Queen', qty:1, room:'quarto', img:'itens-novos/Coberdrom Queen.jpeg', sug:'' },
-            { id:'travesseiros', name:'Travesseiros', qty:6, room:'quarto', img:'itens-novos/Travesseiro (6 unidades quarto).jpeg', sug:'6 unidades' },
-            { id:'protetor-colchao', name:'Protetor de Colchão Queen', qty:1, room:'quarto', img:'itens-novos/Protetor de colchão cama Queen (quarto).jpeg', sug:'' },
-            { id:'protetor-colchao-azul', name:'Protetor de Colchão Queen (Azul)', qty:1, room:'quarto', img:'itens-novos/Protetor de colchão cama Queen azul (quarto).jpeg', sug:'' },
-            { id:'manta-sofa-quarto', name:'Manta para Sofá (Quarto)', qty:1, room:'quarto', img:'itens-novos/Manta para sofá (quarto).jpeg', sug:'' },
-            { id:'abajur', name:'Abajur', qty:2, room:'quarto', img:'gift-abajur.png', sug:'' },
-            { id:'ventilador', name:'Ventilador', qty:2, room:'quarto', img:'gift-ventilador.png', sug:'' },
-            { id:'guarda-roupa', name:'Guarda-roupa', qty:1, room:'quarto', img:'itens-novos/Guarda-roupa (quarto).jpeg', sug:'' },
-            { id:'organizador-guarda-roupa', name:'Organizador de Guarda-roupa', qty:1, room:'quarto', img:'itens-novos/Organizador de guarda-roupa.jpeg', sug:'' },
-            { id:'organizador-gaveta', name:'Organizador de Gaveta', qty:1, room:'quarto', img:'itens-novos/Organizador de gaveta ( quarto).jpeg', sug:'' },
-            { id:'caixa-organizadora', name:'Caixa Organizadora', qty:1, room:'quarto', img:'itens-novos/Caixa Organizadora (quarto).jpeg', sug:'' },
-            { id:'cabide', name:'Cabide', qty:1, room:'quarto', img:'itens-novos/Cabide (quarto).jpeg', sug:'' },
-            { id:'cabide-calca', name:'Cabide para Calça', qty:1, room:'quarto', img:'itens-novos/Cabide para calça (quarto).jpeg', sug:'' },
-            { id:'sapateira', name:'Sapateira Closet', qty:1, room:'quarto', img:'itens-novos/Sapateira Closet (quarto).jpeg', sug:'' },
+            // ===== CASA NOVA =====
+            { id: 'mesa-cozinha', name: 'Mesa da Cozinha', qty: 1, room: 'casa', img: 'itens-novos/Mesa de madeira.jpeg', price: 'R$ 850,00', sug: 'Para nossas refeições diárias' },
+            { id: 'poltrona-chefe', name: 'Poltrona do chefe da casa', qty: 1, room: 'casa', img: 'itens-novos/Sofá (sala).jpeg', price: 'R$ 700,00', sug: 'Lugar favorito do Léo na sala' },
+            { id: 'robo-aspirador', name: 'Robô Aspirador', qty: 1, room: 'casa', img: 'itens-novos/Aspirador de pó (lavanderia).jpeg', price: 'R$ 450,00', sug: 'Para manter nossa casa limpinha' },
+            { id: 'mesa-centro', name: 'Mesa de Centro', qty: 1, room: 'casa', img: 'comodo-sala.png', price: 'R$ 280,00', sug: 'Para o centro da nossa sala' },
+            { id: 'espelho-adnet', name: 'Espelho Adnet redondo para o hall', qty: 1, room: 'casa', img: 'itens-novos/Sapateira Closet (quarto).jpeg', price: 'R$ 250,00', sug: 'Decoração do nosso hall de entrada' },
+            { id: 'quadro-decorativo', name: 'Quadro Decorativo Grande para Sala', qty: 1, room: 'casa', img: 'botanical-gate.png', price: 'R$ 200,00', sug: 'Quadro minimalista para nossa sala' },
+            { id: 'tapete-geometrico', name: 'Tapete Geométrico para Sala', qty: 1, room: 'casa', img: 'itens-novos/Tapete para sala (sala).jpeg', price: 'R$ 170,00', sug: 'Tapete geométrico e aconchegante' },
+            { id: 'luminaria-chao', name: 'Luminária de Chão Moderna', qty: 1, room: 'casa', img: 'gift-abajur.png', price: 'R$ 150,00', sug: 'Para nosso cantinho da leitura' },
+            { id: 'planta-artificial', name: 'Planta artificial alta com vaso minimalista', qty: 1, room: 'casa', img: 'flower-bouquet-Cd59z_hq.png', price: 'R$ 110,00', sug: 'Para trazer verde ao nosso lar' },
+            { id: 'almofadas-decorativas', name: 'Jogo de Almofadas Decorativas', qty: 1, room: 'casa', img: 'itens-novos/Almofada para sofá (sala 2 unidades).jpeg', price: 'R$ 75,00', sug: 'Cores suaves e neutras' },
+            { id: 'quadros-menores', name: 'Kit de Quadros Menores', qty: 1, room: 'casa', img: 'botanical-gate.png', price: 'R$ 60,00', sug: 'Para decorar nossas paredes' },
+            { id: 'capacho-divertido', name: 'Capacho divertido para a porta de entrada', qty: 1, room: 'casa', img: 'itens-novos/Tapete para sala (sala).jpeg', price: 'R$ 50,00', sug: 'Dando boas-vindas com alegria' },
+            { id: 'moringa-agua', name: 'Moringa de Água de Cabeceira', qty: 1, room: 'casa', img: 'itens-novos/Garrafa de água.jpeg', price: 'R$ 45,00', sug: 'Praticidade no nosso quarto' },
 
-            // ===== BANHEIRO =====
-            { id:'toalha-banho', name:'Toalha de Banho', qty:2, room:'banheiro', img:'itens-novos/Toalha de banho ( 2 unidades).jpeg', sug:'2 unidades' },
-            { id:'toalha-banho-2', name:'Toalha de Banho', qty:1, room:'banheiro', img:'itens-novos/Toalha de banho (banheiro).jpeg', sug:'' },
-            { id:'toalha-rosto', name:'Toalha de Rosto', qty:2, room:'banheiro', img:'itens-novos/Toalha de rosto (2 unidades).jpeg', sug:'2 unidades' },
-            { id:'tapete-banheiro', name:'Tapete de Banheiro Antiderrapante', qty:1, room:'banheiro', img:'itens-novos/Tapete de banheiro antiderrapante (banheiro).jpeg', sug:'' },
-            { id:'tapete-banheiro-secagem', name:'Tapete de Secagem Rápida', qty:1, room:'banheiro', img:'itens-novos/Tapete para banheiro de secagem rápida (banheiro).jpeg', sug:'' },
-            { id:'lixeira-antiodor', name:'Lixeira Antiodor para Banheiro', qty:1, room:'banheiro', img:'itens-novos/Lixeira antiodor para banheiro ( banheiro).jpeg', sug:'' },
-            { id:'limpeza-sanitaria', name:'Limpeza Sanitária', qty:1, room:'banheiro', img:'itens-novos/Limpeza sanitária ( banheiro).jpeg', sug:'' },
-            { id:'escova-limpeza', name:'Escova de Limpeza Ajustável', qty:1, room:'banheiro', img:'itens-novos/Escova de limpeza ajustável (banheiro).jpeg', sug:'' },
-            { id:'porta-escova-dente', name:'Porta Escova de Dente', qty:1, room:'banheiro', img:'itens-novos/Porta escova de dente ( banheiro).jpeg', sug:'' },
+            // ===== LUA DE MEL & VIAGENS =====
+            { id: 'voo-executivo', name: 'Upgrade na viagem (Voo Executivo)', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 600,00', sug: 'Contribuição para a viagem' },
+            { id: 'spa-dois', name: 'SPA a dois (Dia de rei e rainha)', qty: 999, room: 'viagem', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 550,00', sug: 'Dia de relaxamento para os noivos' },
+            { id: 'ajuda-lua-mel', name: 'Ajuda na Lua de Mel', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 500,00', sug: 'Ajude os noivos a curtir a viagem' },
+            { id: 'passeios-viagem', name: 'Passeios radicais ou culturais na viagem', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 260,00', sug: 'Para criarmos memórias incríveis' },
+            { id: 'massagens-relaxar', name: 'Massagens para relaxar pós-casamento', qty: 999, room: 'viagem', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 220,00', sug: 'Aliviando a tensão pós-planejamento' },
+            { id: 'ingressos-atracoes', name: 'Ingressos para atrações diversas', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 135,00', sug: 'Museus, parques e muito lazer' },
 
-            // ===== SALA =====
-            { id:'sofa', name:'Sofá', qty:1, room:'sala', img:'itens-novos/Sofá (sala).jpeg', sug:'' },
-            { id:'almofada-sofa', name:'Almofada para Sofá', qty:2, room:'sala', img:'itens-novos/Almofada para sofá (sala 2 unidades).jpeg', sug:'2 unidades' },
-            { id:'capa-almofada', name:'Capa de Almofada', qty:3, room:'sala', img:'itens-novos/Capa de almofada ( 3 unidades).jpeg', sug:'3 unidades' },
-            { id:'capa-almofada-2', name:'Capa para Almofada', qty:3, room:'sala', img:'itens-novos/capa pra almofada (3 unidades).jpeg', sug:'3 unidades' },
-            { id:'manta-sofa', name:'Manta para Sofá', qty:2, room:'sala', img:'itens-novos/Manta para sofá (2 unidades).jpeg', sug:'2 unidades' },
-            { id:'manta-sofa-sala', name:'Manta para Sofá', qty:2, room:'sala', img:'itens-novos/Manta para sofá 2 unidades (sala).jpeg', sug:'2 unidades' },
-            { id:'tapete-sala', name:'Tapete para Sala', qty:1, room:'sala', img:'itens-novos/Tapete para sala (sala).jpeg', sug:'' },
+            // ===== EXPERIÊNCIAS ROMÂNTICAS =====
+            { id: 'jantar-velas', name: 'Jantar romântico à luz de velas', qty: 999, room: 'experiencia', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 160,00', sug: 'Uma noite especial a dois' },
+            { id: 'noite-fondue', name: 'Noite do Fondue (Aparelho + Ingredientes)', qty: 999, room: 'experiencia', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 180,00', sug: 'Fondue delicioso no frio' },
+            { id: 'cafe-cama', name: 'Café da manhã de hotel servido na cama', qty: 999, room: 'experiencia', img: 'itens-novos/Bandeja giratória de bambu.jpeg', price: 'R$ 90,00', sug: 'Mimo romântico matinal' },
 
-            // ===== LAVANDERIA =====
-            { id:'maq-lavar', name:'Máquina de Lavar', qty:1, room:'lavanderia', img:'itens-novos/Máquina de lavar (lavanderia).jpeg', sug:'' },
-            { id:'ferro', name:'Ferro de Passar', qty:1, room:'lavanderia', img:'itens-novos/ferro de passar.jpeg', sug:'' },
-            { id:'tabua-passar', name:'Tábua de Passar', qty:1, room:'lavanderia', img:'itens-novos/Tábua de passar (lavanderia).jpeg', sug:'' },
-            { id:'aspirador', name:'Aspirador de Pó', qty:1, room:'lavanderia', img:'itens-novos/Aspirador de pó (lavanderia).jpeg', sug:'' },
-            { id:'mop-flat', name:'Mop Flat', qty:1, room:'lavanderia', img:'itens-novos/Mop Flat (lavanderia).jpeg', sug:'' },
-            { id:'pa-vassoura', name:'Pá e Vassoura', qty:1, room:'lavanderia', img:'itens-novos/Pá e vassoura ( lavanderia).jpeg', sug:'' },
-            { id:'cesto-roupa-1', name:'Cesto de Roupa Suja', qty:1, room:'lavanderia', img:'itens-novos/Cesto de roupa suja versao 1.jpeg', sug:'Versão 1' },
-            { id:'cesto-roupa-2', name:'Cesto de Roupa Suja', qty:1, room:'lavanderia', img:'itens-novos/Cesto de roupa suja versao 2.jpeg', sug:'Versão 2' },
-            { id:'balde-2un', name:'Balde', qty:2, room:'lavanderia', img:'itens-novos/Balde (2 unidades - lavanderia).jpeg', sug:'2 unidades' },
-            { id:'balde-bacia', name:'Balde e Bacia', qty:1, room:'lavanderia', img:'itens-novos/Balde e bacia (lavanderia).jpeg', sug:'' },
-            { id:'porta-sabao', name:'Porta Sabão', qty:1, room:'lavanderia', img:'itens-novos/Porta sabão (lavanderia).jpeg', sug:'' },
+            // ===== PRESENTES DIVERTIDOS =====
+            { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 500,00', sug: 'Massagem garantida pro Léo!' },
+            { id: 'noivo-louca-15d', name: 'Noivo lava a louça durante 15 dias todo dia', qty: 999, room: 'divertidos', img: 'itens-novos/Escorredor de louça.jpeg', price: 'R$ 500,00', sug: 'Louça limpa pra Isa!' },
+            { id: 'vale-compras', name: 'Vale compras para gastar sem culpa', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 400,00', sug: 'Liberdade para comprar presentinhos' },
+            { id: 'smartfit-1mes', name: '1 mês de SmartFit pra incentivar', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 119,90', sug: 'Incentivo fitness pós-festa!' },
+            { id: 'delivery-sexta', name: 'Patrocínio do Delivery de Sexta', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 80,00', sug: 'Livrando os noivos do fogão' },
+            { id: 'salvar-miojo', name: 'Salvando o casal do miojo (Jantar)', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 100,00', sug: 'Para um jantar prático e gostoso' },
+            { id: 'imas-geladeira', name: 'Imãs de geladeira de viagem fake', qty: 999, room: 'divertidos', img: 'itens-novos/Porta bucha e detergente.jpeg', price: 'R$ 10,00', sug: 'Para fingir que viajamos o mundo' },
+
+            // ===== CHURRASCO & LAZER =====
+            { id: 'churrascao-picanha', name: 'Churrascão com Picanha', qty: 999, room: 'churrasco', img: 'almoco.png', price: 'R$ 350,00', sug: 'Dia de churrasco de qualidade' },
+            { id: 'caixa-som-bluetooth', name: 'Caixa de som Bluetooth para o churrasco', qty: 1, room: 'churrasco', img: 'almoco.png', price: 'R$ 300,00', sug: 'Música para os nossos encontros' },
+            { id: 'churrascao-contrafile', name: 'Churrascão com Contrafilé', qty: 999, room: 'churrasco', img: 'almoco.png', price: 'R$ 120,00', sug: 'Churrasco clássico com amigos' },
+            { id: 'acendedor-churrasqueira', name: 'Acendedor de churrasqueira', qty: 1, room: 'churrasco', img: 'almoco.png', price: 'R$ 15,00', sug: 'Facilidade para assar a carne' },
+
+            // ===== COZINHA & UTILIDADES =====
+            { id: 'bebidas-especiais', name: 'Bebidas especiais (Sucos finos/imports)', qty: 999, room: 'cozinha', img: 'itens-novos/Jarra.jpeg', price: 'R$ 145,00', sug: 'Sucos finos e refrigerantes importados' },
+            { id: 'bandeja-bambu-cama', name: 'Bandeja de bambu para café na cama', qty: 1, room: 'cozinha', img: 'itens-novos/Bandeja giratória de bambu.jpeg', price: 'R$ 65,00', sug: 'Café da manhã especial na cama' },
+            { id: 'tabua-corte', name: 'Tábua de corte estilosa', qty: 1, room: 'cozinha', img: 'gift-tabua.png', price: 'R$ 55,00', sug: 'Tábua estilosa para churrasco e petiscos' },
+            { id: 'kit-temperos', name: 'Kit de temperos do chef', qty: 1, room: 'cozinha', img: 'itens-novos/Saleiro.jpeg', price: 'R$ 40,00', sug: 'Tempero para as refeições da casa' },
+            { id: 'copos-americanos', name: 'Jogo de copos americanos', qty: 1, room: 'cozinha', img: 'gift-copos.png', price: 'R$ 25,00', sug: 'Clássicos copos americanos para o dia a dia' },
+            { id: 'potes-plastico', name: 'Potes de plástico (com tampa!)', qty: 1, room: 'cozinha', img: 'itens-novos/Potes Herméticos para dispensa.jpeg', price: 'R$ 20,00', sug: 'Indispensáveis em qualquer lar' },
+
+            // ===== DECORAÇÃO & CHARME =====
+            { id: 'vaso-cristal', name: 'Vaso de Cristal Decorativo', qty: 1, room: 'decoracao', img: 'flower-bouquet-Cd59z_hq.png', price: 'R$ 130,00', sug: 'Charme para as nossas flores' },
+            { id: 'vela-aromatica', name: 'Vela Aromática Decorativa', qty: 1, room: 'decoracao', img: 'itens-novos/Porta escova de dente ( banheiro).jpeg', price: 'R$ 30,00', sug: 'Para deixar a casa sempre perfumada' }
         ];
 
         let selectedGifts = [];
@@ -984,11 +1043,13 @@
                     const isSelected = selectedGifts.includes(g.id);
                     const card = document.createElement('div');
                     card.className = 'gift-card' + (taken ? ' taken' : '') + (isSelected ? ' selected' : '');
+                    const priceHtml = g.price ? `<p class="gift-card-price" style="font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--accent); margin-top: 4px;">${g.price}</p>` : '';
                     const sugHtml = g.sug ? `<span class="gift-card-suggestion">✦ ${g.sug}</span>` : '';
                     card.innerHTML = `<img src="${g.img}" alt="${g.name}" class="gift-card-img" onerror="this.style.display='none'">
                         <p class="gift-card-name">${g.name}</p>
+                        ${priceHtml}
                         ${sugHtml}
-                        <p class="gift-card-qty">${taken ? 'Esgotado' : (stockQty > 1 ? avail + ' disponível(eis)' : '1 unidade')}</p>`;
+                        <p class="gift-card-qty">${taken ? 'Esgotado' : (stockQty > 1 ? (stockQty > 900 ? 'Disponível' : avail + ' disponível(eis)') : '1 unidade')}</p>`;
                     if (!taken) {
                         card.addEventListener('click', () => {
                             if (isSelected) { selectedGifts = selectedGifts.filter(x => x !== g.id); }
@@ -1006,70 +1067,461 @@
 
         function updateConfirmBtn() {
             const btn = document.getElementById('gift-confirm-btn');
-            btn.classList.toggle('active', selectedGifts.length > 0);
+            if (btn) btn.classList.toggle('active', selectedGifts.length > 0);
+        }
+
+        let checkoutGuestName = '';
+        let checkoutGuestPhone = '';
+        let checkoutGuestCompanions = [];
+        let currentPixCode = '';
+
+        function showGiftStep(stepName) {
+            const steps = ['select', 'rsvp', 'payment', 'thanks'];
+            steps.forEach(s => {
+                const el = document.getElementById('gift-step-' + s);
+                if (el) el.classList.remove('show');
+            });
+            const targetEl = document.getElementById('gift-step-' + stepName);
+            if (targetEl) targetEl.classList.add('show');
+            
+            const headerDetails = document.getElementById('gift-header-details');
+            if (headerDetails) {
+                if (stepName === 'select') {
+                    headerDetails.style.display = '';
+                    startInspoCarousel();
+                } else {
+                    headerDetails.style.display = 'none';
+                    stopInspoCarousel();
+                }
+            }
         }
 
         function openGiftModal() {
             selectedGifts = [];
             document.getElementById('gift-modal').classList.add('open');
-            document.getElementById('gift-footer-main').style.display = '';
-            document.getElementById('gift-name-step').classList.remove('show');
-            document.getElementById('gift-success-step').classList.remove('show');
-            document.getElementById('gift-grid').style.display = '';
+            showGiftStep('select');
             renderGiftGrid();
             updateConfirmBtn();
             document.body.style.overflow = 'hidden';
-            startInspoCarousel();
         }
 
         function closeGiftModal() {
             document.getElementById('gift-modal').classList.remove('open');
             document.body.style.overflow = 'auto';
             stopInspoCarousel();
+            const vid = document.getElementById('thanks-video');
+            if (vid) {
+                vid.pause();
+                vid.currentTime = 0;
+            }
+            const bgMusic = document.getElementById('bg-music');
+            const musicBtn = document.getElementById('music-btn');
+            if (bgMusic && musicBtn && !musicBtn.classList.contains('muted')) {
+                bgMusic.play().catch(e => console.log(e));
+            }
         }
 
-        function showGiftNameStep() {
+        function handleGiftConfirm() {
             if (selectedGifts.length === 0) return;
-            document.getElementById('gift-footer-main').style.display = 'none';
-            document.getElementById('gift-grid').style.display = 'none';
-            document.getElementById('gift-name-step').classList.add('show');
-            document.getElementById('gift-name-input').focus();
+            const mainNameInput = document.querySelector('#rsvp-form input[name="name"]');
+            const mainPhoneInput = document.querySelector('#rsvp-form input[name="phone"]');
+            
+            document.getElementById('gift-rsvp-name').value = localStorage.getItem('rsvp-confirmed-name') || (mainNameInput ? mainNameInput.value.trim() : '');
+            document.getElementById('gift-rsvp-phone').value = localStorage.getItem('rsvp-confirmed-phone') || (mainPhoneInput ? mainPhoneInput.value.trim() : '');
+            document.getElementById('gift-companion-list').innerHTML = '';
+            giftCc = 0;
+            showGiftStep('rsvp');
         }
 
-        function confirmGift() {
-            const name = document.getElementById('gift-name-input').value.trim();
-            if (!name) { document.getElementById('gift-name-input').style.boxShadow = '0 0 0 2px #B85A4A'; return; }
+        let giftCc = 0;
+        function addGiftCompanion(t) {
+            giftCc++;
+            const l = document.getElementById('gift-companion-list'), d = document.createElement('div');
+            d.className = 'companion-item';
+            d.id = 'gift-comp-' + giftCc;
+            d.innerHTML = `<span class="comp-type">${t}</span><input type="text" placeholder="Nome" name="gift_comp_${giftCc}"><button type="button" class="companion-remove" onclick="document.getElementById('gift-comp-${giftCc}').remove()">✕</button>`;
+            l.appendChild(d);
+        }
+
+        function handleGiftRsvpSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('gift-rsvp-name').value.trim();
+            const phone = document.getElementById('gift-rsvp-phone').value.trim();
+            if (!name || !phone) return;
+
+            const comps = [];
+            document.querySelectorAll('#gift-companion-list .companion-item').forEach(i => {
+                const n = i.querySelector('input').value;
+                if (n) comps.push({ type: i.querySelector('.comp-type').textContent, name: n });
+            });
+
+            checkoutGuestName = name;
+            checkoutGuestPhone = phone;
+            checkoutGuestCompanions = comps;
 
             if (firebaseReady) {
-                // Usar transações atômicas do Firebase (seguro para acessos simultâneos)
-                selectedGifts.forEach(id => {
-                    fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
-                });
-                // Salvar detalhes do convidado
-                const giftNames = selectedGifts.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
-                fbDb.ref('guests').push({
+                fbDb.ref('rsvp').push({
                     name: name,
-                    gifts: giftNames,
-                    giftIds: [...selectedGifts],
+                    phone: phone,
+                    companions: comps,
+                    status: 'confirmed',
                     date: new Date().toISOString()
                 });
-            } else {
-                // Fallback localStorage
-                const reserved = getReserved();
-                selectedGifts.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
-                saveReservedLocal(reserved);
             }
 
-            document.getElementById('gift-name-step').classList.remove('show');
-            document.getElementById('gift-success-step').classList.add('show');
-            // Pre-fill RSVP name
-            const rsvpName = document.querySelector('#rsvp-form input[name="name"]');
-            if (rsvpName) rsvpName.value = name;
+            localStorage.setItem('rsvp-confirmed-name', name);
+            localStorage.setItem('rsvp-confirmed-phone', phone);
+            localStorage.setItem('rsvp-confirmed-companions', JSON.stringify(comps));
+
+            const mainNameInput = document.querySelector('#rsvp-form input[name="name"]');
+            if (mainNameInput) mainNameInput.value = name;
+            const mainPhoneInput = document.querySelector('#rsvp-form input[name="phone"]');
+            if (mainPhoneInput) mainPhoneInput.value = phone;
+            
+            document.getElementById('rsvp-form').style.display = 'none';
+            document.getElementById('rsvp-success').classList.add('show');
+
+            preparePaymentStep();
+        }
+
+        function generatePixCode(key, amount, merchantName, merchantCity) {
+            function formatEMV(id, value) {
+                const len = String(value.length).padStart(2, '0');
+                return id + len + value;
+            }
+
+            let payload = formatEMV("00", "01");
+            const gui = formatEMV("00", "br.gov.bcb.pix");
+            const keyFormatted = formatEMV("01", key);
+            const merchantInfo = formatEMV("26", gui + keyFormatted);
+            payload += merchantInfo;
+            payload += formatEMV("52", "0000");
+            payload += formatEMV("53", "986");
+            payload += formatEMV("54", parseFloat(amount).toFixed(2));
+            payload += formatEMV("58", "BR");
+            const cleanName = merchantName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().substring(0, 25);
+            payload += formatEMV("59", cleanName);
+            const cleanCity = merchantCity.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().substring(0, 15);
+            payload += formatEMV("60", cleanCity);
+            const txid = formatEMV("05", "***");
+            payload += formatEMV("62", txid);
+            payload += "6304";
+
+            let crc = 0xFFFF;
+            for (let i = 0; i < payload.length; i++) {
+                let byte = payload.charCodeAt(i);
+                crc ^= (byte << 8);
+                for (let j = 0; j < 8; j++) {
+                    if (crc & 0x8000) {
+                        crc = (crc << 1) ^ 0x1021;
+                    } else {
+                        crc = crc << 1;
+                    }
+                    crc &= 0xFFFF;
+                }
+            }
+            const crcHex = crc.toString(16).toUpperCase().padStart(4, '0');
+            return payload + crcHex;
+        }
+
+        function selectPaymentMethod(method) {
+            const btnPix = document.getElementById('choice-pix');
+            const btnCard = document.getElementById('choice-stripe');
+            const contentPix = document.getElementById('payment-content-pix');
+            const contentCard = document.getElementById('payment-content-card');
+            
+            if (method === 'pix') {
+                btnPix.classList.add('selected');
+                btnCard.classList.remove('selected');
+                contentPix.style.display = 'block';
+                contentCard.style.display = 'none';
+            } else {
+                btnPix.classList.remove('selected');
+                btnCard.classList.add('selected');
+                contentPix.style.display = 'none';
+                contentCard.style.display = 'block';
+            }
+        }
+
+        function redirectToAbacatePayCheckout(method) {
+            const processing = document.getElementById('payment-processing');
+            document.getElementById('processing-title').textContent = "Carregando...";
+            document.getElementById('processing-desc').textContent = "Aguarde enquanto preparamos a tela de contribuição segura no AbacatePay.";
+            processing.classList.add('show');
+            
+            document.getElementById('payment-choice-view').style.display = 'none';
+            document.getElementById('payment-content-pix').style.display = 'none';
+            document.getElementById('payment-content-card').style.display = 'none';
+
+            localStorage.setItem('pending-payment-name', checkoutGuestName);
+            localStorage.setItem('pending-payment-gifts', JSON.stringify(selectedGifts));
+
+            fetch('/api/create-billing', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: checkoutGuestName,
+                    phone: checkoutGuestPhone,
+                    companions: checkoutGuestCompanions,
+                    giftIds: selectedGifts,
+                    method: method
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao gerar link de pagamento.');
+                return res.json();
+            })
+            .then(data => {
+                if (data.url && data.billingId) {
+                    localStorage.setItem('pending-billing-id', data.billingId);
+                    
+                    // Set up real-time listener for this billing in Firebase
+                    if (firebaseReady) {
+                        fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
+                            const val = snap.val();
+                            if (val && val.status === 'paid') {
+                                processing.classList.remove('show');
+                                document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
+                                showGiftStep('thanks');
+                                const thanksVid = document.getElementById('thanks-video');
+                                if (thanksVid) {
+                                    const bgMusic = document.getElementById('bg-music');
+                                    if (bgMusic) bgMusic.pause();
+                                    thanksVid.currentTime = 0;
+                                    thanksVid.play().catch(e => console.log('Play blocked', e));
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Redirect to AbacatePay checkout url
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Url inválida recebida.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Ocorreu um erro ao gerar o checkout no AbacatePay. Por favor, tente novamente.');
+                // Restore views on error
+                processing.classList.remove('show');
+                document.getElementById('payment-choice-view').style.display = 'block';
+                if (method === 'pix') {
+                    document.getElementById('payment-content-pix').style.display = 'block';
+                } else {
+                    document.getElementById('payment-content-card').style.display = 'block';
+                }
+            });
+        }
+
+        function copyGiftPix() {
+            if (!currentPixCode) return;
+            navigator.clipboard.writeText(currentPixCode).then(() => {
+                const btn = document.getElementById('gift-pix-copy-btn');
+                btn.textContent = '✓ Código Copiado!';
+                btn.style.background = '#25D366';
+                setTimeout(() => {
+                    btn.textContent = 'Copiar Código PIX';
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error(err);
+            });
+        }
+
+        function preparePaymentStep() {
+            const selectedDetails = selectedGifts.map(id => GIFTS.find(g => g.id === id)).filter(Boolean);
+            if (selectedDetails.length === 0) return;
+            
+            let totalVal = 0;
+            selectedDetails.forEach(g => {
+                const valStr = g.price.replace(/[^\d,]/g, '').replace(',', '.');
+                const val = parseFloat(valStr);
+                if (!isNaN(val)) totalVal += val;
+            });
+
+            const formattedTotal = "R$ " + totalVal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const firstGift = selectedDetails[0];
+            const titleText = selectedDetails.length === 1 ? firstGift.name : `${firstGift.name} + ${selectedDetails.length - 1} item(ns)`;
+            
+            document.getElementById('payment-gift-img').src = firstGift.img;
+            document.getElementById('payment-gift-title').textContent = titleText;
+            document.getElementById('payment-gift-price').textContent = formattedTotal;
+
+            document.getElementById('choice-pix').classList.remove('selected');
+            document.getElementById('choice-stripe').classList.remove('selected');
+            
+            document.getElementById('payment-content-pix').style.display = 'none';
+            document.getElementById('payment-content-card').style.display = 'none';
+            
+            document.getElementById('payment-choice-view').style.display = 'block';
+            document.getElementById('payment-processing').classList.remove('show');
+
+            showGiftStep('payment');
+        }
+
+        function completePaymentFlow() {
+            // Hide choice view and content areas
+            document.getElementById('payment-choice-view').style.display = 'none';
+            document.getElementById('payment-content-pix').style.display = 'none';
+            document.getElementById('payment-content-card').style.display = 'none';
+
+            // Show processing spinner
+            const processing = document.getElementById('payment-processing');
+            document.getElementById('processing-title').textContent = "Confirmando...";
+            document.getElementById('processing-desc').textContent = "Aguarde um instante enquanto confirmamos sua contribuição via PIX...";
+            processing.classList.add('show');
+
+            setTimeout(() => {
+                if (firebaseReady) {
+                    selectedGifts.forEach(id => {
+                        fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
+                    });
+                    const giftNames = selectedGifts.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
+                    fbDb.ref('guests').push({
+                        name: checkoutGuestName,
+                        gifts: giftNames,
+                        giftIds: [...selectedGifts],
+                        date: new Date().toISOString()
+                    });
+                } else {
+                    const reserved = getReserved();
+                    selectedGifts.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
+                    saveReservedLocal(reserved);
+                }
+
+                // Hide spinner
+                processing.classList.remove('show');
+
+                // Personalize and show thanks view
+                document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
+                showGiftStep('thanks');
+
+                // Play thank-you video
+                const thanksVid = document.getElementById('thanks-video');
+                if (thanksVid) {
+                    const bgMusic = document.getElementById('bg-music');
+                    if (bgMusic) bgMusic.pause();
+                    thanksVid.currentTime = 0;
+                    thanksVid.play().catch(err => {
+                        console.log('Play blocked', err);
+                    });
+                }
+            }, 2000);
         }
 
         // Close modal on overlay click
         document.getElementById('gift-modal').addEventListener('click', e => {
             if (e.target === e.currentTarget) closeGiftModal();
+        });
+
+        // Document level setup for AbacatePay return redirect and video ended listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isPaymentSuccess = urlParams.get('payment_success') === 'true' || localStorage.getItem('pending-payment-success') === 'true';
+            const pendingBillingId = localStorage.getItem('pending-billing-id');
+
+            const processSuccess = (nameToUse) => {
+                localStorage.removeItem('pending-payment-success');
+                localStorage.removeItem('pending-payment-name');
+                localStorage.removeItem('pending-payment-gifts');
+                localStorage.removeItem('pending-billing-id');
+
+                // Clear URL parameters to prevent duplicate processing on refresh
+                if (window.history.replaceState) {
+                    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.hash;
+                    window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+                }
+                
+                document.getElementById('gift-modal').classList.add('open');
+                checkoutGuestName = nameToUse;
+                document.getElementById('thanks-guest-name').textContent = nameToUse;
+                showGiftStep('thanks');
+                
+                const thanksVid = document.getElementById('thanks-video');
+                if (thanksVid) {
+                    const bgMusic = document.getElementById('bg-music');
+                    if (bgMusic) bgMusic.pause();
+                    thanksVid.currentTime = 0;
+                    thanksVid.play().catch(err => {
+                        console.log('Play blocked', err);
+                    });
+                }
+            };
+
+            if (isPaymentSuccess) {
+                const name = urlParams.get('name') || localStorage.getItem('pending-payment-name') || 'Convidado';
+                
+                // If we have a pending billing ID, check if it was processed by the webhook.
+                // If not (e.g. database delay), we run a backup local reservation write.
+                if (pendingBillingId && firebaseReady) {
+                    fbDb.ref('pending_payments/' + pendingBillingId).once('value', snap => {
+                        const val = snap.val();
+                        if (val && val.status === 'paid') {
+                            processSuccess(name);
+                        } else {
+                            runBackupClientReservation();
+                        }
+                    });
+                } else {
+                    runBackupClientReservation();
+                }
+
+                function runBackupClientReservation() {
+                    let giftsToReserve = [];
+                    try {
+                        const giftsParam = urlParams.get('gifts');
+                        if (giftsParam) {
+                            if (giftsParam.trim().startsWith('[')) {
+                                giftsToReserve = JSON.parse(giftsParam);
+                            } else {
+                                giftsToReserve = giftsParam.split(',').map(s => s.trim()).filter(Boolean);
+                            }
+                        } else {
+                            giftsToReserve = JSON.parse(localStorage.getItem('pending-payment-gifts') || '[]');
+                        }
+                    } catch(e) {
+                        console.error("Erro ao processar presentes da URL/localStorage:", e);
+                    }
+
+                    if (giftsToReserve.length > 0) {
+                        const alreadyRegisteredKey = 'registered-gifts-' + giftsToReserve.join('-');
+                        if (localStorage.getItem(alreadyRegisteredKey) !== 'true') {
+                            localStorage.setItem(alreadyRegisteredKey, 'true');
+                            if (firebaseReady) {
+                                giftsToReserve.forEach(id => {
+                                    fbDb.ref('reserved/' + id).transaction(current => (current || 0) + 1);
+                                });
+                                const giftNames = giftsToReserve.map(id => GIFTS.find(g => g.id === id)?.name).filter(Boolean);
+                                fbDb.ref('guests').push({
+                                    name: name,
+                                    gifts: giftNames,
+                                    giftIds: [...giftsToReserve],
+                                    date: new Date().toISOString()
+                                });
+                            } else {
+                                const reserved = getReserved();
+                                giftsToReserve.forEach(id => { reserved[id] = (reserved[id] || 0) + 1; });
+                                saveReservedLocal(reserved);
+                            }
+                        }
+                    }
+                    processSuccess(name);
+                }
+            }
+
+            const thanksVid = document.getElementById('thanks-video');
+            if (thanksVid) {
+                thanksVid.addEventListener('ended', () => {
+                    const bgMusic = document.getElementById('bg-music');
+                    const musicBtn = document.getElementById('music-btn');
+                    if (bgMusic && musicBtn && !musicBtn.classList.contains('muted')) {
+                        bgMusic.play().catch(e => console.log(e));
+                    }
+                });
+            }
         });
 
         // INSPIRATION CAROUSEL
@@ -1113,7 +1565,7 @@
                 });
             }
 
-            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 [digite os nomes aqui]\n\npara o Chá de Panela do Leonardo e Isabelle 🎉`;
+            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 [digite os nomes aqui]\n\npara o Casamento do Leonardo e Isabelle 🎉`;
             window.open(`https://wa.me/5521995080295?text=${encodeURIComponent(m)}`, '_blank');
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
@@ -1143,6 +1595,216 @@
         // REVEAL
         const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');ro.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -40px 0px'});
         document.querySelectorAll('.reveal').forEach(e=>ro.observe(e));
+
+        // POLAROIDS SCROLL ANIMATION
+        function setPolaroidState(num, p) {
+            const el = document.getElementById('polaroid-' + num);
+            if (!el) return;
+            if (num === 1) {
+                el.style.transform = 'translate(0px, 0px) rotate(-4deg) scale(0.95)';
+                el.style.opacity = '1';
+            } else if (num === 2) {
+                let x = 300 * (1 - p) + 5 * p;
+                let y = -100 * (1 - p) - 8 * p;
+                let rot = 35 * (1 - p) + 4 * p;
+                el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.95)`;
+                el.style.opacity = p;
+            } else if (num === 3) {
+                let x = -300 * (1 - p) - 6 * p;
+                let y = 120 * (1 - p) + 6 * p;
+                let rot = -45 * (1 - p) - 5 * p;
+                el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.95)`;
+                el.style.opacity = p;
+            } else if (num === 4) {
+                let x = 80 * (1 - p) + 2 * p;
+                let y = 300 * (1 - p) + 12 * p;
+                let rot = 25 * (1 - p) + 2 * p;
+                el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(0.95)`;
+                el.style.opacity = p;
+            }
+        }
+
+        let polaroidStart = 0;
+        let polaroidEnd = 0;
+
+        function updatePolaroidOffsets() {
+            const section = document.getElementById('polaroids-section');
+            if (!section) return;
+            let top = 0;
+            let obj = section;
+            while (obj) {
+                top += obj.offsetTop;
+                obj = obj.offsetParent;
+            }
+            polaroidStart = top;
+            polaroidEnd = polaroidStart + section.offsetHeight - window.innerHeight;
+        }
+
+        // Initialize offsets
+        updatePolaroidOffsets();
+        window.addEventListener('resize', updatePolaroidOffsets);
+        setTimeout(updatePolaroidOffsets, 1000); // Re-run after layout settles
+
+        window.addEventListener('scroll', () => {
+            if (polaroidStart === 0 && polaroidEnd === 0) {
+                updatePolaroidOffsets();
+            }
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            
+            if (scrollTop < polaroidStart) {
+                setPolaroidState(1, 0);
+                setPolaroidState(2, 0);
+                setPolaroidState(3, 0);
+                setPolaroidState(4, 0);
+                return;
+            }
+            if (scrollTop > polaroidEnd) {
+                setPolaroidState(1, 1);
+                setPolaroidState(2, 1);
+                setPolaroidState(3, 1);
+                setPolaroidState(4, 1);
+                return;
+            }
+            
+            let progress = (scrollTop - polaroidStart) / (polaroidEnd - polaroidStart);
+            progress = Math.max(0, Math.min(1, progress));
+            
+            let p2 = Math.max(0, Math.min(1, progress / 0.25));
+            setPolaroidState(2, p2);
+            
+            let p3 = Math.max(0, Math.min(1, (progress - 0.25) / 0.25));
+            setPolaroidState(3, p3);
+            
+            let p4 = Math.max(0, Math.min(1, (progress - 0.50) / 0.25));
+            setPolaroidState(4, p4);
+        });
+
+        // DRESS CODE TYPING EFFECT
+        const typingObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const title = document.getElementById('dresscode-title');
+                    if (title && !title.classList.contains('typed')) {
+                        title.classList.add('typed');
+                        const text = title.getAttribute('data-text');
+                        let i = 0;
+                        title.textContent = "";
+                        function type() {
+                            if (i < text.length) {
+                                title.textContent += text.charAt(i);
+                                i++;
+                                setTimeout(type, 150);
+                            }
+                        }
+                        type();
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        const dresscodeEl = document.getElementById('dresscode');
+        if (dresscodeEl) typingObserver.observe(dresscodeEl);
+
+        // GIFTS SCROLL ANIMATION FOR A1-A4
+        function setGiftPhotoState(num, p) {
+            const el = document.getElementById('gift-photo-' + num);
+            if (!el) return;
+            el.style.opacity = p;
+        }
+
+        let giftsStart = 0;
+        let giftsEnd = 0;
+
+        function updateGiftsOffsets() {
+            const section = document.getElementById('gifts-photos-section');
+            if (!section) return;
+            let top = 0;
+            let obj = section;
+            while (obj) {
+                top += obj.offsetTop;
+                obj = obj.offsetParent;
+            }
+            giftsStart = top;
+            giftsEnd = giftsStart + section.offsetHeight - window.innerHeight;
+        }
+
+        // Initialize offsets
+        updateGiftsOffsets();
+        window.addEventListener('resize', updateGiftsOffsets);
+        setTimeout(updateGiftsOffsets, 1000); // Re-run after layout settles
+
+        window.addEventListener('scroll', () => {
+            if (giftsStart === 0 && giftsEnd === 0) {
+                updateGiftsOffsets();
+            }
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            
+            if (scrollTop < giftsStart) {
+                setGiftPhotoState(1, 1);
+                setGiftPhotoState(2, 0);
+                setGiftPhotoState(3, 0);
+                setGiftPhotoState(4, 0);
+                return;
+            }
+            if (scrollTop > giftsEnd) {
+                setGiftPhotoState(1, 0);
+                setGiftPhotoState(2, 0);
+                setGiftPhotoState(3, 0);
+                setGiftPhotoState(4, 1);
+                return;
+            }
+            
+            let progress = (scrollTop - giftsStart) / (giftsEnd - giftsStart);
+            progress = Math.max(0, Math.min(1, progress));
+            
+            // Cross-fade logic (only one image fully visible, other fading out/in)
+            if (progress <= 0.33) {
+                let t = progress / 0.33;
+                setGiftPhotoState(1, 1 - t);
+                setGiftPhotoState(2, t);
+                setGiftPhotoState(3, 0);
+                setGiftPhotoState(4, 0);
+            } else if (progress <= 0.66) {
+                let t = (progress - 0.33) / 0.33;
+                setGiftPhotoState(1, 0);
+                setGiftPhotoState(2, 1 - t);
+                setGiftPhotoState(3, t);
+                setGiftPhotoState(4, 0);
+            } else {
+                let t = (progress - 0.66) / 0.34;
+                setGiftPhotoState(1, 0);
+                setGiftPhotoState(2, 0);
+                setGiftPhotoState(3, 1 - t);
+                setGiftPhotoState(4, t);
+            }
+        });
+
+        // FOOTER BIBLE VERSE TYPING EFFECT
+        const footerVerseObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const textEl = document.getElementById('footer-verse-text');
+                    if (textEl && !textEl.classList.contains('typed')) {
+                        textEl.classList.add('typed');
+                        const text = textEl.getAttribute('data-text');
+                        let i = 0;
+                        textEl.textContent = "";
+                        
+                        function type() {
+                            if (i < text.length) {
+                                textEl.textContent += text.charAt(i);
+                                i++;
+                                setTimeout(type, 80);
+                            }
+                        }
+                        setTimeout(type, 300);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const footerEl = document.querySelector('.footer');
+        if (footerEl) footerVerseObserver.observe(footerEl);
     </script>
 </body>
 </html>
