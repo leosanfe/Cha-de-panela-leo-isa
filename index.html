@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Casamento — Leonardo & Isabelle</title>
-    <meta name="description" content="Convite exclusivo para o Casamento de Leonardo e Isabelle. 20 de Junho de 2026.">
+    <meta name="description" content="Convite exclusivo para o Casamento de Leonardo e Isabelle. 16 de Agosto de 2026.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -55,18 +55,15 @@
 
         /* MAIN */
         #main-content { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 480px; margin: 0 auto; opacity: 0; transition: opacity 1.5s ease; background: transparent; box-shadow: none; }
-        #main-content.visible { opacity: 1; }
-
-        /* HERO SECTION */
-        .hero { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; position: relative; overflow: hidden; background: transparent; padding: 30px 0 80px 0; }
-        .hero-content { width: 100%; padding: 0 24px; z-index: 5; margin-top: -60px; position: relative; }
+        #main-content.visible { opacity: 1; }        /* HERO SECTION */
+        .hero { width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; background: transparent; padding: 0; }
+        .hero-content { width: 100%; padding: 0 12px; z-index: 5; position: relative; }
         
-        .invitation-card-container { width: 100%; position: relative; margin: 0 auto; max-width: 420px; }
+        .invitation-card-container { width: 100%; position: relative; margin: 0 auto; max-width: 460px; }
         .invitation-card { width: 100%; height: auto; display: block; margin: 0 auto; opacity: 0; transform: translateY(30px); transition: opacity 1.5s ease, transform 1.5s ease; background: transparent; box-shadow: none; border-radius: 0; }
         .invitation-card.hero-text-visible { opacity: 1; transform: translateY(0); }
         
-
-        .hero-bottom { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 35px; opacity: 0; transform: translateY(15px); transition: opacity 1.5s ease, transform 1.5s ease; }
+        .hero-bottom { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; opacity: 0; transform: translateY(15px); transition: opacity 1.5s ease, transform 1.5s ease; z-index: 10; }
         .hero-bottom.hero-text-visible { opacity: 1; transform: translateY(0); }
         .hero-date-lines { display: flex; align-items: center; gap: 16px; margin-bottom: 15px; }
         .hero-date-line { width: 40px; height: 1px; background: var(--divider); }
@@ -75,6 +72,29 @@
         .hero-scroll-arrow { margin-top: 10px; }
         .hero-scroll-arrow svg { width: 20px; height: 20px; color: var(--text-muted); opacity: .6; animation: bounce 2s ease-in-out infinite; }
         @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:.8} }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 100vh;
+                height: 100dvh;
+            }
+            .hero-content {
+                padding: 0;
+            }
+            .invitation-card-container {
+                max-width: 100%;
+                width: 100%;
+            }
+            .invitation-card {
+                width: 100%;
+                height: 70vh;
+                height: 70dvh;
+                object-fit: contain;
+            }
+            .hero-bottom {
+                bottom: 20px;
+            }
+        }
 
         /* COUNTDOWN */
         .countdown-section { width: 100%; background: var(--bg); padding: 60px 24px 80px; text-align: center; position: relative; border-top: 1px solid var(--divider); }
@@ -327,8 +347,156 @@
         
         .thanks-step { display: none; padding: 24px; text-align: center; }
         .thanks-step.show { display: block; }
-        .thanks-video-container { position: relative; width: 100%; max-width: 240px; aspect-ratio: 9/16; margin: 16px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15); background: #000; }
-        .thanks-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* INSPIRATION MODAL */
+        .inspo-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0,0,0,.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .inspo-modal-overlay.open {
+            display: flex;
+        }
+        .inspo-modal {
+            background: var(--bg);
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--divider);
+        }
+        .inspo-modal-header {
+            padding: 24px 24px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--divider);
+        }
+        .inspo-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0,0,0,.06);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            transition: all .3s;
+            z-index: 10;
+        }
+        .inspo-modal-close:hover {
+            background: rgba(0,0,0,.12);
+        }
+        .inspo-modal-title {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--slate-dark);
+            margin-bottom: 6px;
+        }
+        .inspo-modal-desc {
+            font-family: var(--serif);
+            font-size: 14px;
+            font-style: italic;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        .inspo-slides-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            background: #e5e5e5;
+            overflow: hidden;
+        }
+        .inspo-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .inspo-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        .inspo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .inspo-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .inspo-nav-btn:hover {
+            background: var(--white);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .inspo-nav-prev {
+            left: 12px;
+        }
+        .inspo-nav-next {
+            right: 12px;
+        }
+        .inspo-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+        }
+        .inspo-modal-footer {
+            padding: 16px 20px 24px;
+            text-align: center;
+            background: var(--bg);
+            border-top: 1px solid var(--divider);
+        }
+        .inspo-indicator-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        .inspo-indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--divider);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .inspo-indicator-dot.active {
+            background: var(--olive);
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
@@ -416,21 +584,160 @@
 
         <!-- MANUAL DOS CONVIDADOS -->
         <section class="manual-section" id="manual">
-            <img src="Itens-Site-Casamento/manualpadrinho.png" alt="Manual dos Convidados" class="reveal rd2" style="width: 100%; height: auto; display: block; max-width: 550px; margin: 0 auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(62, 84, 103, 0.08);">
-        </section>
+            <h2 class="section-title-script reveal">Manual dos Convidados</h2>
+            <p class="section-subtitle-caps reveal rd1">DICAS PARA O NOSSO GRANDE DIA</p>
+            
+            <div class="manual-grid">
+                <!-- Item 1: Confirmação -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Confirme sua presença</h4>
+                        <p class="manual-item-desc">Por favor, confirme pelo formulário nesta página.</p>
+                    </div>
+                </div>
+
+                <!-- Item 2: Branco -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Branco é da noiva</h4>
+                        <p class="manual-item-desc">Deixe o branco e tons muito próximos para a noiva.</p>
+                    </div>
+                </div>
+
+                <!-- Item 3: Convidado não convida -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Convidado não convida</h4>
+                        <p class="manual-item-desc">Nosso espaço é planejado apenas para os convidados listados.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4: Cerimônia -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Participe da cerimônia</h4>
+                        <p class="manual-item-desc">Sua presença na cerimônia é a parte mais importante para nós.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5: Madrinhas -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/><path d="M17 22H7a2 2 0 0 1-2-2v-3a7 7 0 0 1 14 0v3a2 2 0 0 1-2 2z"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Cores das Madrinhas</h4>
+                        <p class="manual-item-desc">Evite usar tons de verde, pois são exclusivos das madrinhas.</p>
+                    </div>
+                </div>
+
+                <!-- Item 6: Pontualidade -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Seja pontual</h4>
+                        <p class="manual-item-desc">Programe-se para chegar com antecedência e aproveitar tudo.</p>
+                    </div>
+                </div>
+
+                <!-- Item 7: Fotógrafos -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Não atrapalhe as fotos</h4>
+                        <p class="manual-item-desc">Evite celulares no caminho dos fotógrafos profissionais.</p>
+                    </div>
+                </div>
+
+                <!-- Item 8: Celular Silencioso -->
+                <div class="manual-item reveal rd2">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="m1 1 22 22"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Celular no silencioso</h4>
+                        <p class="manual-item-desc">Mantenha o aparelho sem som durante toda a cerimônia.</p>
+                    </div>
+                </div>
+
+                <!-- Item 9: Decoração -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7v3a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z"/><path d="M12 14v8M9 18l3-2 3 2"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Não leve a decoração</h4>
+                        <p class="manual-item-desc">As flores e adornos devem permanecer até o fim da festa.</p>
+                    </div>
+                </div>
+
+                <!-- Item 10: Despedida -->
+                <div class="manual-item reveal rd3">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3M10 1v3M14 1v3"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Despeça-se dos noivos</h4>
+                        <p class="manual-item-desc">Não vá embora sem antes nos dar um grande abraço.</p>
+                    </div>
+                </div>
+
+                <!-- Item 11: Aproveite -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Aproveite bastante!</h4>
+                        <p class="manual-item-desc">Coma, dance, divirta-se e comemore muito conosco!</p>
+                    </div>
+                </div>
+
+                <!-- Item 12: Doces -->
+                <div class="manual-item reveal rd4">
+                    <div class="manual-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v20M18 2v20M6 12h12M6 7h12"/></svg>
+                    </div>
+                    <div class="manual-content">
+                        <h4 class="manual-item-title">Mesa de Doces</h4>
+                        <p class="manual-item-desc">Aguarde a liberação oficial da mesa de doces para pegá-los.</p>
+                    </div>
+                </div>
+            </div>
 
         <!-- DRESS CODE -->
         <section class="dresscode-section" id="dresscode">
             <h2 class="section-title-script reveal" id="dresscode-title" data-text="Dress Code" style="min-height: 48px;"></h2>
             <p class="section-subtitle-caps reveal rd1">SUGESTÃO DE VESTIMENTA</p>
             <img src="Itens-Site-Casamento/dresscodenovo.png" alt="Dress Code" class="reveal rd2" style="width:100%; height:auto; display:block; max-width:280px; margin:0 auto 24px; border-radius:0; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.08));">
-            <div class="dresscode-card reveal rd3">
-                <p class="dresscode-card-text" style="font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">
+            <div class="dresscode-card reveal rd3" style="text-align: center;">
+                <p class="dresscode-card-text" style="font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">
                     Roupas elegantes em tons claros e suaves. Não é necessário seguir uma cor específica, mas priorize peças leves e sofisticadas.
                 </p>
-                <span class="dresscode-highlight" style="font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--accent); background: rgba(62,84,103,0.06); padding: 8px 18px; border-radius: 50px; display: inline-block;">
-                    Evite: shorts, bonés, roupas esportivas e chinelos. ✨
-                </span>
+                <div style="margin-bottom: 20px;">
+                    <span class="dresscode-highlight" style="font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--accent); background: rgba(62,84,103,0.06); padding: 8px 18px; border-radius: 50px; display: inline-block;">
+                        Evite: shorts, bonés, roupas esportivas e chinelos. ✨
+                    </span>
+                </div>
+                <button class="loc-btn loc-btn-maps" style="background: var(--olive); color: var(--white); border: none; cursor: pointer; padding: 12px 28px; border-radius: 50px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 8px; justify-content: center; margin: 0 auto; box-shadow: 0 4px 12px rgba(62,84,103,0.15);" onclick="openInspoModal()">
+                    ✨ Ver Inspirações
+                </button>
             </div>
         </section>
 
@@ -461,7 +768,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Acompanhantes</label>
-                        <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Adicione as pessoas que irão com você</p>
+                        <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">
+                            Adicione as pessoas que irão com você.
+                            <strong style="color: var(--slate-dark); display: block; margin-top: 4px;">Atenção: Adicione apenas os nomes que foram enviados na lista da mensagem do WhatsApp.</strong>
+                        </p>
                         <div class="companion-buttons">
                             <button type="button" class="companion-btn" onclick="addCompanion('adulto')">+ Adulto</button>
                             <button type="button" class="companion-btn" onclick="addCompanion('criança')">+ Criança</button>
@@ -661,22 +971,63 @@
                     </div>
                 </div>
 
-                <!-- PASSO 3: Vídeo de Agradecimento (Sucesso) -->
+                <!-- PASSO 3: Foto de Agradecimento e Versículo (Sucesso) -->
                 <div class="gift-step" id="gift-step-thanks">
                     <div class="success-icon" style="font-size: 48px; margin-bottom: 12px; text-align: center;">🎉</div>
                     <h3 class="gift-modal-title" style="text-align: center; font-size: 28px; margin-bottom: 6px;">Obrigado, <span id="thanks-guest-name">Convidado</span>!</h3>
-                    <p class="gift-modal-desc" style="text-align: center; line-height: 1.5;">
-                        Sua presença foi confirmada e o presente foi registrado! Assistam à mensagem que preparamos para você:
+                    <p class="gift-modal-desc" style="text-align: center; line-height: 1.5; margin-bottom: 15px;">
+                        Sua presença foi confirmada e seu presente foi registrado com sucesso! Agradecemos imensamente pelo carinho. ❤️
                     </p>
                     
-                    <div class="thanks-video-container">
-                        <video id="thanks-video" class="thanks-video" playsinline controls>
-                            <source src="whatsapp-video.mp4" type="video/mp4">
-                            Seu navegador não suporta vídeos.
-                        </video>
+                    <div style="width: 100%; max-width: 280px; margin: 16px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid var(--divider);">
+                        <img src="Itens-Site-Casamento/confirmacao.png" alt="Confirmado" style="width: 100%; height: auto; display: block; margin: 0 auto;">
+                    </div>
+
+                    <div id="thanks-bible-verse-container" style="background: rgba(62,84,103,0.04); border: 1px dashed var(--divider); border-radius: 12px; padding: 16px; margin: 16px auto 0; max-width: 340px; text-align: center;">
+                        <p id="thanks-bible-verse" style="font-family: var(--serif); font-size: 14px; font-style: italic; color: var(--text-light); line-height: 1.5;"></p>
                     </div>
                     
                     <button class="gift-final-btn" style="width: 100%; margin-top: 16px;" onclick="closeGiftModal()">Fechar Lista</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSPIRATIONS MODAL -->
+        <div class="inspo-modal-overlay" id="inspo-modal">
+            <div class="inspo-modal">
+                <button class="inspo-modal-close" onclick="closeInspoModal()">✕</button>
+                <div class="inspo-modal-header">
+                    <h3 class="inspo-modal-title">Sugestões de Trajes</h3>
+                    <p class="inspo-modal-desc">Algumas ideias de roupas elegantes em tons claros e suaves.</p>
+                </div>
+                <div class="inspo-slides-container">
+                    <div class="inspo-slide active">
+                        <img src="Itens-Site-Casamento/inspo1.png" onerror="this.src='Itens-Site-Casamento/A1.png'" alt="Inspiração 1">
+                    </div>
+                    <div class="inspo-slide">
+                        <img src="Itens-Site-Casamento/inspo2.png" onerror="this.src='Itens-Site-Casamento/A2.png'" alt="Inspiração 2">
+                    </div>
+                    <div class="inspo-slide">
+                        <img src="Itens-Site-Casamento/inspo3.png" onerror="this.src='Itens-Site-Casamento/A3.png'" alt="Inspiração 3">
+                    </div>
+                    <div class="inspo-slide">
+                        <img src="Itens-Site-Casamento/inspo4.png" onerror="this.src='Itens-Site-Casamento/A4.png'" alt="Inspiração 4">
+                    </div>
+                    
+                    <button class="inspo-nav-btn inspo-nav-prev" onclick="prevInspoSlide()" aria-label="Anterior">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="inspo-nav-btn inspo-nav-next" onclick="nextInspoSlide()" aria-label="Próximo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+                <div class="inspo-modal-footer">
+                    <div class="inspo-indicator-dots">
+                        <span class="inspo-indicator-dot active" onclick="setInspoSlide(0)"></span>
+                        <span class="inspo-indicator-dot" onclick="setInspoSlide(1)"></span>
+                        <span class="inspo-indicator-dot" onclick="setInspoSlide(2)"></span>
+                        <span class="inspo-indicator-dot" onclick="setInspoSlide(3)"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -737,7 +1088,7 @@
         });
 
         // COUNTDOWN
-        const ed=new Date('2026-06-20T15:30:00-03:00').getTime();
+        const ed=new Date('2026-08-16T15:30:00-03:00').getTime();
         function uc(){const d=ed-Date.now();if(d<=0){['days','hours','minutes','seconds'].forEach(i=>document.getElementById(i).textContent='0');return}
         document.getElementById('days').textContent=Math.floor(d/864e5);
         document.getElementById('hours').textContent=String(Math.floor(d%864e5/36e5)).padStart(2,'0');
@@ -752,10 +1103,21 @@
 
         // COMPANIONS
         let cc=0;
-        function addCompanion(t){cc++;const l=document.getElementById('companion-list'),d=document.createElement('div');
-        d.className='companion-item';d.id='comp-'+cc;
-        d.innerHTML=`<span class="comp-type">${t}</span><input type="text" placeholder="Nome" name="comp_${cc}"><button type="button" class="companion-remove" onclick="document.getElementById('comp-${cc}').remove()">✕</button>`;
-        l.appendChild(d)}
+        function addCompanion(t){
+            cc++;
+            const l=document.getElementById('companion-list'), d=document.createElement('div');
+            d.className='companion-item';
+            d.id='comp-'+cc;
+            
+            let innerHTML = `<span class="comp-type">${t}</span><input type="text" placeholder="Nome" name="comp_${cc}" required>`;
+            if (t === 'criança') {
+                innerHTML += `<input type="text" placeholder="Nascimento (DD/MM/AAAA)" name="comp_birth_${cc}" required oninput="this.value=this.value.replace(/[^0-9\\/]/g,'')" maxlength="10">`;
+            }
+            innerHTML += `<button type="button" class="companion-remove" onclick="document.getElementById('comp-${cc}').remove()">✕</button>`;
+            
+            d.innerHTML = innerHTML;
+            l.appendChild(d);
+        }
 
         // ========== GIFT LIST SYSTEM ==========
         const ROOMS = [
@@ -959,6 +1321,27 @@
         let checkoutGuestCompanions = [];
         let currentPixCode = '';
 
+        const BIBLE_VERSES = [
+            "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. - 1 Coríntios 13:4",
+            "Assim, eles já não são dois, mas uma só carne. Portanto, o que Deus uniu, ninguém o separe. - Mateus 19:6",
+            "Acima de tudo, porém, revistam-se do amor, que é o elo perfeito. - Colossenses 3:14",
+            "Nós amamos porque ele nos amou primeiro. - 1 João 4:19",
+            "O amor tudo sofre, tudo crê, tudo espera, tudo suporta. - 1 Coríntios 13:7",
+            "Deus é amor. Todo aquele que permanece no amor permanece em Deus, e Deus nele. - 1 João 4:16",
+            "Grandes águas não podem apagar o amor; rios não podem afogá-lo. - Cânticos 8:7",
+            "Tudo o que fizerem, façam com amor. - 1 Coríntios 16:14",
+            "Melhor é serem dois do que um... Porque se um cair, o outro levanta o seu companheiro. - Eclesiastes 4:9-10",
+            "Eu sei que tudo que Deus faz durará eternamente. - Eclesiastes 3:14"
+        ];
+
+        function setRandomBibleVerse() {
+            const el = document.getElementById('thanks-bible-verse');
+            if (el) {
+                const idx = Math.floor(Math.random() * BIBLE_VERSES.length);
+                el.textContent = BIBLE_VERSES[idx];
+            }
+        }
+
         function showGiftStep(stepName) {
             const steps = ['select', 'rsvp', 'payment', 'thanks'];
             steps.forEach(s => {
@@ -968,6 +1351,10 @@
             const targetEl = document.getElementById('gift-step-' + stepName);
             if (targetEl) targetEl.classList.add('show');
             
+            if (stepName === 'thanks') {
+                setRandomBibleVerse();
+            }
+
             const headerDetails = document.getElementById('gift-header-details');
             if (headerDetails) {
                 if (stepName === 'select') {
@@ -993,11 +1380,6 @@
             document.getElementById('gift-modal').classList.remove('open');
             document.body.style.overflow = 'auto';
             stopInspoCarousel();
-            const vid = document.getElementById('thanks-video');
-            if (vid) {
-                vid.pause();
-                vid.currentTime = 0;
-            }
             const bgMusic = document.getElementById('bg-music');
             const musicBtn = document.getElementById('music-btn');
             if (bgMusic && musicBtn && !musicBtn.classList.contains('muted')) {
@@ -1133,13 +1515,6 @@
                                     processing.classList.remove('show');
                                     document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
                                     showGiftStep('thanks');
-                                    const thanksVid = document.getElementById('thanks-video');
-                                    if (thanksVid) {
-                                        const bgMusic = document.getElementById('bg-music');
-                                        if (bgMusic) bgMusic.pause();
-                                        thanksVid.currentTime = 0;
-                                        thanksVid.play().catch(e => console.log('Play blocked', e));
-                                    }
                                 }
                             });
                         }
@@ -1165,13 +1540,6 @@
                                     processing.classList.remove('show');
                                     document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
                                     showGiftStep('thanks');
-                                    const thanksVid = document.getElementById('thanks-video');
-                                    if (thanksVid) {
-                                        const bgMusic = document.getElementById('bg-music');
-                                        if (bgMusic) bgMusic.pause();
-                                        thanksVid.currentTime = 0;
-                                        thanksVid.play().catch(e => console.log('Play blocked', e));
-                                    }
                                 }
                             });
                         }
@@ -1293,17 +1661,6 @@
                 // Personalize and show thanks view
                 document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
                 showGiftStep('thanks');
-
-                // Play thank-you video
-                const thanksVid = document.getElementById('thanks-video');
-                if (thanksVid) {
-                    const bgMusic = document.getElementById('bg-music');
-                    if (bgMusic) bgMusic.pause();
-                    thanksVid.currentTime = 0;
-                    thanksVid.play().catch(err => {
-                        console.log('Play blocked', err);
-                    });
-                }
             }
         }
 
@@ -1334,16 +1691,6 @@
                 checkoutGuestName = nameToUse;
                 document.getElementById('thanks-guest-name').textContent = nameToUse;
                 showGiftStep('thanks');
-                
-                const thanksVid = document.getElementById('thanks-video');
-                if (thanksVid) {
-                    const bgMusic = document.getElementById('bg-music');
-                    if (bgMusic) bgMusic.pause();
-                    thanksVid.currentTime = 0;
-                    thanksVid.play().catch(err => {
-                        console.log('Play blocked', err);
-                    });
-                }
             };
 
             if (isPaymentSuccess) {
@@ -1406,16 +1753,6 @@
                     processSuccess(name);
                 }
             }
-
-            const thanksVid = document.getElementById('thanks-video');
-            if (thanksVid) {
-                thanksVid.addEventListener('ended', () => {
-                    const bgMusic = document.getElementById('bg-music');
-                    const musicBtn = document.getElementById('music-btn');
-                    if (bgMusic && musicBtn && !musicBtn.classList.contains('muted')) {
-                        bgMusic.play().catch(e => console.log(e));
-                    }
-                });
             }
         });
 
@@ -1445,8 +1782,16 @@
             fd.forEach((v, k) => d[k] = v);
             const comps = [];
             document.querySelectorAll('.companion-item').forEach(i => {
-                const n = i.querySelector('input').value;
-                if (n) comps.push({ type: i.querySelector('.comp-type').textContent, name: n });
+                const nameInput = i.querySelector('input[name^="comp_"]');
+                const n = nameInput ? nameInput.value.trim() : '';
+                if (n) {
+                    const comp = { type: i.querySelector('.comp-type').textContent, name: n };
+                    const birthInput = i.querySelector('input[name^="comp_birth_"]');
+                    if (birthInput) {
+                        comp.birthdate = birthInput.value.trim();
+                    }
+                    comps.push(comp);
+                }
             });
 
             // Salvar confirmação no Firebase
@@ -1700,6 +2045,45 @@
 
         const footerEl = document.querySelector('.footer');
         if (footerEl) footerVerseObserver.observe(footerEl);
+
+        // ========== INSPIRATIONS MODAL ==========
+        let currentInspoSlideIdx = 0;
+        function openInspoModal() {
+            document.getElementById('inspo-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            currentInspoSlideIdx = 0;
+            showInspoSlide(0);
+        }
+        function closeInspoModal() {
+            document.getElementById('inspo-modal').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+        function showInspoSlide(idx) {
+            const slides = document.querySelectorAll('.inspo-slide');
+            const dots = document.querySelectorAll('.inspo-indicator-dot');
+            if (idx >= slides.length) idx = 0;
+            if (idx < 0) idx = slides.length - 1;
+            currentInspoSlideIdx = idx;
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === idx);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === idx);
+            });
+        }
+        function nextInspoSlide() {
+            showInspoSlide(currentInspoSlideIdx + 1);
+        }
+        function prevInspoSlide() {
+            showInspoSlide(currentInspoSlideIdx - 1);
+        }
+        function setInspoSlide(idx) {
+            showInspoSlide(idx);
+        }
+        // Fechar clicando fora
+        document.getElementById('inspo-modal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeInspoModal();
+        });
     </script>
 </body>
 </html>
