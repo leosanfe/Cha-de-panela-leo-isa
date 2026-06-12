@@ -895,6 +895,10 @@
                             <label class="form-label">Seu nome <span class="req">*</span></label>
                             <input type="text" class="form-input" id="gift-rsvp-name" placeholder="Nome completo" required>
                         </div>
+                        <div class="form-group" style="margin-top: 16px;">
+                            <label class="form-label">Seu e-mail <span class="req">*</span></label>
+                            <input type="email" class="form-input" id="gift-rsvp-email" placeholder="exemplo@email.com" required>
+                        </div>
                         <button type="submit" class="submit-btn" style="margin-top: 24px;">
                             Avançar
                         </button>
@@ -1327,6 +1331,7 @@
         }
 
         let checkoutGuestName = '';
+        let checkoutGuestEmail = '';
         let checkoutGuestPhone = '';
         let checkoutGuestCompanions = [];
         let currentPixCode = '';
@@ -1404,21 +1409,26 @@
             
             // Clear inputs in the gift rsvp form
             document.getElementById('gift-rsvp-name').value = '';
-            document.getElementById('gift-rsvp-phone').value = '';
+            const emailInput = document.getElementById('gift-rsvp-email');
+            if (emailInput) emailInput.value = '';
         }
 
         function handleGiftConfirm() {
             if (selectedGifts.length === 0) return;
             document.getElementById('gift-rsvp-name').value = '';
+            const emailInput = document.getElementById('gift-rsvp-email');
+            if (emailInput) emailInput.value = '';
             showGiftStep('rsvp');
         }
 
         function handleGiftRsvpSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('gift-rsvp-name').value.trim();
-            if (!name) return;
+            const email = document.getElementById('gift-rsvp-email').value.trim();
+            if (!name || !email) return;
 
             checkoutGuestName = name;
+            checkoutGuestEmail = email;
             checkoutGuestPhone = "";
             checkoutGuestCompanions = [];
 
@@ -1504,6 +1514,7 @@
                 },
                 body: JSON.stringify({
                     name: checkoutGuestName,
+                    email: checkoutGuestEmail,
                     phone: checkoutGuestPhone,
                     companions: checkoutGuestCompanions,
                     giftIds: selectedGifts,

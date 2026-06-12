@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const { name, phone, companions, giftIds, method } = JSON.parse(event.body || '{}');
+        const { name, email, phone, companions, giftIds, method } = JSON.parse(event.body || '{}');
 
         if (!name || !giftIds || !Array.isArray(giftIds) || giftIds.length === 0) {
             return {
@@ -103,7 +103,11 @@ exports.handler = async (event, context) => {
                 }
             ],
             returnUrl: successRedirectUrl,
-            completionUrl: successRedirectUrl
+            completionUrl: successRedirectUrl,
+            customer: {
+                name: name,
+                email: email
+            }
         };
 
         const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {
