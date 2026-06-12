@@ -97,7 +97,7 @@
         }
 
         /* COUNTDOWN */
-        .countdown-section { width: 100%; background: var(--bg); padding: 60px 24px 80px; text-align: center; position: relative; border-top: 1px solid var(--divider); }
+        .countdown-section { width: 100%; background: transparent; padding: 60px 24px 80px; text-align: center; position: relative; border-top: 1px solid var(--divider); }
         .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 380px; margin: 0 auto 30px; gap: 8px; }
         .countdown-item { padding: 12px 6px; position: relative; }
         .countdown-item:not(:last-child)::after { content:''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: var(--divider); }
@@ -307,7 +307,7 @@
         #dresscode .reveal.revealed { transform: translateY(0); opacity: 1; }
 
         /* MANUAL DOS CONVIDADOS */
-        .manual-section { width: 100%; background: var(--bg); padding: 60px 24px; text-align: center; border-top: 1px solid var(--divider); }
+        .manual-section { width: 100%; background: transparent; padding: 60px 24px; text-align: center; border-top: 1px solid var(--divider); }
         .manual-grid { display: flex; flex-direction: column; gap: 16px; max-width: 440px; margin: 0 auto; text-align: left; }
         .manual-item { display: flex; gap: 16px; background: var(--white); padding: 16px; border-radius: 16px; border: 1px solid var(--divider); box-shadow: 0 4px 12px rgba(0,0,0,0.01); transition: all 0.3s ease; }
         .manual-item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(62, 84, 103, 0.06); border-color: var(--slate-light); }
@@ -790,9 +790,10 @@
                 </form>
                 
                 <div class="rsvp-success" id="rsvp-success">
-                    <div class="rsvp-success-icon">🎉</div>
-                    <h3 class="rsvp-success-title">Obrigado!</h3>
-                    <p class="rsvp-success-text">Presença confirmada!<br>Estamos ansiosos para te ver lá!</p>
+                    <h3 class="rsvp-success-title" id="rsvp-success-title">Obrigado!</h3>
+                    <img src="Itens-Site-Casamento/confirmacao.png" alt="Presença Confirmada" style="width: 100%; max-width: 320px; height: auto; border-radius: 12px; margin: 16px auto; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <p id="rsvp-success-verse" style="font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--text-light); line-height: 1.6; margin: 16px 0; padding: 0 12px;"></p>
+                    <p class="rsvp-success-text" style="font-size: 13px; color: var(--text-muted);">Redirecionando para o WhatsApp em instantes...</p>
                 </div>
                 <div class="rsvp-success" id="rsvp-declined" style="display:none;">
                     <div class="rsvp-success-icon">😢</div>
@@ -1016,7 +1017,7 @@
         </div>
 
         <!-- FOOTER (IMAGEM FINAL DO SITE) -->
-        <footer class="footer" style="width:100%; overflow:hidden; padding:0; margin:0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%); mask-image: linear-gradient(to bottom, black 80%, transparent 100%);">
+        <footer class="footer" style="width:100%; overflow:hidden; padding:0; margin:0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);">
             <img src="Itens-Site-Casamento/finaldosite.png" alt="Leonardo & Isabelle" style="width:100%; height:auto; display:block;">
             <div id="footer-verse-container" style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 380px; text-align: center; z-index: 5; padding: 0 24px; pointer-events: none;">
                 <p id="footer-verse-text" data-text="Esperei com paciência no Senhor, e ele se inclinou para mim, e ouviu o meu clamor. - Salmos 40" style="font-family: var(--serif); font-size: clamp(14px, 3.2vw, 17px); font-style: italic; color: var(--text-light); line-height: 1.6; min-height: 54px; margin-bottom: 8px; margin-top: 0;"></p>
@@ -1371,6 +1372,16 @@
             if (bgMusic && musicBtn && !musicBtn.classList.contains('muted')) {
                 bgMusic.play().catch(e => console.log(e));
             }
+            
+            // Reset the list state so a user can make a new checkout cleanly
+            selectedGifts = [];
+            updateConfirmBtn();
+            renderGiftGrid();
+            showGiftStep('select');
+            
+            // Clear inputs in the gift rsvp form
+            document.getElementById('gift-rsvp-name').value = '';
+            document.getElementById('gift-rsvp-phone').value = '';
         }
 
         function handleGiftConfirm() {
@@ -1485,55 +1496,24 @@
                 return res.json();
             })
             .then(data => {
-                if (method === 'pix') {
-                    if (data.pixCode && data.billingId) {
-                        localStorage.setItem('pending-billing-id', data.billingId);
-                        currentPixCode = data.pixCode;
-                        
-                        document.getElementById('payment-pix-qr').src = data.pixQrBase64;
-                        document.getElementById('payment-pix-code').textContent = data.pixCode;
-
-                        // Set up real-time listener for this billing in Firebase
-                        if (firebaseReady) {
-                            fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
-                                const val = snap.val();
-                                if (val && val.status === 'paid') {
-                                    processing.classList.remove('show');
-                                    document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
-                                    showGiftStep('thanks');
-                                }
-                            });
-                        }
-
-                        // Hide loading spinner, restore PIX view, show details
-                        processing.classList.remove('show');
-                        document.getElementById('payment-choice-view').style.display = 'block';
-                        document.getElementById('payment-content-pix').style.display = 'block';
-                        document.getElementById('pix-generation-stage').style.display = 'none';
-                        document.getElementById('pix-details-stage').style.display = 'block';
-                    } else {
-                        throw new Error('Pix transparente inválido.');
+                if (data.url && data.billingId) {
+                    localStorage.setItem('pending-billing-id', data.billingId);
+                    
+                    // Set up real-time listener for this billing in Firebase (in case they pay and return)
+                    if (firebaseReady) {
+                        fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
+                            const val = snap.val();
+                            if (val && val.status === 'paid') {
+                                processing.classList.remove('show');
+                                document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
+                                showGiftStep('thanks');
+                            }
+                        });
                     }
+                    
+                    window.location.href = data.url;
                 } else {
-                    if (data.url && data.billingId) {
-                        localStorage.setItem('pending-billing-id', data.billingId);
-                        
-                        // Set up real-time listener for this billing in Firebase (in case they pay and return)
-                        if (firebaseReady) {
-                            fbDb.ref('pending_payments/' + data.billingId).on('value', snap => {
-                                const val = snap.val();
-                                if (val && val.status === 'paid') {
-                                    processing.classList.remove('show');
-                                    document.getElementById('thanks-guest-name').textContent = checkoutGuestName;
-                                    showGiftStep('thanks');
-                                }
-                            });
-                        }
-                        
-                        window.location.href = data.url;
-                    } else {
-                        throw new Error('Url de checkout de cartão inválida.');
-                    }
+                    throw new Error('Url de checkout inválida.');
                 }
             })
             .catch(err => {
@@ -1790,10 +1770,22 @@
                 });
             }
 
-            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 [digite os nomes aqui]\n\npara o Casamento do Leonardo e Isabelle 🎉`;
-            window.open(`https://wa.me/5521995080295?text=${encodeURIComponent(m)}`, '_blank');
+            // Custom name title & random Bible verse
+            document.getElementById('rsvp-success-title').textContent = `Obrigado, ${d.name}!`;
+            const rsvpVerseEl = document.getElementById('rsvp-success-verse');
+            if (rsvpVerseEl) {
+                const idx = Math.floor(Math.random() * BIBLE_VERSES.length);
+                rsvpVerseEl.textContent = BIBLE_VERSES[idx];
+            }
+
             e.target.style.display = 'none';
             document.getElementById('rsvp-success').classList.add('show');
+
+            let m = `Olá! Gostaria de confirmar a presença de:\n\n👉 ${d.name}${comps.length > 0 ? '\n👉 ' + comps.map(c => c.name).join('\n👉 ') : ''}\n\npara o Casamento do Leonardo e Isabelle 🎉`;
+            
+            setTimeout(() => {
+                window.location.href = `https://wa.me/5521995080295?text=${encodeURIComponent(m)}`;
+            }, 3000);
         });
 
         // Decline

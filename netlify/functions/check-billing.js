@@ -21,7 +21,7 @@ module.exports = async (event, context) => {
         }
 
         const abacateKey = process.env.ABACATEPAY_API_KEY;
-        const abacateRes = await fetch(`https://api.abacatepay.com/v2/transparents/check?id=${billingId}`, {
+        const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/list', {
             headers: {
                 'Authorization': `Bearer ${abacateKey}`
             }
@@ -29,12 +29,13 @@ module.exports = async (event, context) => {
 
         if (!abacateRes.ok) {
             const errText = await abacateRes.text();
-            console.error('Erro ao verificar status no AbacatePay:', errText);
+            console.error('Erro ao verificar status no AbacatePay (list):', errText);
             return { statusCode: 500, headers, body: JSON.stringify({ error: 'Erro ao verificar no AbacatePay.' }) };
         }
 
         const abacateData = await abacateRes.json();
-        const transaction = abacateData.data;
+        const billings = abacateData.data || [];
+        const transaction = billings.find(b => b.id === billingId);
 
         let status = 'PENDING';
         if (transaction) {
