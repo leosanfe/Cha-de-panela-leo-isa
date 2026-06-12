@@ -89,6 +89,40 @@ exports.handler = async (event, context) => {
         const cleanPhone = (phone || '').replace(/\D/g, '');
         const formattedPhone = formatCellphone(cleanPhone);
 
+        // 1. Create/find customer in AbacatePay
+        const customerRes = await fetch('https://api.abacatepay.com/v1/customer/create', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${abacateKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email
+            })
+        });
+
+        if (!customerRes.ok) {
+            const errBody = await customerRes.text();
+            console.error('Erro ao criar cliente no AbacatePay:', errBody);
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ error: 'Erro ao cadastrar cliente no AbacatePay.', details: errBody })
+            };
+        }
+
+        const customerData = await customerRes.json();
+        const customerId = customerData.data?.id;
+
+        if (!customerId) {
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ error: 'ID do cliente não retornado pelo AbacatePay.' })
+            };
+        }
+
         // Use V1 checkout for both PIX and CARD
         const abacateBody = {
             frequency: 'ONE_TIME',
@@ -104,10 +138,7 @@ exports.handler = async (event, context) => {
             ],
             returnUrl: successRedirectUrl,
             completionUrl: successRedirectUrl,
-            customer: {
-                name: name,
-                email: email
-            }
+            customerId: customerId
         };
 
         const abacateRes = await fetch('https://api.abacatepay.com/v1/billing/create', {

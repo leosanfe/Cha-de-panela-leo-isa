@@ -1521,8 +1521,19 @@
                     method: method
                 })
             })
-            .then(res => {
-                if (!res.ok) throw new Error('Erro ao gerar link de pagamento.');
+            .then(async res => {
+                if (!res.ok) {
+                    let errMsg = 'Ocorreu um erro ao gerar o checkout no AbacatePay. Por favor, tente novamente.';
+                    try {
+                        const errData = await res.json();
+                        if (errData && errData.details) {
+                            errMsg = `Erro no AbacatePay:\n${errData.details}`;
+                        } else if (errData && errData.error) {
+                            errMsg = `Erro:\n${errData.error}`;
+                        }
+                    } catch (e) {}
+                    throw new Error(errMsg);
+                }
                 return res.json();
             })
             .then(data => {
@@ -1548,7 +1559,7 @@
             })
             .catch(err => {
                 console.error(err);
-                alert('Ocorreu um erro ao gerar o checkout no AbacatePay. Por favor, tente novamente.');
+                alert(err.message);
                 // Restore views on error
                 processing.classList.remove('show');
                 document.getElementById('payment-choice-view').style.display = 'block';
