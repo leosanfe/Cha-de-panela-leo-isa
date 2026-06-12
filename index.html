@@ -228,6 +228,16 @@
         .gift-confirm-btn.active { opacity: 1; pointer-events: all; }
         .gift-confirm-btn.active:hover { background: var(--olive-dark); transform: translateY(-1px); }
 
+        .gift-modal.room-expanded .gift-modal-desc,
+        .gift-modal.room-expanded .gift-modal-tip,
+        .gift-modal.room-expanded .inspo-carousel,
+        .gift-modal.room-expanded .inspo-palette {
+            display: none !important;
+        }
+        .gift-modal.room-expanded .gift-modal-header {
+            padding: 8px 24px 8px;
+        }
+
         /* GIFT NAME STEP */
         .gift-name-step { display: none; padding: 40px 24px; text-align: center; }
         .gift-name-step.show { display: block; }
@@ -1135,11 +1145,11 @@
 
         // ========== GIFT LIST SYSTEM ==========
         const ROOMS = [
-            { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' },
             { id: 'casa', name: 'Casa Nova', img: 'comodo-sala.png', emoji: '🏠' },
             { id: 'viagem', name: 'Lua de Mel & Viagens', img: 'bus-illustration-eVtX45sg.png', emoji: '✈️' },
             { id: 'experiencia', name: 'Experiências Românticas', img: 'couple-dancing-XNVWWZw7.png', emoji: '❤️' },
             { id: 'divertidos', name: 'Presentes Divertidos', img: 'brincadeiras.png', emoji: '😂' },
+            { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' },
             { id: 'churrasco', name: 'Churrasco & Lazer', img: 'almoco.png', emoji: '🍖' },
             { id: 'cozinha', name: 'Cozinha & Utilidades', img: 'comodo-cozinha.png', emoji: '🍽️' },
             { id: 'decoracao', name: 'Decoração & Charme', img: 'flower-bouquet-Cd59z_hq.png', emoji: '✨' }
@@ -1264,6 +1274,14 @@
             window._getGiftStock = (id) => cachedGiftStock[id];
         }
 
+        function toggleRoom(headerEl) {
+            const section = headerEl.parentElement;
+            section.classList.toggle('open');
+            const grid = document.getElementById('gift-grid');
+            const anyOpen = Array.from(grid.querySelectorAll('.gift-room-section')).some(s => s.classList.contains('open'));
+            document.getElementById('gift-modal').classList.toggle('room-expanded', anyOpen);
+        }
+
         function renderGiftGrid() {
             const grid = document.getElementById('gift-grid');
             const reserved = getReserved();
@@ -1284,7 +1302,7 @@
                 // Only restore previously opened sections (default: closed)
                 if (openRooms.has(room.id)) section.classList.add('open');
                 section.innerHTML = `
-                    <div class="gift-room-header" onclick="this.parentElement.classList.toggle('open')">
+                    <div class="gift-room-header" onclick="toggleRoom(this)">
                         <img src="${room.img}" alt="${room.name}" class="gift-room-img">
                         <div class="gift-room-info">
                             <p class="gift-room-name">${room.emoji} ${room.name}</p>
@@ -1323,6 +1341,10 @@
 
                 grid.appendChild(section);
             });
+
+            // Update the room-expanded state of the modal
+            const anyOpen = Array.from(grid.querySelectorAll('.gift-room-section')).some(s => s.classList.contains('open'));
+            document.getElementById('gift-modal').classList.toggle('room-expanded', anyOpen);
         }
 
         function updateConfirmBtn() {
