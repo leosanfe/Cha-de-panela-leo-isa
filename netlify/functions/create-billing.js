@@ -89,8 +89,8 @@ exports.handler = async (event, context) => {
         const cleanPhone = (phone || '').replace(/\D/g, '');
         const formattedPhone = formatCellphone(cleanPhone);
 
-        // 1. Create/find customer in AbacatePay
-        const customerRes = await fetch('https://api.abacatepay.com/v1/customer/create', {
+        // 1. Create/find customer in AbacatePay (V2)
+        const customerRes = await fetch('https://api.abacatepay.com/v2/customers/create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${abacateKey}`,
