@@ -1,7 +1,4 @@
 const GIFTS = [
-    // ===== TESTE =====
-    { id: 'teste-cota', name: 'Cota de Teste (1 Real)', price: 'R$ 1,00' },
-
     // ===== COTAS ESPECIAIS =====
     { id: 'cota-ostentacao', name: 'O gerente ficou maluco! (Cota Ostentação)', price: 'R$ 3.000,00' },
     { id: 'tv-grande', name: 'Smart TV Grande', price: 'R$ 2.200,00' },
@@ -9,7 +6,6 @@ const GIFTS = [
 
     // ===== CASA NOVA =====
     { id: 'mesa-cozinha', name: 'Mesa da Cozinha', price: 'R$ 850,00' },
-    { id: 'poltrona-chefe', name: 'Poltrona do chefe da casa', price: 'R$ 700,00' },
     { id: 'robo-aspirador', name: 'Robô Aspirador', price: 'R$ 450,00' },
     { id: 'mesa-centro', name: 'Mesa de Centro', price: 'R$ 280,00' },
     { id: 'espelho-adnet', name: 'Espelho Adnet redondo para o hall', price: 'R$ 250,00' },
@@ -36,13 +32,10 @@ const GIFTS = [
     { id: 'cafe-cama', name: 'Café da manhã de hotel servido na cama', price: 'R$ 90,00' },
 
     // ===== PRESENTES DIVERTIDOS =====
-    { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', price: 'R$ 500,00' },
-    { id: 'noivo-louca-15d', name: 'Noivo lava a louça durante 15 dias todo dia', price: 'R$ 500,00' },
-    { id: 'vale-compras', name: 'Vale compras para gastar sem culpa', price: 'R$ 400,00' },
-    { id: 'smartfit-1mes', name: '1 mês de SmartFit pra incentivar', price: 'R$ 119,90' },
+    { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', price: 'R$ 100,00' },
+    { id: 'noivo-louca-15d', name: 'Noivo lava a louça durante 15 dias todo dia', price: 'R$ 100,00' },
     { id: 'delivery-sexta', name: 'Patrocínio do Delivery de Sexta', price: 'R$ 80,00' },
-    { id: 'salvar-miojo', name: 'Salvando o casal do miojo (Jantar)', price: 'R$ 100,00' },
-    { id: 'imas-geladeira', name: 'Imãs de geladeira de viagem fake', price: 'R$ 10,00' },
+    { id: 'salvar-miojo', name: 'Salvando o casal do miojo (Jantar)', price: 'R$ 50,00' },
 
     // ===== CHURRASCO & LAZER =====
     { id: 'churrascao-picanha', name: 'Churrascão com Picanha', price: 'R$ 350,00' },
