@@ -586,7 +586,7 @@
             <!-- POLAROIDS SECTION -->
             <div id="polaroids-section" style="width: 100%; position: relative; height: 220vh; background: transparent; margin-top: 10px; margin-bottom: 0;">
                 <div style="position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 60px; overflow: hidden; z-index: 10;">
-                    <div class="polaroids-container" style="position: relative; width: 330px; height: 375px;">
+                    <div class="polaroids-container" style="position: relative; width: 330px; height: 375px; flex-shrink: 0;">
                         <div class="polaroid-card" id="polaroid-1" style="position: absolute; inset: 0; transform: rotate(-4deg) scale(0.95); z-index: 4; opacity: 1; pointer-events: none;">
                             <img src="Itens-Site-Casamento/polaroid1.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
@@ -600,7 +600,7 @@
                             <img src="Itens-Site-Casamento/polaroid4.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                     </div>
-                    <div class="polaroid-verse-container" style="margin-top: 24px; text-align: center; max-width: 360px;">
+                    <div class="polaroid-verse-container" style="margin-top: 24px; text-align: center; max-width: 360px; flex-shrink: 0;">
                         <p style="font-family: var(--serif); font-size: clamp(16px, 3.8vw, 20px); font-style: italic; color: var(--slate-blue); line-height: 1.6; margin-bottom: 8px;">
                             "Grandes coisas fez o Senhor por nós, e, por isso, estamos alegres."
                         </p>
@@ -1082,8 +1082,7 @@
             { id: 'cozinha', name: 'Cozinha & Utilidades', img: 'comodo-cozinha.png', emoji: '🍽️' },
             { id: 'churrasco', name: 'Churrasco & Lazer', img: 'almoco.png', emoji: '🍖' },
             { id: 'experiencia', name: 'Experiências Românticas', img: 'couple-dancing-XNVWWZw7.png', emoji: '❤️' },
-            { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' },
-            { id: 'divertidos', name: 'Presentes Divertidos', img: 'brincadeiras.png', emoji: '😂' }
+            { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' }
         ];
 
         const GIFTS = [
@@ -1117,11 +1116,7 @@
             // ===== EXPERIÊNCIAS ROMÂNTICAS =====
             { id: 'noite-fondue', name: 'Noite do Fondue (Aparelho + Ingredientes)', qty: 999, room: 'experiencia', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 180,00', sug: 'Fondue delicioso no frio' },
 
-            // ===== PRESENTES DIVERTIDOS =====
-            { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 100,00', sug: 'Massagem garantida pro Léo!' },
-            { id: 'noivo-louca-15d', name: 'Noivo lava a louça durante 15 dias todo dia', qty: 999, room: 'divertidos', img: 'itens-novos/Escorredor de louça.jpeg', price: 'R$ 100,00', sug: 'Louça limpa pra Isa!' },
-            { id: 'delivery-sexta', name: 'Patrocínio do Delivery de Sexta', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 80,00', sug: 'Livrando os noivos do fogão' },
-            { id: 'salvar-miojo', name: 'Salvando o casal do miojo (Jantar)', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 50,00', sug: 'Para um jantar prático e gostoso' },
+
 
             // ===== CHURRASCO & LAZER =====
             { id: 'churrascao-picanha', name: 'Churrascão com Picanha', qty: 999, room: 'churrasco', img: 'almoco.png', price: 'R$ 350,00', sug: 'Dia de churrasco de qualidade' },

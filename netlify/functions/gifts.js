@@ -29,11 +29,7 @@ const GIFTS = [
     // ===== EXPERIÊNCIAS ROMÂNTICAS =====
     { id: 'noite-fondue', name: 'Noite do Fondue (Aparelho + Ingredientes)', price: 'R$ 180,00' },
 
-    // ===== PRESENTES DIVERTIDOS =====
-    { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', price: 'R$ 100,00' },
-    { id: 'noivo-louca-15d', name: 'Noivo lava a louça durante 15 dias todo dia', price: 'R$ 100,00' },
-    { id: 'delivery-sexta', name: 'Patrocínio do Delivery de Sexta', price: 'R$ 80,00' },
-    { id: 'salvar-miojo', name: 'Salvando o casal do miojo (Jantar)', price: 'R$ 50,00' },
+
 
     // ===== CHURRASCO & LAZER =====
     { id: 'churrascao-picanha', name: 'Churrascão com Picanha', price: 'R$ 350,00' },
