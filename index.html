@@ -1081,7 +1081,6 @@
             { id: 'viagem', name: 'Lua de Mel & Viagens', img: 'bus-illustration-eVtX45sg.png', emoji: '✈️' },
             { id: 'cozinha', name: 'Cozinha & Utilidades', img: 'comodo-cozinha.png', emoji: '🍽️' },
             { id: 'churrasco', name: 'Churrasco & Lazer', img: 'almoco.png', emoji: '🍖' },
-            { id: 'decoracao', name: 'Decoração & Charme', img: 'flower-bouquet-Cd59z_hq.png', emoji: '✨' },
             { id: 'experiencia', name: 'Experiências Românticas', img: 'couple-dancing-XNVWWZw7.png', emoji: '❤️' },
             { id: 'cotas', name: 'Cotas Especiais', img: 'rings-illustration-tO3OeALU.png', emoji: '👑' },
             { id: 'divertidos', name: 'Presentes Divertidos', img: 'brincadeiras.png', emoji: '😂' }
@@ -1089,9 +1088,7 @@
 
         const GIFTS = [
             // ===== COTAS ESPECIAIS =====
-            { id: 'cota-ostentacao', name: 'O gerente ficou maluco! (Cota Ostentação)', qty: 999, room: 'cotas', img: 'itens-novos/cota_ostentacao.png', price: 'R$ 3.000,00', sug: 'Cota de contribuição' },
             { id: 'tv-grande', name: 'Smart TV Grande', qty: 1, room: 'cotas', img: 'emblema-leo-isa.png', price: 'R$ 2.200,00', sug: 'Para nossa sala de TV' },
-            { id: 'vida-sem-dividas', name: 'Começar a vida sem dívidas', qty: 999, room: 'cotas', img: 'rings-illustration-tO3OeALU.png', price: 'R$ 1.500,00', sug: 'Qualquer ajuda é muito bem-vinda!' },
 
             // ===== CASA NOVA =====
             { id: 'mesa-cozinha', name: 'Mesa da Cozinha', qty: 1, room: 'casa', img: 'itens-novos/Mesa de madeira.jpeg', price: 'R$ 850,00', sug: 'Para nossas refeições diárias' },
@@ -1105,20 +1102,20 @@
             { id: 'almofadas-decorativas', name: 'Jogo de Almofadas Decorativas', qty: 1, room: 'casa', img: 'itens-novos/Almofada para sofá (sala 2 unidades).jpeg', price: 'R$ 75,00', sug: 'Cores suaves e neutras' },
             { id: 'quadros-menores', name: 'Kit de Quadros Menores', qty: 1, room: 'casa', img: 'botanical-gate.png', price: 'R$ 60,00', sug: 'Para decorar nossas paredes' },
             { id: 'capacho-divertido', name: 'Capacho divertido para a porta de entrada', qty: 1, room: 'casa', img: 'itens-novos/capacho_divertido.png', price: 'R$ 50,00', sug: 'Dando boas-vindas com alegria' },
-            { id: 'moringa-agua', name: 'Moringa de Água de Cabeceira', qty: 1, room: 'casa', img: 'itens-novos/Garrafa de água.jpeg', price: 'R$ 45,00', sug: 'Praticidade no nosso quarto' },
+            { id: 'maquina-lavar', name: 'Máquina de lavar', qty: 1, room: 'casa', img: 'itens-novos/maquina-lavar.webp', price: 'R$ 1.500,00', sug: 'Para manter nossas roupas sempre limpas e cheirosas' },
+            { id: 'roupadecama-king', name: 'Roupa de cama King', qty: 1, room: 'casa', img: 'itens-novos/roupadecama-king.webp', price: 'R$ 180,00', sug: 'Para noites de sono confortáveis e aconchegantes' },
+            { id: 'sapateira', name: 'Sapateira', qty: 1, room: 'casa', img: 'itens-novos/sapateira.webp', price: 'R$ 120,00', sug: 'Para deixar nossos calçados organizados' },
+            { id: 'toalha-banho', name: 'Toalha de banho', qty: 1, room: 'casa', img: 'itens-novos/toalha-banho.jpg', price: 'R$ 80,00', sug: 'Para sairmos do banho bem quentinhos' },
 
             // ===== LUA DE MEL & VIAGENS =====
             { id: 'voo-executivo', name: 'Upgrade na viagem (Voo Executivo)', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 600,00', sug: 'Contribuição para a viagem' },
             { id: 'spa-dois', name: 'SPA a dois (Dia de rei e rainha)', qty: 999, room: 'viagem', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 550,00', sug: 'Dia de relaxamento para os noivos' },
             { id: 'ajuda-lua-mel', name: 'Ajuda na Lua de Mel', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 500,00', sug: 'Ajude os noivos a curtir a viagem' },
             { id: 'passeios-viagem', name: 'Passeios radicais ou culturais na viagem', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 260,00', sug: 'Para criarmos memórias incríveis' },
-            { id: 'massagens-relaxar', name: 'Massagens para relaxar pós-casamento', qty: 999, room: 'viagem', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 220,00', sug: 'Aliviando a tensão pós-planejamento' },
             { id: 'ingressos-atracoes', name: 'Ingressos para atrações diversas', qty: 999, room: 'viagem', img: 'bus-illustration-eVtX45sg.png', price: 'R$ 135,00', sug: 'Museus, parks e muito lazer' },
 
             // ===== EXPERIÊNCIAS ROMÂNTICAS =====
-            { id: 'jantar-velas', name: 'Jantar romântico à luz de velas', qty: 999, room: 'experiencia', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 160,00', sug: 'Uma noite especial a dois' },
             { id: 'noite-fondue', name: 'Noite do Fondue (Aparelho + Ingredientes)', qty: 999, room: 'experiencia', img: 'couple-dancing-XNVWWZw7.png', price: 'R$ 180,00', sug: 'Fondue delicioso no frio' },
-            { id: 'cafe-cama', name: 'Café da manhã de hotel servido na cama', qty: 999, room: 'experiencia', img: 'itens-novos/Bandeja giratória de bambu.jpeg', price: 'R$ 90,00', sug: 'Mimo romântico matinal' },
 
             // ===== PRESENTES DIVERTIDOS =====
             { id: 'noiva-massagem-15d', name: 'Massagem da noiva no noivo toda noite por 15 dias', qty: 999, room: 'divertidos', img: 'brincadeiras.png', price: 'R$ 100,00', sug: 'Massagem garantida pro Léo!' },
@@ -1128,21 +1125,14 @@
 
             // ===== CHURRASCO & LAZER =====
             { id: 'churrascao-picanha', name: 'Churrascão com Picanha', qty: 999, room: 'churrasco', img: 'almoco.png', price: 'R$ 350,00', sug: 'Dia de churrasco de qualidade' },
-            { id: 'caixa-som-bluetooth', name: 'Caixa de som Bluetooth para o churrasco', qty: 1, room: 'churrasco', img: 'almoco.png', price: 'R$ 300,00', sug: 'Música para os nossos encontros' },
             { id: 'churrascao-contrafile', name: 'Churrascão com Contrafilé', qty: 999, room: 'churrasco', img: 'almoco.png', price: 'R$ 120,00', sug: 'Churrasco clássico com amigos' },
-            { id: 'acendedor-churrasqueira', name: 'Acendedor de churrasqueira', qty: 1, room: 'churrasco', img: 'almoco.png', price: 'R$ 15,00', sug: 'Facilidade para assar a carne' },
 
             // ===== COZINHA & UTILIDADES =====
-            { id: 'bebidas-especiais', name: 'Bebidas especiais (Sucos finos/imports)', qty: 999, room: 'cozinha', img: 'itens-novos/Jarra.jpeg', price: 'R$ 145,00', sug: 'Sucos finos e refrigerantes importados' },
             { id: 'bandeja-bambu-cama', name: 'Bandeja de bambu para café na cama', qty: 1, room: 'cozinha', img: 'itens-novos/bandeja_bambu.png', price: 'R$ 65,00', sug: 'Café da manhã especial na cama' },
             { id: 'tabua-corte', name: 'Tábua de corte estilosa', qty: 1, room: 'cozinha', img: 'gift-tabua.png', price: 'R$ 55,00', sug: 'Tábua estilosa para churrasco e petiscos' },
-            { id: 'kit-temperos', name: 'Kit de temperos do chef', qty: 1, room: 'cozinha', img: 'itens-novos/kit_temperos.png', price: 'R$ 40,00', sug: 'Tempero para as refeições da casa' },
-            { id: 'copos-americanos', name: 'Jogo de copos americanos', qty: 1, room: 'cozinha', img: 'gift-copos.png', price: 'R$ 25,00', sug: 'Clássicos copos americanos para o dia a dia' },
-            { id: 'potes-plastico', name: 'Potes de plástico (com tampa!)', qty: 1, room: 'cozinha', img: 'itens-novos/Potes Herméticos para dispensa.jpeg', price: 'R$ 20,00', sug: 'Indispensáveis em qualquer lar' },
-
-            // ===== DECORAÇÃO & CHARME =====
-            { id: 'vaso-cristal', name: 'Vaso de Cristal Decorativo', qty: 1, room: 'decoracao', img: 'flower-bouquet-Cd59z_hq.png', price: 'R$ 130,00', sug: 'Charme para as nossas flores' },
-            { id: 'vela-aromatica', name: 'Vela Aromática Decorativa', qty: 1, room: 'decoracao', img: 'itens-novos/vela_aromatica.png', price: 'R$ 30,00', sug: 'Para deixar a casa sempre perfumada' }
+            { id: 'armario-cozinha', name: 'Armário de cozinha', qty: 1, room: 'cozinha', img: 'itens-novos/armario-cozinha.png', price: 'R$ 600,00', sug: 'Para organizar nossas panelas e utensílios' },
+            { id: 'depurador-ar', name: 'Depurador de ar', qty: 1, room: 'cozinha', img: 'itens-novos/depurador-ar.webp', price: 'R$ 350,00', sug: 'Para manter nossa cozinha livre de fumaça e odores' },
+            { id: 'liquidificador', name: 'Liquidificador', qty: 1, room: 'cozinha', img: 'itens-novos/liquidificador.webp', price: 'R$ 150,00', sug: 'Para nossos sucos, vitaminas e receitas' }
         ];
 
         let selectedGifts = [];
