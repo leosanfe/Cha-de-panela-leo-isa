@@ -1288,8 +1288,13 @@
             const isFirstRender = grid.children.length === 0;
             grid.innerHTML = '';
 
+            const parsePrice = p => {
+                if (!p) return 0;
+                return parseFloat(p.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+            };
+
             ROOMS.forEach(room => {
-                const roomGifts = GIFTS.filter(g => g.room === room.id);
+                const roomGifts = GIFTS.filter(g => g.room === room.id).sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
                 if (roomGifts.length === 0) return;
                 const availCount = roomGifts.filter(g => { const q = (window._getGiftStock && window._getGiftStock(g.id) !== undefined) ? window._getGiftStock(g.id) : g.qty; return (q - (reserved[g.id]||0)) > 0; }).length;
 
